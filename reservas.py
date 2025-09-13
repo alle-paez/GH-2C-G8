@@ -96,16 +96,23 @@ def verificar_formato(dni):
     else: 
         return False
 
-def buscar_cliente(matriz_clientes, dni):
-    existe = False
-    for i in range(len(matriz_clientes)):
-        if matriz_clientes[i][0] == dni:
-            existe = True
-        if not existe:
-            print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
-            llenar_clientes_desde_reservas(matriz_clientes, dni)
-            existe = True
+def existe_cliente(matriz_clientes, dni):
+    for c in matriz_clientes:
+        if c[0] == dni:
+            return True
+    return False
 
+def existe_cliente(matriz_clientes, dni):
+    for c in matriz_clientes:
+        if c[0] == dni:
+            return True
+    return False
+
+def buscar_cliente(matriz_clientes, dni):
+    if not existe_cliente(matriz_clientes, dni):
+        print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
+        llenar_clientes_desde_reservas(matriz_clientes, dni)
+        
 def llenar_clientes_desde_reservas(matriz_clientes, dni):
         nombre = input("Ingrese el nombre del cliente: ")
         apellido = input("Ingrese el apellido del cliente: ")
@@ -115,18 +122,26 @@ def llenar_clientes_desde_reservas(matriz_clientes, dni):
         print("Finalizo la carga, prosiguiendo con la reserva. ")
 
 #VERIFICAR HABITACIÓN  ---------------------------------------------------------------------------------------
-def _tupla(fecha):
-    return tuple(fecha)
+def comparar_fechas(fecha_1, fecha_2):
+    return tuple(fecha_1) < tuple(fecha_2)
 
-def verificar_reservas(matriz_reservas, check_in, check_out):
-    pass
+def coinciden_fechas(d1, h1, d2, h2):
+    return comparar_fechas(d1, h2) and comparar_fechas(d2, h1)
 
+def verificar_reservas_disponibilidad(matriz_reservas,nro_hab, check_in, check_out):
+    for reserva in matriz_reservas:
+        _, _, existente_desde, existente_hasta, hab, _, _ = reserva
+        if hab == nro_hab and coinciden_fechas(check_in, check_out, existente_desde, existente_hasta):
+            return False
+    return True
+    
 def total_por_precio(matriz_habitaciones, dto, dias):
-    pos_hab = matriz_habitaciones.index(dto)
-    total = matriz_habitaciones[pos_hab][1] * dias
-    return total
+ for hab in matriz_habitaciones:
+     if hab[0] == dto:
+         precio_noche = hab[1]
+         return precio_noche * dias
+       
         
-
 #LLENAR RESERVAS ---------------------------------------------------------------------------------------------
 def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz_habitaciones= habitaciones):
     nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
@@ -167,10 +182,19 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz
                 pass
             if continuar == 2:
                 pass 
+#Validar habitaciones y fechas --------------------------------------------------
+
+        dto = int(input("Ingrese el numero de habitación: "))
+        while not verificar_reservas_disponibilidad(matriz_reservas, dto, check_in, check_out):
+            print(f"La habitación {dto} ya está ocupada en ese rango.")
+            dto = int(input("Ingrese el numero de habitación: "))
 
 #Total y habitación -------------------------------------------------------------
-        total = total_por_precio(matriz_habitaciones)
+
+        total = total_por_precio(matriz_habitaciones, dto, dias)
+
         nro_reserva = len(matriz_reservas) + 1
+
 
 
 def print_reservas(matriz):
