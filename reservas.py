@@ -90,7 +90,7 @@ def diferencia_dias_entre(check_in, check_out):
 #VERIFICACIONES CLIENTE --------------------------------------------------------------------------------------
 
 def verificar_formato(dni):
-    patron = '^{0-9}{8}$'
+    patron = r'^\d{8}$'
     if re.match(patron, dni):
         return True
     else: 
@@ -109,6 +109,10 @@ def existe_cliente(matriz_clientes, dni):
     return False
 
 def buscar_cliente(matriz_clientes, dni):
+    if not existe_cliente(matriz_clientes, dni):
+        print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
+        llenar_clientes_desde_reservas(matriz_clientes, dni)
+        
     if not existe_cliente(matriz_clientes, dni):
         print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
         llenar_clientes_desde_reservas(matriz_clientes, dni)
