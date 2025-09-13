@@ -102,7 +102,17 @@ def existe_cliente(matriz_clientes, dni):
             return True
     return False
 
+def existe_cliente(matriz_clientes, dni):
+    for c in matriz_clientes:
+        if c[0] == dni:
+            return True
+    return False
+
 def buscar_cliente(matriz_clientes, dni):
+    if not existe_cliente(matriz_clientes, dni):
+        print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
+        llenar_clientes_desde_reservas(matriz_clientes, dni)
+        
     if not existe_cliente(matriz_clientes, dni):
         print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
         llenar_clientes_desde_reservas(matriz_clientes, dni)
@@ -232,3 +242,18 @@ def print_reservas(matriz):
     return matriz
 
 
+#FACTURA    
+def imprimir_factura():
+    #ENCABEZADO
+    linea=("-")*80
+    factura=(f'{str(nro_factura[0]).zfill(4)}-{str(nro_factura[1]).zfill(8)}'.ljust(40))
+    print(f'{linea}\n{empresa['nombre'].capitalize().ljust(80)}\n{linea}\nFactura: {factura}\n\
+Domicilio fiscal: {empresa['dirección'].capitalize().ljust(40)}    CUIT:{empresa['cuit'].rjust(10)} \n\
+Web: {empresa['web'].ljust(80)}\nPeríodo: 2025-08\n\
+Soporte: {empresa['email']}')
+    print (f'{linea}\n')
+    nro_factura[0]+=1
+    nro_factura[1]+=1
+    #CUERPO
+    #print(f'Total: {IVA(total_por_precio())}'.ljust(80))
+    
