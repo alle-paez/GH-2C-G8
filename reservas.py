@@ -90,7 +90,7 @@ def diferencia_dias_entre(check_in, check_out):
 #VERIFICACIONES CLIENTE --------------------------------------------------------------------------------------
 
 def verificar_formato(dni):
-    patron = '^\d{8}$'
+    patron = '^{0-9}{8}$'
     if re.match(patron, dni):
         return True
     else: 
@@ -183,3 +183,18 @@ def print_reservas(matriz):
     return matriz
 
 
+#FACTURA    
+def imprimir_factura():
+    #ENCABEZADO
+    linea=("-")*80
+    factura=(f'{str(nro_factura[0]).zfill(4)}-{str(nro_factura[1]).zfill(8)}'.ljust(40))
+    print(f'{linea}\n{empresa['nombre'].capitalize().ljust(80)}\n{linea}\nFactura: {factura}\n\
+Domicilio fiscal: {empresa['dirección'].capitalize().ljust(40)}    CUIT:{empresa['cuit'].rjust(10)} \n\
+Web: {empresa['web'].ljust(80)}\nPeríodo: 2025-08\n\
+Soporte: {empresa['email']}')
+    print (f'{linea}\n')
+    nro_factura[0]+=1
+    nro_factura[1]+=1
+    #CUERPO
+    #print(f'Total: {IVA(total_por_precio())}'.ljust(80))
+    

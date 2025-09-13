@@ -2,7 +2,6 @@ from listas_codeadas import *
 from clientes import *
 from habitaciones import *
 from reservas import *
-from login import *
 
 def ubicar(matriz, item): #INDEX
     flag=0
@@ -18,6 +17,7 @@ def ubicar(matriz, item): #INDEX
     return pos
 
 #menú
+imprimir_factura()
 print("----Sistema de Gestión Hotelera----")
 print("" "\n",
 "1-Gestionar habitaciones", "\n", \

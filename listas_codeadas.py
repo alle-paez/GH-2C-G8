@@ -22,3 +22,16 @@ clientes = [
     [31222333, "Martín", "Díaz", "1178901234", "martin.diaz@email.com"]
 ]
 
+nro_factura= [1,1]
+
+empresa={
+    'nombre':'departamentos sobre el mar',
+    'dirección':'villa gessel',
+    'email':'departamentos.sm@gmail.com',
+    'teléfono':'6291-2367',
+    'web':'www.departamentossobreelmar.com.ar',
+    'cuit': '30-78765432-1'
+
+    }
+
+IVA = lambda x: x * 1.21
