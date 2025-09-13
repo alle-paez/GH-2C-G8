@@ -129,13 +129,32 @@ def verificar_reservas_disponibilidad(matriz_reservas,nro_hab, check_in, check_o
             return False
     return True
     
-def total_por_precio(matriz_habitaciones, dto, dias):
+def total_por_precio(matriz_habitaciones, dto, dias, ad):
  for hab in matriz_habitaciones:
      if hab[0] == dto:
          precio_noche = hab[1]
-         return precio_noche * dias
-       
-        
+         return precio_noche * dias + ad * 4000
+
+def verificar_cant_max(matriz_habitaciones, dto):
+    for hab in matriz_habitaciones:
+        if hab[0]==dto:
+            cant_maxima = hab[3]
+            return cant_maxima
+
+def validar_cant(pax, matriz_habitaciones, dto):
+    cap_max = verificar_cant_max(matriz_habitaciones,dto)
+    pax = int(pax)
+    if pax <= cap_max:
+        return True, 0
+    elif pax <= cap_max + 2:
+        ad = pax - cap_max
+        return True, ad
+    else: 
+        return False
+
+def digito_unico(pax):
+    return pax.isdigit() and len(pax) == 1
+
 #LLENAR RESERVAS ---------------------------------------------------------------------------------------------
 def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz_habitaciones= habitaciones):
     nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
@@ -157,7 +176,6 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz
 
     #Busqueda en clientes ------------------------------------
         buscar_cliente(matriz_clientes, nro_dni)
-        cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
 
     #check-in y check-out -------------------------------------------
         check_in = pedir_fecha("Ingrese fecha inicio (AAAA-MM-DD): ")
@@ -184,12 +202,25 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz
             dto = int(input("Ingrese el numero de habitación: "))
 
 #Total y habitación -------------------------------------------------------------
+        cant_pax = input("Ingrese la cantidad de pasajeros: ")
+        while not digito_unico(cant_pax):
+            cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
 
-        total = total_por_precio(matriz_habitaciones, dto, dias)
+        valido, adicionales = validar_cant(cant_pax, matriz_habitaciones, dto)
+        while not valido:
+            print("Exceso de pasajeros.")
+            cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
+            while not digito_unico(cant_pax):
+                cant_pax = int(input("Ingrese la cantidad de pasajeros: "))    
+            valido, adicionales = validar_cant(cant_pax, matriz_habitaciones, dto)
 
+        total = total_por_precio(matriz_habitaciones, dto, dias, adicionales)
         nro_reserva = len(matriz_reservas) + 1
 
-
+        matriz_reservas.append([nro_reserva, nro_dni, check_in, check_out, dto, cant_pax, total])
+        print(f"{nro_reserva, nro_dni, check_in, check_out, dto, cant_pax, total}")
+        print("Se agrego todo correctamente.")
+        nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
 
 def print_reservas(matriz):
     print("NroReserva|DNI       |Pax       |Desde     |Hasta     |Total     |")
