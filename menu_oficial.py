@@ -2,7 +2,7 @@ from listas_codeadas import *
 from clientes import *
 from habitaciones import *
 from reservas import *
-from login import *
+
 
 def ubicar(matriz, item): #INDEX
     flag=0
@@ -84,7 +84,7 @@ Volver para atrás con -1')
         while opcion_reservas!=-1:
 
             if opcion_reservas==1: #AGREGAR RESERVA
-                llenar_reservas(reservas)
+                llenar_reservas()
             elif opcion_reservas==2: #MODIFICAR RESERVA
                 pass
             elif opcion_reservas==3: # CANCELAR RESERVA
