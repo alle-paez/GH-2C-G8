@@ -274,7 +274,9 @@ def menu_mostrar():
         2 - Buscar por DNI. \n \
         3 - Buscar por habitación. \n \
         4 - Totales: Mayor a menor. \n \
-        5 - Totales: Menor a mayor. \n")
+        5 - Totales: Menor a mayor. \n\
+        6 - Ordenar por fecha de entrada: \n \
+")
 
 def mostrar_reservas(matriz, hab, x):
     lista = []
@@ -284,8 +286,8 @@ def mostrar_reservas(matriz, hab, x):
             lista.append(res)
     return lista
 
-def ordenar_totales_menor_mayor(reservas):
-    reservas.sort(key=lambda x: x[6])
+def ordenar_menor_mayor(reservas, i):
+    reservas.sort(key=lambda x: x[i])
     return reservas
 
 def ordenar_totales_mayor_menor(reservas):
@@ -320,8 +322,13 @@ def print_elegir_opcion(matriz_reservas= reservas):
         ordenar_totales_mayor_menor(matriz_reservas)
         print_tabla_reservas(matriz_reservas)
     elif op == 5:
-        ordenar_totales_menor_mayor(matriz_reservas)
+        ordenar_menor_mayor(matriz_reservas, 6)
         print_tabla_reservas(matriz_reservas)
+    elif op==6:
+        ordenar_menor_mayor(matriz_reservas, 2)
+        print_tabla_reservas(matriz_reservas)
+
+
 
 
 def print_tabla_reservas(matriz):
