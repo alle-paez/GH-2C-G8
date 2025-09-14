@@ -27,6 +27,8 @@ reservas_ant_mod = []
 
 reservas_post_mod = []
 
+reservas_eliminadas=[]
+
 nro_factura= [1,1]
 
 
