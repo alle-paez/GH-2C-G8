@@ -3,36 +3,27 @@ from clientes import *
 from habitaciones import *
 from reservas import *
 
-def ubicar(matriz, item): #INDEX
-    flag=0
-    i=0
-    pos=-1
-    while flag!=1:
-        if matriz[i][0]==item:
-            flag=1
-            pos=i
-        i+=1
-        if i==len(matriz):
-            flag=1
-    return pos
-
 #menú
-imprimir_factura()
-print("----Sistema de Gestión Hotelera----")
-print("" "\n",
-"1-Gestionar habitaciones", "\n", \
-"2-Reservas", "\n", \
-"Salir del programa con -1")
+print("")
+print(f'Sistema de Gestión Hotelera'.center(80,"-"))
+print(f'\n\
+1-Gestionar Habitaciones\n\
+2-Gestionar Reservas\n\
+3-Ver Estadísticas\n\
+Salir del programa con -1 \n\
+{LINEA}')
 opcion=int(input("Ingrese numéricamente la opción deseada: "))
 
 while opcion!=-1:
     if opcion==1:
-        print("" \
-        "1-Agregar habitación" , "\n", \
-        "2-Modificar habitación" , "\n",\
-        "3-Borrar habitación" , "\n",\
-        "4-Ver habitaciones", "\n",\
-        "Volver para atrás con -1")
+        print(f'{LINEA}\n\
+1-Agregar habitación\n\
+2-Modificar habitación\n\
+3-Borrar habitación\n\
+4-Ver habitaciones\n\
+5-Papelera de reciclaje\n\
+Volver para atrás con -1 \n\
+{LINEA}')
         opcion_habitaciones=int(input("Ingrese numéricamente la opción deseada: "))
 
         while opcion_habitaciones!=-1:
@@ -65,11 +56,14 @@ while opcion!=-1:
                 print_habitaciones(habitaciones)
             
             print(f'\
+{LINEA}\
 1-Agregar habitación\n\
 2-Modificar habitación\n\
 3-Borrar habitación\n\
 4-Ver habitaciones\n\
-Volver para atrás con -1')
+5-Papelera de reciclaje\n\
+Volver para atrás con -1\
+{LINEA}')
             opcion_habitaciones=int(input("Ingrese numéricamente la opción deseada: "))
 
     elif opcion==2:
@@ -101,7 +95,8 @@ Volver para atrás con -1')
             opcion_reservas=int(input("Ingrese numéricamente la opción deseada: "))
 
     print(f'\n\
-1-Gestionar habitaciones\n\
-2-Reservas\n\
+1-Gestionar Habitaciones\n\
+2-Gestionar Reservas\n\
+3-Ver Estadísticas\n\
 Salir del programa con -1')
     opcion=int(input("Ingrese numéricamente la opción deseada: "))

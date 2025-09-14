@@ -9,9 +9,11 @@ def print_habitaciones(matriz):
         print()
     return matriz
 
-def llenar_habitaciones(matriz):
-    numero = leer_numero("Número de habitación (-1 para salir): ", permitir_menos1=True)
+es_entero = lambda x: re.search(r'^-?[0-9]+$', x) is not None
 
+def llenar_habitaciones(matriz):
+    numero = input("Número de habitación (-1 para salir): ")
+    flag=es_entero(numero)
     while numero != -1:
         idx = ubicar(matriz, numero)
         while idx != -1 and numero != -1:
@@ -31,6 +33,8 @@ def llenar_habitaciones(matriz):
             print("Habitación agregada.")
 
             numero = leer_numero("Número de habitación (-1 para salir): ", permitir_menos1=True)
+
+
 
 def modificar_habitacion(matriz):
     numero = leer_numero("Número de habitación a modificar (-1 para volver): ", permitir_menos1=True)
@@ -96,3 +100,4 @@ def modificar_habitacion(matriz):
                 op = int(op_txt)
 
             numero = leer_numero("\nNúmero de otra habitación a modificar (-1 para volver): ", permitir_menos1=True)
+
