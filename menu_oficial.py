@@ -70,7 +70,7 @@ def menu_administrador():
                 elif opcion_reservas==3: # CANCELAR RESERVA
                     reservas_eliminadas()
                 elif opcion_reservas==4: #VER RESERVAS
-                    print_tabla_reservas()
+                    print_elegir_opcion()
                 elif opcion_reservas==5:
                     deshacer_eliminar_reserva()
 

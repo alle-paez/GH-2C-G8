@@ -1,5 +1,6 @@
 from listas_codeadas import *
 from clientes import *
+from habitaciones import *
 import re
 
 """Lista para hacer: 
@@ -192,16 +193,6 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz
             check_out = pedir_fecha("Reingrese fecha fin (AAAA-MM-DD): ")
 
         dias = diferencia_dias_entre(check_in, check_out)
-
-        """if dias > 31:
-            continuar = int(input("Cantidad de días mayor a 31, desea continuar? 1 - Si | 2 - No "))
-            while continuar != 1 and continuar != 2: 
-                print("Se debe ingresar 1 o 2.")
-                continuar = int(input("Cantidad de días mayor a 31, desea continuar? 1 - Si | 2 - No "))
-            if continuar == 1:
-                pass
-            if continuar == 2:
-                pass """
 #Validar habitaciones y fechas --------------------------------------------------
         
         dto = int(input("Ingrese el numero de habitación: "))
@@ -230,7 +221,7 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz
         print("Se agrego todo correctamente.")
         nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
 
-#UPDATE: ACTUALIZAR ----------------------------------------------------------------------------------
+#UPDATE: ACTUALIZAR Y LEER ----------------------------------------------------------------------------------
 def buscar_reserva_x_id(matriz_reservas, idd):
     for i in range(len(matriz_reservas)):
         if matriz_reservas[i][0] == idd:
@@ -243,14 +234,7 @@ def dar_reserva_x_id(matriz_reservas, idd):
         return False
     else: 
         return matriz_reservas[i]
-    
-def elegir_reserva_x_cliente(matriz_reservas, dni):
-    reservas_cliente = []
-    for reserva in matriz_reservas:
-        if reserva[1] == int(dni):
-            res = reserva
-            reservas_cliente.append(res) 
-    return reservas_cliente
+
 
 def mostrar_opciones_mod():
     print(f"¿Que elemento/s de la reserva desea modificar?:\n \
@@ -284,7 +268,63 @@ def print_reserva(matriz, pos):
           str(pax).ljust(3), "|",
           str(total).ljust(6))
 
-def print_tabla_reservas(matriz=reservas):
+def menu_mostrar():
+    print(f"¿Que desea ver? Ingrese una opción: \n \
+        1 - Tabla reservas completa. \n \
+        2 - Buscar por DNI. \n \
+        3 - Buscar por habitación. \n \
+        4 - Totales: Mayor a menor. \n \
+        5 - Totales: Menor a mayor. \n")
+
+def mostrar_reservas(matriz, hab, x):
+    lista = []
+    for valor in matriz: 
+        if valor[x] == hab:
+            res = valor
+            lista.append(res)
+    return lista
+
+def ordenar_totales_menor_mayor(reservas):
+    reservas.sort(key=lambda x: x[6])
+    return reservas
+
+def ordenar_totales_mayor_menor(reservas):
+    reservas.sort(key=lambda x: x[6], reverse=True)
+    return reservas
+
+def print_elegir_opcion(matriz_reservas= reservas):
+    menu_mostrar()
+    op = int(input("Ingrese la opción elegida:"))
+    if op == 1:
+        print_tabla_reservas(matriz_reservas)
+    elif op == 2:
+        cliente = input("Ingrese el DNI del cliente: ")
+        ver_dni = verificar_formato(cliente)
+        while not ver_dni:
+            print("Se ingreso un dni Invalido.")
+            cliente= input("Ingrese el número de dni del cliente: (-1 para salir): ")
+            ver_dni = verificar_formato(cliente)
+        cliente = int(cliente)
+        reservas_cliente = mostrar_reservas(matriz_reservas,cliente,1)
+        if len(reservas_cliente)==0:
+            print(f"El Dni {cliente} no tiene ninguna reserva en el alojamiento.")
+        else: 
+            print_tabla_reservas(reservas_cliente)
+    elif op == 3:
+        print("Elija el numero de habitación: ")
+        print_habitaciones(habitaciones)
+        hab = int(input("Habitación elegida: "))
+        reservas_habitacion = mostrar_reservas(matriz_reservas, hab, 4)
+        print_tabla_reservas(reservas_habitacion)
+    elif op == 4:
+        ordenar_totales_mayor_menor(matriz_reservas)
+        print_tabla_reservas(matriz_reservas)
+    elif op == 5:
+        ordenar_totales_menor_mayor(matriz_reservas)
+        print_tabla_reservas(matriz_reservas)
+
+
+def print_tabla_reservas(matriz):
     print("")
     print("------------------------------------------------------------------")
     print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
@@ -299,7 +339,11 @@ def print_tabla_reservas(matriz=reservas):
           str(hab).ljust(3), "|",
           str(pax).ljust(3), "|",
           str(total).ljust(6))
-    
+
+
+
+
+#MODIFICACION --------------------------------------------------------------------------------------------------------------
 def modificacion(matriz_clientes=clientes, matriz_reservas= reservas, matriz_habitaciones=habitaciones, mat_mod_anterior= reservas_ant_mod, mat_mod_posterior= reservas_post_mod):
     busq = modo_busqueda()
     while busq != 1 and busq != 2:
@@ -317,7 +361,7 @@ def modificacion(matriz_clientes=clientes, matriz_reservas= reservas, matriz_hab
         nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
         ver_dni = verificar_formato(nro_dni)
         existe = existe_cliente(matriz_clientes, int(nro_dni))
-        reservas_cliente = elegir_reserva_x_cliente(matriz_reservas, int(nro_dni))
+        reservas_cliente = mostrar_reservas(matriz_reservas, int(nro_dni), 1)
         while not ver_dni or not existe or reservas_cliente == 0:
             if not ver_dni: 
                 print("Se ingreso un dni Invalido.")
