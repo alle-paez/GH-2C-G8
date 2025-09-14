@@ -430,10 +430,47 @@ def modificacion(matriz_clientes=clientes, matriz_reservas= reservas, matriz_hab
         opcion_elegida = int(input("Ingrese la opción elegida: (-1 para retroceder.)"))
 
 
-
-            
-
 #DELETE: BORRAR --------------------------------------------------------------------------------------
+def eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=reservas_eliminadas):
+    id_eliminar = int(input("Ingrese el número de reserva que quiera eliminar: "))
+    flag = 1
+    while flag == 1:
+        flag = 0
+        pos = buscar_reserva_x_id(matriz_reservas, id_eliminar)
+        if pos != -1:
+            reserva = matriz_reservas.pop(pos)
+            reservas_eliminadas.append(reserva)
+            print(f"La reserva nro {id_eliminar} ha sido eliminada con exito.")
+            flag = int(input("Si desea eliminar otra habitación, ingrese 1, si no, ingrese 0: "))
+        else: 
+            print(f"No se encontro la habitación {id_eliminar}.")
+            id_eliminar = int(input("Ingrese el número de reserva nuevamente: "))
+
+        if flag == 1:
+            id_eliminar = int(input("Ingrese el número de reserva que quiera eliminar: "))
+
+
+def deshacer_eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=reservas_eliminadas):
+    id_recuperar = int(input("Ingrese el número de reserva que quisiera recuperar: "))
+    flag = 1
+    while flag == 1: 
+        flag = 0
+        pos=buscar_reserva_x_id(reservas_eliminadas, id_recuperar)
+        if pos != -1:
+            reserva = reservas_eliminadas.pop(pos)
+            matriz_reservas.insert(reserva[0]-1, reserva)
+            print(f"La reserva nro {id_recuperar} ha sido recuperada con exito.")
+            flag = int(input("Si desea recuperar otra habitación, ingrese 1, si no, ingrese 0: "))
+        else: 
+            print(f"No se encontro la habitación {id_recuperar}.")
+            id_recuperar = int(input("Ingrese el número de reserva nuevamente: "))
+        if flag == 1:
+            id_recuperar = int(input("Ingrese el número de reserva que quiera recuperar: "))
+
+
+
+
+
 #FACTURA    
 def imprimir_factura():
     #ENCABEZADO

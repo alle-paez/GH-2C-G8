@@ -32,6 +32,10 @@ reservas_post_mod = [
 ]
 nro_factura= [1,1]
 
+reservas_eliminadas = [
+    
+]
+
 empresa={
     'nombre':'departamentos sobre el mar',
     'dirección':'villa gessel',

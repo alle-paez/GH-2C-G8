@@ -2,7 +2,6 @@ from listas_codeadas import *
 from clientes import *
 from habitaciones import *
 from reservas import *
-from opcion_habitaciones import *
 
 #menú
 print("")
@@ -36,8 +35,23 @@ Volver para atrás con -1 \n\
                 print_habitaciones(habitaciones)
                 item=input(int("Ingrese el número de habitación que quiera modificar: "))
             elif opcion_habitaciones==3: #ELIMINAR HABITACIONES
+                #AGREGAR UN DESHACER¿
                 print_habitaciones(habitaciones)
-                eliminar_hab(habitaciones, habitaciones_borradas)
+                item=int(input("Ingrese el número de habitación que quiera eliminar: "))
+                pos=ubicar(habitaciones, item)
+                flag=1
+                while flag==1:
+                    if pos!=-1:
+                        del(habitaciones[pos])
+                        print(f'\nLa habitación {item} ha sido eliminada con éxito\n')
+                        flag=int(input("Si quiere eliminar otra habitación ingrese 1, si no ingrese 0: "))
+                        pos=-1
+                    else:
+                        print("La habitación ingresada no existe, intente de nuevo")
+
+                    if flag==1:
+                        item=int(input("Ingrese el número de habitación que quiera eliminar: "))
+                        pos=ubicar(habitaciones, item) #HACER UN CKECK ANTES PARA QUE NO SE CUELGUE SI SON MUCHOS ELEMENTOS¿
             elif opcion_habitaciones==4:#VER HABITACIONES
                 print_habitaciones(habitaciones)
             
