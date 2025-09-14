@@ -105,12 +105,6 @@ def existe_cliente(matriz_clientes, dni):
             return True
     return False
 
-def existe_cliente(matriz_clientes, dni):
-    for c in matriz_clientes:
-        if c[0] == dni:
-            return True
-    return False
-
 def buscar_cliente(matriz_clientes, dni):
     if not existe_cliente(matriz_clientes, dni):
         print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
@@ -198,7 +192,8 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz
             check_out = pedir_fecha("Reingrese fecha fin (AAAA-MM-DD): ")
 
         dias = diferencia_dias_entre(check_in, check_out)
-        if dias > 31:
+
+        """if dias > 31:
             continuar = int(input("Cantidad de días mayor a 31, desea continuar? 1 - Si | 2 - No "))
             while continuar != 1 and continuar != 2: 
                 print("Se debe ingresar 1 o 2.")
@@ -206,9 +201,9 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz
             if continuar == 1:
                 pass
             if continuar == 2:
-                pass 
+                pass """
 #Validar habitaciones y fechas --------------------------------------------------
-
+        
         dto = int(input("Ingrese el numero de habitación: "))
         while not verificar_reservas_disponibilidad(matriz_reservas, dto, check_in, check_out):
             print(f"La habitación {dto} ya está ocupada en ese rango.")
@@ -270,10 +265,9 @@ def elegir_reserva_x_cliente(matriz_reservas, dni):
 def mostrar_opciones_mod():
     print(f"¿Que elemento/s de la reserva desea modificar?:\n \
 (El id, dni del cliente y el total de la reserva no son posibles de modificar.) \n \
-    Fecha de entrada: 1 \n \
-    Fecha de salida: 2 \n \
-    Número de habitación: 3 \n \
-    Cantidad de pasajeros: 4")
+    Fechas de entrada y salida: 1 \n \
+    Número de habitación: 2 \n \
+    Cantidad de pasajeros: 3")
 
 def modo_busqueda():
     print(f"¿Como desea buscar la reserva? \n \
@@ -281,7 +275,26 @@ def modo_busqueda():
           2 - DNI del cliente.")
     busq = int(input("Por favor, solo ingrese una opción correcta: "))
     return busq
-def modificacion(matriz_reservas= reservas, matriz_habitaciones=habitaciones):
+
+def formatear_fecha(fecha):
+    return str(fecha[0]).zfill(4) + "-" + str(fecha[1]).zfill(2) + "-" + str(fecha[2]).zfill(2)
+
+def print_reserva(matriz, pos):
+    fila = matriz[pos]
+    id_reserva, dni, check_in, check_out, hab, pax, total = fila
+    print("")
+    print("------------------------------------------------------------------")
+    print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
+    print("------------------------------------------------------------------")
+    print(str(id_reserva).ljust(4), "|",
+          str(dni).ljust(11), "|",
+          formatear_fecha(check_in).ljust(11), "|",
+          formatear_fecha(check_out).ljust(11), "|",
+          str(hab).ljust(3), "|",
+          str(pax).ljust(3), "|",
+          str(total).ljust(6))
+
+def modificacion(matriz_clientes=clientes, matriz_reservas= reservas, matriz_habitaciones=habitaciones, mat_mod_anterior= reservas_ant_mod, mat_mod_posterior= reservas_post_mod):
     busq = modo_busqueda()
     while busq != 1 and busq != 2:
         busq = modo_busqueda()
@@ -297,24 +310,125 @@ def modificacion(matriz_reservas= reservas, matriz_habitaciones=habitaciones):
     elif busq == 2:
         nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
         ver_dni = verificar_formato(nro_dni)
-        while not ver_dni:
-            print("Se ingreso un dni Invalido.")
+        existe = existe_cliente(matriz_clientes, int(nro_dni))
+        reservas_cliente = elegir_reserva_x_cliente(matriz_reservas, int(nro_dni))
+        while not ver_dni or not existe or reservas_cliente == 0:
+            if not ver_dni: 
+                print("Se ingreso un dni Invalido.")
+            elif not existe:
+                print(" El cliente no existe en la base de datos.")
+            elif len(reservas_cliente) == 0:
+                print(" El cliente no tiene reservas registradas.")
+
             nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
             ver_dni = verificar_formato(nro_dni)
-        reservas_cliente = elegir_reserva_x_cliente(matriz_reservas, nro_dni)
+            existe = existe_cliente(matriz_clientes, int(nro_dni))
+
+
         print(f" ID | DNI Cliente | Entrada | Salida | Habitación | Pax | Total")
         for el in reservas_cliente:
             print(el, end=" ") 
             print("")   
 
+        print("Se mostraron las reservas del cliente junto a su id, por favor elija una opción: ")
+        id_reserva = int(input("Ingrese el id de reserva: "))
+        existe = dar_reserva_x_id(matriz_reservas, id_reserva)
+        while not existe:
+            id_reserva = int(input("Ingrese el id de reserva: "))
+            existe = dar_reserva_x_id(matriz_reservas, id_reserva)  
+              
+        i = buscar_reserva_x_id(matriz_reservas, id_reserva)
+
+
     mostrar_opciones_mod()
     opcion_elegida = int(input("Ingrese la opción elegida: (-1 para retroceder.)"))
     while opcion_elegida != -1:
-        pass
-        
+#FECHAS ----------------------------------------------------------------------       
+        if opcion_elegida == 1:
+            check_in = pedir_fecha("Ingrese fecha inicio (AAAA-MM-DD): ")
+            check_out = pedir_fecha("Ingrese fecha final (AAAA-MM-DD): ")
+            modificados_reservas = matriz_reservas.pop(i)
 
-print(dar_reserva_x_id(reservas, 1))
-print(elegir_reserva_x_cliente(reservas, 30555999))
+            while not verificar_egreso(check_in, check_out):
+                print("El egreso debe ser posterior al ingreso.")
+                check_out = pedir_fecha("Reingrese fecha fin (AAAA-MM-DD): ")
+            
+            dias = diferencia_dias_entre(check_in, check_out)
+
+            dto = modificados_reservas[4]
+            while not verificar_reservas_disponibilidad(matriz_reservas, dto, check_in, check_out):
+                print(f"La habitación {dto} ya está ocupada en ese rango.")
+                dto = int(input("Ingrese el numero de habitación: "))
+            
+            cant_pax = modificados_reservas[5]
+            valido, adicionales = validar_cant(cant_pax, matriz_habitaciones, dto)
+            while not valido:
+                print("Exceso de pasajeros.")
+                cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
+                while not digito_unico(cant_pax):
+                    cant_pax = int(input("Ingrese la cantidad de pasajeros: "))    
+                valido, adicionales = validar_cant(cant_pax, matriz_habitaciones, dto)
+
+            total = total_por_precio(matriz_habitaciones, dto, dias, adicionales)
+            print(total)
+            modif = [modificados_reservas[0], modificados_reservas[1], check_in, check_out, dto, cant_pax, total]
+            mat_mod_anterior.append(modificados_reservas.pop())
+            mat_mod_posterior.append(modif)
+            matriz_reservas.insert(i, modif)
+            print_reserva(matriz_reservas, i)
+        
+        if opcion_elegida == 2:
+            modificados_reservas = matriz_reservas.pop(i)
+            check_in = modificados_reservas[2]
+            check_out = modificados_reservas[3]
+            dias = diferencia_dias_entre(check_in, check_out)
+            dto = int(input("Ingrese el número de habitación: "))
+            while not verificar_reservas_disponibilidad(matriz_reservas, dto, check_in, check_out):
+                print(f"La habitación {dto} ya está ocupada en ese rango.")
+                dto = int(input("Ingrese el numero de habitación: "))
+            
+            cant_pax = modificados_reservas[5]
+            valido, adicionales = validar_cant(cant_pax, matriz_habitaciones, dto)
+            while not valido:
+                print("Exceso de pasajeros.")
+                cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
+                while not digito_unico(cant_pax):
+                    cant_pax = int(input("Ingrese la cantidad de pasajeros: "))    
+                valido, adicionales = validar_cant(cant_pax, matriz_habitaciones, dto)
+            
+            total = total_por_precio(matriz_habitaciones, dto, dias, adicionales)
+            modif = [modificados_reservas[0], modificados_reservas[1], check_in, check_out, dto, cant_pax, total]
+            mat_mod_anterior.append(modificados_reservas.pop())
+            mat_mod_posterior.append(modif)
+            matriz_reservas.insert(i, modif)
+            print_reserva(matriz_reservas, i)
+
+        if opcion_elegida == 3:
+            modificados_reservas = matriz_reservas.pop(i)
+            check_in = modificados_reservas[2]
+            check_out = modificados_reservas[3]
+            dias = diferencia_dias_entre(check_in, check_out)
+            dto = modificados_reservas[4]
+
+            cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
+            valido, adicionales = validar_cant(cant_pax, matriz_habitaciones, dto)
+            while not valido:
+                print("Exceso de pasajeros.")
+                cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
+                while not digito_unico(cant_pax):
+                    cant_pax = int(input("Ingrese la cantidad de pasajeros: "))    
+                valido, adicionales = validar_cant(cant_pax, matriz_habitaciones, dto)
+
+            total = total_por_precio(matriz_habitaciones, dto, dias, adicionales)
+            modif = [modificados_reservas[0], modificados_reservas[1], check_in, check_out, dto, cant_pax, total]
+            mat_mod_anterior.append(modificados_reservas.pop())
+            mat_mod_posterior.append(modif)
+            matriz_reservas.insert(i, modif)
+            
+            print_reserva(matriz_reservas, i)
+
+        opcion_elegida = int(input("Ingrese la opción elegida: (-1 para retroceder.)"))
+
 
 
             
