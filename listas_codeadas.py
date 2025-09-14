@@ -23,8 +23,6 @@ clientes = [
     [31222333, "Martín", "Díaz", "1178901234", "martin.diaz@email.com"]
 ]
 
-nro_factura= [1,1]
-
 empresa={
     'nombre':'departamentos sobre el mar',
     'dirección':'villa gessel',
@@ -41,3 +39,4 @@ LINEA=("-")*80
 
 habitaciones_borradas=[]
 
+nro_factura= [1,1]
