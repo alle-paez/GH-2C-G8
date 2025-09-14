@@ -32,14 +32,13 @@ def ubicar(matriz, item):
             flag = 1
     return pos
 
-def leer_numero(mensaje, permitir_menos1=False):
+def leer_numero(num,mensaje="Ingrese el número, cerrar con-1", permitir_menos1=False):
     """
     Pide un número entero validado con expresión regular.
     Si permitir_menos1=True, se permite el valor -1 como salida.
     """
     patron = r"^-?[0-9]+$"
-    nro = input(mensaje).strip()
-    while not re.match(patron, nro) or (not permitir_menos1 and int(nro) < 1):
+    while not re.match(patron, num) or (not permitir_menos1 and int(num) < 1):
         print("Entrada inválida. Solo números enteros válidos.")
-        nro = input(mensaje).strip()
-    return int(nro)
+        num = input(mensaje).strip()
+    return int(num)
