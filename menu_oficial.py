@@ -3,7 +3,7 @@ from clientes import *
 from habitaciones import *
 from reservas import *
 
-def menú_administrador():
+def menu_administrador():
 
     print("")
     print(f'Sistema de Gestión Hotelera'.center(80,"-"))
@@ -68,9 +68,11 @@ def menú_administrador():
                 elif opcion_reservas==2: #MODIFICAR RESERVA
                     modificacion()
                 elif opcion_reservas==3: # CANCELAR RESERVA
-                    pass
+                    reservas_eliminadas()
                 elif opcion_reservas==4: #VER RESERVAS
-                    print_reservas(reservas)
+                    print_tabla_reservas()
+                elif opcion_reservas==5:
+                    deshacer_eliminar_reserva()
 
                 print(f'{LINEA}\n\
     1-Agregar reserva\n\
@@ -110,3 +112,6 @@ def menú_administrador():
     Salir del programa con -1\n\
     {LINEA}')
         opcion=int(input("Ingrese numéricamente la opción deseada: "))
+
+
+menu_administrador()

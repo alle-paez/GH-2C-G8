@@ -230,16 +230,6 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz
         print("Se agrego todo correctamente.")
         nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
 
-# READ -----------------------------------------------------------------------------------------------
-def print_reservas(matriz):
-    print("NroReserva|DNI       |Pax       |Desde     |Hasta     |Total     |")
-    for i in range(len(matriz)):
-        for j in range(len(matriz[i])):
-            #print(espaciado(10, matriz[i][j], "i"), end="")
-            print(f'{matriz[i][j]}'.center(10," "), end='')
-        print()
-    return matriz
-
 #UPDATE: ACTUALIZAR ----------------------------------------------------------------------------------
 def buscar_reserva_x_id(matriz_reservas, idd):
     for i in range(len(matriz_reservas)):
@@ -294,6 +284,22 @@ def print_reserva(matriz, pos):
           str(pax).ljust(3), "|",
           str(total).ljust(6))
 
+def print_tabla_reservas(matriz=reservas):
+    print("")
+    print("------------------------------------------------------------------")
+    print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
+    print("------------------------------------------------------------------")
+    for valor in matriz:
+        fila = valor
+        id_reserva, dni, check_in, check_out, hab, pax, total = fila
+        print(str(id_reserva).ljust(4), "|",
+          str(dni).ljust(11), "|",
+          formatear_fecha(check_in).ljust(11), "|",
+          formatear_fecha(check_out).ljust(11), "|",
+          str(hab).ljust(3), "|",
+          str(pax).ljust(3), "|",
+          str(total).ljust(6))
+    
 def modificacion(matriz_clientes=clientes, matriz_reservas= reservas, matriz_habitaciones=habitaciones, mat_mod_anterior= reservas_ant_mod, mat_mod_posterior= reservas_post_mod):
     busq = modo_busqueda()
     while busq != 1 and busq != 2:
