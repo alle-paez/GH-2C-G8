@@ -85,7 +85,6 @@ Volver para atrás con -1\
                 pass
             elif opcion_reservas==4: #VER RESERVAS
                 print_reservas(reservas)
-            
             print(f'\
 1-Agregar reserva\n\
 2-Modificar reserva\n\
