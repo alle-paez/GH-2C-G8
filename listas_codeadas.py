@@ -23,18 +23,13 @@ clientes = [
     [31222333, "Martín", "Díaz", "1178901234", "martin.diaz@email.com"]
 ]
 
-<<<<<<< HEAD
-=======
-reservas_ant_mod = [
+reservas_ant_mod = []
 
-]
+reservas_post_mod = []
 
-reservas_post_mod = [
-    
-]
 nro_factura= [1,1]
 
->>>>>>> 127a9621f53c7a95230fda8621af6ba82864c7b4
+
 empresa={
     'nombre':'departamentos sobre el mar',
     'dirección':'villa gessel',
@@ -42,7 +37,6 @@ empresa={
     'teléfono':'6291-2367',
     'web':'www.departamentossobreelmar.com.ar',
     'cuit': '30-78765432-1'
-
     }
 
 IVA = lambda x: x * 1.21

@@ -1,5 +1,6 @@
 from listas_codeadas import *
 from auxiliar_habitaciones import *
+import re
 
 #IMPRIMIR HABITACIONES----------------------------------------------------------------------------------------------
 def print_habitaciones(matriz):
@@ -96,6 +97,7 @@ def llenar_habitaciones(matriz):
             numero = input("Número de habitación (-1 para salir): ")
             idx = ubicar(matriz, int(numero))
             flag=es_entero(numero)
+    ordenar_hab(matriz)
 
 #MODIFICAR HABITACIONES----------------------------------------------------------------------------------------------
 def modificar_habitacion(matriz):
@@ -108,24 +110,27 @@ def modificar_habitacion(matriz):
         while idx == -1 and int(numero) != -1:
             print("No existe esa habitación.")
             numero = input("Número de habitación a modificar (-1 para volver): ")
-            es_entero(numero)
+            flag= es_entero(numero)
 
             if int(numero) != -1:
                 idx = ubicar(matriz, int(numero))
+            else:
+                numero = input("Número de habitación a modificar (-1 para volver): ")
+                flag=es_entero(numero)
 
         if int(numero) != -1:
             fila = matriz[idx]  # [nro, precio, tipo, capacidad, estado]
-            print("\nActual →",
-                  "Nro:", fila[0],
-                  "Precio:", fila[1],
-                  "Tipo:", fila[2],
-                  "Capacidad:", fila[3],
-                  "Estado:", fila[4])
+            print(f'\nActual →\
+Nro: {fila[0]}\
+Precio:{fila[1]}\
+Tipo:{fila[2]}\
+Capacidad:{fila[3]}\
+Estado:{fila[4]}')\
 
-            op_txt = input("\n¿Qué modificar?  1-Precio  2-Tipo  3-Capacidad  4-Estado  5-Todos  (-1 volver)\nOpción: ").strip()
+            op_txt = input(f"\n¿Qué modificar?  1-Precio  2-Tipo  3-Capacidad  4-Estado  5-Todos  (-1 volver)\nOpción: ").strip()
             while not (op_txt.lstrip("-").isdigit() and int(op_txt) in {1,2,3,4,5,-1}):
                 print("Opción inválida.")
-                op_txt = input("\n1-Precio  2-Tipo  3-Capacidad  4-Estado  5-Todos  (-1 volver)\nOpción: ").strip()
+                op_txt = input(f"\n1-Precio  2-Tipo  3-Capacidad  4-Estado  5-Todos  (-1 volver)\nOpción: ").strip()
             op = int(op_txt)
 
             while op != -1:
@@ -175,6 +180,7 @@ def modificar_habitacion(matriz):
 
             numero = input("Número de otra habitación a modificar (-1 para volver): ")
             es_entero(numero)
+    ordenar_hab(matriz)
 
 #LEER TIPOS Y SUS OPCIONES--------------------------------------------------------------------------------------------------------
 tipos   = ["Single", "Doble", "Triple", "Suite"]
