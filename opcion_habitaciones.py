@@ -14,25 +14,35 @@ es_entero = lambda x: re.search(r'^-?[0-9]+$', x) is not None
 def llenar_habitaciones(matriz):
     numero = input("Número de habitación (-1 para salir): ")
     flag=es_entero(numero)
-    while numero != -1:
-        idx = ubicar(matriz, numero)
-        while idx != -1 and numero != -1:
+    #chekeo que el número sea válido
+    while flag==False:
+        numero = input("El valor ingresado no es válido, ingrese nuevamente(-1 para salir): ")
+        flag=es_entero(numero)
+    #checkeo que no exista ya
+    while int(numero) != -1:
+        idx = ubicar(matriz, int(numero))
+        while idx != -1:
             print("Esta habitación ya existe.")
-            numero = leer_numero("Número de habitación (-1 para salir): ", permitir_menos1=True)
-            if(numero != -1):
-                idx = ubicar(matriz, numero)
+            while flag==False or idx!=-1:
+                numero = input("Número de habitación (-1 para salir): ")
+                flag=es_entero(numero)
+                idx = ubicar(matriz, int(numero))
 
-        if numero != -1 and idx == -1:
-            precio = leer_numero("Precio (entero > 0): ")
+        if int(numero) != -1 and idx == -1 and flag:
+            precio = input("Precio (entero > 0): ")
+            es_entero(precio)
 
             tipo_txt = leer_tipo()
-            capacidad = leer_numero("Capacidad (> 0): ")
+            capacidad = input("Capacidad (> 0): ")
+
             estado_txt = leer_estado()
 
             matriz.append([numero, precio, tipo_txt, capacidad, estado_txt])
             print("Habitación agregada.")
 
-            numero = leer_numero("Número de habitación (-1 para salir): ", permitir_menos1=True)
+            numero = input("Número de habitación (-1 para salir): ")
+            idx = ubicar(matriz, int(numero))
+            flag=es_entero(numero)
 
 
 

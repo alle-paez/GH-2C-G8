@@ -116,9 +116,9 @@ def buscar_cliente(matriz_clientes, dni):
         print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
         llenar_clientes_desde_reservas(matriz_clientes, dni)
         
-    if not existe_cliente(matriz_clientes, dni):
+"""    if not existe_cliente(matriz_clientes, dni):
         print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
-        llenar_clientes_desde_reservas(matriz_clientes, dni)
+        llenar_clientes_desde_reservas(matriz_clientes, dni)"""
         
 def llenar_clientes_desde_reservas(matriz_clientes, dni):
         nombre = input("Ingrese el nombre del cliente: ")
