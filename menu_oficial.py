@@ -102,8 +102,8 @@ Volver para atrás con -1\n\
                 elif opcion_clientes==3: # BORRAR CLIENTES
                     llenar_clientes(clientes)
                 elif opcion_clientes==4: #VER CLIENTES
-                    print_clientes(clientes)
-            print(f'{LINEA}\n\
+                    print_clt(clientes)
+                print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\
 3-Eliminar cliente\n\
@@ -111,7 +111,7 @@ Volver para atrás con -1\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
 {LINEA}')
-        opcion_clientes=int(input("Ingrese numéricamente la opción deseada: "))
+                opcion_clientes=int(input("Ingrese numéricamente la opción deseada: "))
             
         print(f'{LINEA}\n\
 1-Gestionar Habitaciones\n\

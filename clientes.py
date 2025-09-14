@@ -56,9 +56,38 @@ def print_clientes(m):
 def modificar_clientes():
     pass
 
+def mostrar_opciones_mod_2():
+    print(f"¿Que elemento/s de la reserva desea modificar?:\n \
+(El id, dni del cliente y el total de la reserva no son posibles de modificar.) \n \
+Fechas de entrada y salida: 1 \n \
+Número de habitación: 2 \n \
+Cantidad de pasajeros: 3")
 
 #existe_cliente()
 #buscar_cliente()
 es_texto=lambda x: re.search(r'^[a-zA-Z ]+$', x)is not None
 es_telefono= lambda x: re.search(r'\d{4}-\d{4}$', x) is not None
 es_mail= lambda x: re.search(r'\w*@gmail\.com$', x) is not None
+
+def print_clt(matriz):
+    print("")
+    print("---------------------------------------------------------------------------------")
+    print("DNI       |Nombre       |Apellido       |Teléfono        |Mail                  ")
+    print("---------------------------------------------------------------------------------")
+    for valor in matriz:
+        fila = valor
+        dni, nombre, apellido, telefono, mail= fila
+
+        print(str(dni).ljust(9), "|",
+            str(nombre).ljust(11), "|",
+            str(apellido).ljust(13), "|",
+            str(telefono).ljust(14), "|",
+            str(mail).ljust(14))
+
+"""    clientes = [
+    [30555999, "Juan", "Pérez", "1123456789", "juan.perez@email.com"],
+    [28444888, "María", "Gómez", "1167894321", "maria.gomez@email.com"],
+    [33222111, "Lucas", "Martínez", "1134567890", "lucas.martinez@email.com"],
+    [29888777, "Sofía", "López", "1145678901", "sofia.lopez@email.com"],
+    [31222333, "Martín", "Díaz", "1178901234", "martin.diaz@email.com"]
+]"""
