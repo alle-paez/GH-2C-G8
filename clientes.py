@@ -1,19 +1,5 @@
 from listas_codeadas import * 
 
-"""def llenar_habitaciones(matriz):
-
-    numero= int(input("Ingrese el número de habitación: "))
-    while numero!=-1:
-        
-        precio=	int(input("Ingrese el precio: "))
-        tipo=input("Ingrese el tipo de habitación: ")
-        capacidad=int(input("Ingrese la capacidad de habitación: "))
-        estado=input("Ingrese el estado de la habitación: ")
-
-        matriz.append([numero, precio, tipo, capacidad, estado])
-
-        numero= int(input("Ingrese el número de habitación: "))"""
-        
 def llenar_clientes(m):
     dni = int(input("Ingrese el Dni del cliente: (-1 para finalizar la carga:)"))
     while dni != -1: 
@@ -32,3 +18,5 @@ def print_clientes(m):
             print(f'{m[i][j]}'.center(10," "), end = "")
         print()
 
+def modificar_clientes():
+    pass

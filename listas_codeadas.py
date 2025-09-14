@@ -52,3 +52,4 @@ LINEA=("-")*80
 
 habitaciones_borradas=[]
 
+nro_factura= [1,1]
