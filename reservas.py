@@ -66,7 +66,7 @@ def pedir_fecha(mensaje):
                 print("La fecha no existe, vuelva a intentar.")
         else:
             print("Formato incorrecto, use AAAA-MM-DD.")
-    return fecha  #Sale [año, mes, dia]
+    return fecha
 
 def dias_en_mes(anio, mes):
     dias_mes = [31, 29 if bisiesto(anio) else 28, 31, 30, 31, 30,
@@ -246,6 +246,78 @@ def print_reservas(matriz):
     return matriz
 
 #UPDATE: ACTUALIZAR ----------------------------------------------------------------------------------
+def buscar_reserva_x_id(matriz_reservas, idd):
+    for i in range(len(matriz_reservas)):
+        if matriz_reservas[i][0] == idd:
+            return i
+    return -1
+
+def dar_reserva_x_id(matriz_reservas, idd):
+    i = buscar_reserva_x_id(matriz_reservas, idd)
+    if i == -1:
+        return False
+    else: 
+        return matriz_reservas[i]
+    
+def elegir_reserva_x_cliente(matriz_reservas, dni):
+    reservas_cliente = []
+    for reserva in matriz_reservas:
+        if reserva[1] == int(dni):
+            res = reserva
+            reservas_cliente.append(res) 
+    return reservas_cliente
+
+def mostrar_opciones_mod():
+    print(f"¿Que elemento/s de la reserva desea modificar?:\n \
+(El id, dni del cliente y el total de la reserva no son posibles de modificar.) \n \
+    Fecha de entrada: 1 \n \
+    Fecha de salida: 2 \n \
+    Número de habitación: 3 \n \
+    Cantidad de pasajeros: 4")
+
+def modo_busqueda():
+    print(f"¿Como desea buscar la reserva? \n \
+          1 - ID de reserva. \n \
+          2 - DNI del cliente.")
+    busq = int(input("Por favor, solo ingrese una opción correcta: "))
+    return busq
+def modificacion(matriz_reservas= reservas, matriz_habitaciones=habitaciones):
+    busq = modo_busqueda()
+    while busq != 1 and busq != 2:
+        busq = modo_busqueda()
+    if busq == 1: 
+        id_reserva = int(input("Ingrese el id de reserva: "))
+        existe = dar_reserva_x_id(matriz_reservas, id_reserva)
+        while not existe:
+            id_reserva = int(input("Ingrese el id de reserva: "))
+            existe = dar_reserva_x_id(matriz_reservas, id_reserva)  
+              
+        i = buscar_reserva_x_id(matriz_reservas, id_reserva)
+
+    elif busq == 2:
+        nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
+        ver_dni = verificar_formato(nro_dni)
+        while not ver_dni:
+            print("Se ingreso un dni Invalido.")
+            nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
+            ver_dni = verificar_formato(nro_dni)
+        reservas_cliente = elegir_reserva_x_cliente(matriz_reservas, nro_dni)
+        print(f" ID | DNI Cliente | Entrada | Salida | Habitación | Pax | Total")
+        for el in reservas_cliente:
+            print(el, end=" ") 
+            print("")   
+
+    mostrar_opciones_mod()
+    opcion_elegida = int(input("Ingrese la opción elegida: (-1 para retroceder.)"))
+    while opcion_elegida != -1:
+        pass
+        
+
+print(dar_reserva_x_id(reservas, 1))
+print(elegir_reserva_x_cliente(reservas, 30555999))
+
+
+            
 
 #DELETE: BORRAR --------------------------------------------------------------------------------------
 #FACTURA    
