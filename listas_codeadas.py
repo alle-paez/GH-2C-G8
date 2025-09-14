@@ -23,6 +23,13 @@ clientes = [
     [31222333, "Martín", "Díaz", "1178901234", "martin.diaz@email.com"]
 ]
 
+reservas_ant_mod = [
+
+]
+
+reservas_post_mod = [
+    
+]
 nro_factura= [1,1]
 
 empresa={
@@ -38,3 +45,4 @@ empresa={
 IVA = lambda x: x * 1.21
 
 LINEA=("-")*80
+
