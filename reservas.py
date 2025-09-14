@@ -76,13 +76,16 @@ def dias_en_mes(anio, mes):
 def contar_dias(fecha):
     anio, mes, dia = fecha
     dias = 0
+
     for a in range(1, anio):
         dias += 366 if bisiesto(a) else 365
-        for m in range(1, mes):
-            dias += dias_en_mes(anio, m)
+
+    for m in range(1, mes):
+        dias += dias_en_mes(anio, m)
         
-        dias += dia
-        return dias
+    dias += dia
+
+    return dias
 
 def diferencia_dias_entre(check_in, check_out):
     return contar_dias(check_out) - contar_dias(check_in)
@@ -165,7 +168,7 @@ def validar_cant(pax, matriz_habitaciones, dto):
 def digito_unico(pax):
     return pax.isdigit() and len(pax) == 1
 
-#LLENAR RESERVAS ---------------------------------------------------------------------------------------------
+#LLENAR RESERVAS: CREATE ---------------------------------------------------------------------------------------------
 def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz_habitaciones= habitaciones):
     nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
     ver_dni = verificar_formato(nro_dni)
@@ -227,11 +230,12 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= clientes, matriz
         total = total_por_precio(matriz_habitaciones, dto, dias, adicionales)
         nro_reserva = len(matriz_reservas) + 1
 
-        matriz_reservas.append([nro_reserva, nro_dni, check_in, check_out, dto, cant_pax, total])
+        matriz_reservas.append([nro_reserva, nro_dni, check_in, check_out, dto, int(cant_pax), total])
         print(f"{nro_reserva, nro_dni, check_in, check_out, dto, cant_pax, total}")
         print("Se agrego todo correctamente.")
         nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
 
+# READ -----------------------------------------------------------------------------------------------
 def print_reservas(matriz):
     print("NroReserva|DNI       |Pax       |Desde     |Hasta     |Total     |")
     for i in range(len(matriz)):
@@ -241,7 +245,9 @@ def print_reservas(matriz):
         print()
     return matriz
 
+#UPDATE: ACTUALIZAR ----------------------------------------------------------------------------------
 
+#DELETE: BORRAR --------------------------------------------------------------------------------------
 #FACTURA    
 def imprimir_factura():
     #ENCABEZADO
