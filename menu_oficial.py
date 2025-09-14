@@ -86,11 +86,12 @@ Volver para atrás con -1')
             if opcion_reservas==1: #AGREGAR RESERVA
                 llenar_reservas()
             elif opcion_reservas==2: #MODIFICAR RESERVA
-                pass
+                modificacion()
             elif opcion_reservas==3: # CANCELAR RESERVA
                 pass
             elif opcion_reservas==4: #VER RESERVAS
                 print_reservas(reservas)
+
             print(f'\
 1-Agregar reserva\n\
 2-Modificar reserva\n\
