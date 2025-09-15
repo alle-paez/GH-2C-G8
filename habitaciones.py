@@ -1,5 +1,4 @@
 from listas_codeadas import *
-from auxiliar_habitaciones import *
 import re
 
 #IMPRIMIR HABITACIONES----------------------------------------------------------------------------------------------

@@ -3,6 +3,7 @@ from reservas import *
 import re
 
 #AGREGAR CLIENTES--------------------------------------------------------------------------------
+from habitaciones import ubicar
 def llenar_clientes(m):
     dni = input("Ingrese el Dni del cliente: (-1 para finalizar la carga:)")
     flag=verificar_formato(dni)
@@ -50,6 +51,54 @@ def llenar_clientes(m):
 #MODIFICAR CLIENTES-------------------------------------------------------------------------------------------------------
 def modificar_clientes():
     pass
+
+def modificar_clientes(m):
+    print_clt(m)
+    dni = input("\nIngrese DNI del cliente a modificar (-1 para salir): ").strip()
+
+    while dni != "-1":
+        if re.match(r"^\d{8}$", dni):
+            dni = int(dni)
+            pos = ubicar(m, dni)
+            if pos != -1:
+                fila = m[pos]
+                print("Cliente encontrado:")
+                print_clt([fila])
+
+                nuevo_nombre   = input(f"Nuevo nombre ({fila[1]}): ").strip()
+                if nuevo_nombre != "":
+                    while not es_texto(nuevo_nombre):
+                        nuevo_nombre = input("Nombre inválido. Reingrese: ").strip()
+                    fila[1] = nuevo_nombre.title()
+
+                nuevo_apellido = input(f"Nuevo apellido ({fila[2]}): ").strip()
+                if nuevo_apellido != "":
+                    while not es_texto(nuevo_apellido):
+                        nuevo_apellido = input("Apellido inválido. Reingrese: ").strip()
+                    fila[2] = nuevo_apellido.title()
+
+                nuevo_tel = input(f"Nuevo teléfono ({fila[3]}): ").strip()
+                if nuevo_tel != "":
+                    while not es_telefono(nuevo_tel):
+                        nuevo_tel = input("Teléfono inválido. Reingrese (####-####): ").strip()
+                    fila[3] = nuevo_tel
+
+                nuevo_mail = input(f"Nuevo mail ({fila[4]}): ").strip()
+                if nuevo_mail != "":
+                    while not es_mail(nuevo_mail):
+                        nuevo_mail = input("Mail inválido (solo @gmail.com). Reingrese: ").strip()
+                    fila[4] = nuevo_mail
+
+                m[pos] = fila
+                print("Cliente modificado con éxito.")
+                print_clt([fila])
+            else:
+                print("No existe cliente con ese DNI.")
+        else:
+            print("DNI inválido.")
+
+        dni = input("\nIngrese DNI del cliente a modificar (-1 para salir): ").strip()
+    
 
 #VALIDACIONES DE FORMATO--------------------------------------------------------------------------------------------------
 es_texto=lambda x: re.search(r'^[a-zA-Z ]+$', x)is not None
