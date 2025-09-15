@@ -1,3 +1,4 @@
+import re
 reservas = [
     [1, 30555999, (2025,8,15), (2025,8,20), 101, 2,  75000],
     [2, 28444888, (2025,8,18), (2025,8,25), 102, 3, 126000],
@@ -29,6 +30,10 @@ reservas_post_mod = []
 
 reservas_eliminadas=[]
 
+clientes_borrados=[]
+
+habitaciones_borradas=[]
+
 nro_factura= [1,1]
 
 
@@ -54,6 +59,5 @@ IVA = lambda x: x * 1.21
 
 LINEA=("-")*80
 
-habitaciones_borradas=[]
-
 nro_factura= [1,1]
+
