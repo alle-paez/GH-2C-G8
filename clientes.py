@@ -118,7 +118,7 @@ es_mail= lambda x: re.search(r'\w*@gmail\.com$', x) is not None
 def print_clt(matriz):
     print("")
     print("---------------------------------------------------------------------------------")
-    print("DNI       |Nombre       |Apellido       |Teléfono        |Mail                  ")
+    print("DNI       |Nombre       |Apellido       |Teléfono     |Mail                              ")
     print("---------------------------------------------------------------------------------")
     for valor in matriz:
         fila = valor

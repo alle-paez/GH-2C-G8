@@ -279,12 +279,7 @@ def menu_mostrar():
 ")
 
 def mostrar_reservas(matriz, hab, x):
-    lista = []
-    for valor in matriz: 
-        if valor[x] == hab:
-            res = valor
-            lista.append(res)
-    return lista
+    return [res for res in matriz if res[x] == hab]
 
 def ordenar_menor_mayor(reservas, i):
     reservas.sort(key=lambda x: x[i])
