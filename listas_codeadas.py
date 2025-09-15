@@ -41,6 +41,12 @@ empresa={
     'cuit': '30-78765432-1'
     }
 
+usuarios = [
+    ["admin", "admin123", "ADMIN"],
+    ["30555999", "1234", "CLIENTE"],
+]
+
+
 IVA = lambda x: x * 1.21
 
 LINEA=("-")*80
