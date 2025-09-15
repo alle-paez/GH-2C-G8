@@ -2,19 +2,17 @@ from listas_codeadas import *
 from clientes import *
 from habitaciones import *
 from reservas import *
-from estadisticas import *
 
-def menu_administrador():
+#menú
 
     print("")
     print(f'Sistema de Gestión Hotelera'.center(80,"-"))
     print(f'\n\
-    1-Gestionar Habitaciones\n\
-    2-Gestionar Reservas\n\
-    3-Gestionar Clientes\n\
-    4- Ver estadisticas \n\
-    Salir del programa con -1 \n\
-    {LINEA}')
+1-Gestionar Habitaciones\n\
+2-Gestionar Reservas\n\
+3-Gestionar Clientes\n\
+Salir del programa con -1 \n\
+{LINEA}')
     opcion=int(input("Ingrese numéricamente la opción deseada: "))
 
     while opcion!=-1:
@@ -44,13 +42,13 @@ def menu_administrador():
                     print_habitaciones(habitaciones)
                 
                 print(f'{LINEA}\n\
-    1-Agregar habitación\n\
-    2-Modificar habitación\n\
-    3-Borrar habitación\n\
-    4-Ver habitaciones\n\
-    5-Papelera de reciclaje\n\
-    Volver para atrás con -1\n\
-    {LINEA}')
+1-Agregar habitación\n\
+2-Modificar habitación\n\
+3-Borrar habitación\n\
+4-Ver habitaciones\n\
+5-Papelera de reciclaje\n\
+Volver para atrás con -1\n\
+{LINEA}')
                 opcion_habitaciones=int(input("Ingrese numéricamente la opción deseada: "))
 
         elif opcion==2:
@@ -77,12 +75,12 @@ def menu_administrador():
                     deshacer_eliminar_reserva()
 
                 print(f'{LINEA}\n\
-    1-Agregar reserva\n\
-    2-Modificar reserva\n\
-    3-Cancelar reserva\n\
-    4-Ver reservas\n\
-    5-Papelera de reciclaje\n\
-    Volver para atrás con -1\n\
+1-Agregar reserva\n\
+2-Modificar reserva\n\
+3-Cancelar reserva\n\
+4-Ver reservas\n\
+5-Papelera de reciclaje\n\
+Volver para atrás con -1\n\
     {LINEA}')
                 opcion_reservas=int(input("Ingrese numéricamente la opción deseada: "))
         elif opcion==3:
