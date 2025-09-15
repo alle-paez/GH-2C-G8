@@ -105,10 +105,10 @@ def menu_administrador():
                 elif opcion_clientes==3: # BORRAR CLIENTES
                     llenar_clientes(clientes)
                 elif opcion_clientes==4: #VER CLIENTES
-                    print_clientes(clientes)
-
+                    print_clt(clientes)
+    
         elif opcion == 4:
-            elegir_opcion_estadistica()
+                    elegir_opcion_estadistica()
             
         print(f'{LINEA}\n\
     1-Gestionar Habitaciones\n\
