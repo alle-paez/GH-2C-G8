@@ -46,6 +46,9 @@ usuarios = [
     ["30555999", "1234", "CLIENTE"],
 ]
 
+es_telefono  = lambda s: re.match(r"^\d{4}-\d{4}$", s) is not None
+es_mail      = lambda s: re.match(r"^[A-Za-z0-9._%+-]+@gmail\.com$", s) is not None
+es_texto = lambda x: re.match(r"^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$", x) is not None
 
 IVA = lambda x: x * 1.21
 
