@@ -12,7 +12,7 @@ def print_habitaciones(matriz):
 
 #ORDENAR POR ÍNDICE: NÚMERO DE HABITACIÓN------------------------------------------------------------------------------------
 def ordenar_hab(hab):
-    hab.sort(key=lambda x: x[0])
+    hab.sort(key=lambda x: int(x[0]))
     return hab
 
 #ELIMINAR HABITACIONES------------------------------------------------------------------------------------------------------

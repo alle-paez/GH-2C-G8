@@ -152,7 +152,7 @@ def verificar_cant_max(matriz_habitaciones, dto):
 def validar_cant(pax, matriz_habitaciones, dto):
     cap_max = verificar_cant_max(matriz_habitaciones,dto)
     pax = int(pax)
-    if pax <= cap_max:
+    if int(pax) <= cap_max:
         return True, 0
     elif pax <= cap_max + 2:
         ad = pax - cap_max

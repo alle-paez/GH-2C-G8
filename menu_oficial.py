@@ -2,6 +2,7 @@ from listas_codeadas import *
 from clientes import *
 from habitaciones import *
 from reservas import *
+from login import *
 
 def menu_administrador():
 
@@ -11,6 +12,7 @@ def menu_administrador():
 1-Gestionar Habitaciones\n\
 2-Gestionar Reservas\n\
 3-Gestionar Clientes\n\
+4-Estadísticas\n\
 Salir del programa con -1 \n\
 {LINEA}')
     opcion=int(input("Ingrese numéricamente la opción deseada: "))
@@ -38,6 +40,9 @@ Volver para atrás con -1 \n\
                     eliminar_hab(habitaciones, habitaciones_borradas)
                 elif opcion_habitaciones==4:#VER HABITACIONES
                     print_habitaciones(habitaciones)
+                elif opcion_habitaciones==5:
+                    print_habitaciones(habitaciones_borradas)
+                    deshacer_borrar(habitaciones, habitaciones_borradas)
                 
                 print(f'{LINEA}\n\
 1-Agregar habitación\n\
@@ -119,10 +124,11 @@ Volver para atrás con -1\n\
         print(f'{LINEA}\n\
 1-Gestionar Habitaciones\n\
 2-Gestionar Reservas\n\
-3-Ver Estadísticas\n\
+3-Gestionar Clientes\n\
+4-Ver Estadísticas\n\
 Salir del programa con -1\n\
 {LINEA}')
         opcion=int(input("Ingrese numéricamente la opción deseada: "))
 
-
+login()
 menu_administrador()
