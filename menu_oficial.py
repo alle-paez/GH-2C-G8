@@ -96,13 +96,16 @@ Volver para atrás con -1\n\
 
                 if opcion_clientes==1: #AGREGAR CLIENTES
                     llenar_clientes(clientes)
-                    
                 elif opcion_clientes==2: #MODIFICAR CLIENTES
                     pass
                 elif opcion_clientes==3: # BORRAR CLIENTES
-                    llenar_clientes(clientes)
+                    print_clt(clientes)
+                    borrar_clientes(clientes, clientes_borrados)
                 elif opcion_clientes==4: #VER CLIENTES
                     print_clt(clientes)
+                elif opcion_clientes==5:
+                    print_clt(clientes_borrados)
+                    deshacer_borrar_clt(clientes, clientes_borrados)
                 print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\

@@ -18,7 +18,7 @@ def ordenar_hab(hab):
 
 #ELIMINAR HABITACIONES------------------------------------------------------------------------------------------------------
 def eliminar_hab(hab, hab_borradas):
-    item=int(input("Ingrese el número de habitación que quiera eliminar: "))
+    item=int(input("Ingrese el número de habitación que quiera eliminar: ").strip())
     flag=1
 
     while flag ==1:
@@ -28,22 +28,22 @@ def eliminar_hab(hab, hab_borradas):
             hab_borradas.append(hab[pos])
             del hab[pos]
             print(f'La habitación {item} ha sido eliminada con éxito')
-            flag=int(input("Si desea eliminar otra habitación ingrese 1, si no, ingrese 0: "))
+            flag=int(input("Si desea eliminar otra habitación ingrese 1, si no, ingrese 0: ").strip())
             while flag !=1 and flag !=0:
-                flag=int(input("Si desea eliminar otra habitación ingrese 1, si no, ingrese 0: "))
+                flag=int(input("Si desea eliminar otra habitación ingrese 1, si no, ingrese 0: ").strip())
 
         else:
             print(f'no se encontró la habitación {item}')
-            item=int(input("Ingrese el número de habitación nuevamente: "))
+            item=int(input("Ingrese el número de habitación nuevamente: ").strip())
         
 
         if flag==1:
-            item=int(input("Ingrese el número de habitación que quiera eliminar: "))
+            item=int(input("Ingrese el número de habitación que quiera eliminar: ").strip())
 
 #DESHACER BORRAR DE UNA HABITACIÓN--------------------------------------------------------------------------------------------------
 def deshacer_borrar(hab, hab_borradas):
 
-    item=int(input("Ingrese el número de habitación que quiera recuperar: "))
+    item=int(input("Ingrese el número de habitación que quiera recuperar: ").strip())
     flag=1
 
     while flag ==1:
@@ -53,13 +53,13 @@ def deshacer_borrar(hab, hab_borradas):
             hab.append(hab_borradas[pos])
             del (hab_borradas[pos])
             print(f'La habitación {item} ha sido recuperada con éxito')
-            flag=int(input("Si desea recuperar otra habitación ingrese 1, si no, ingrese 0: "))
+            flag=int(input("Si desea recuperar otra habitación ingrese 1, si no, ingrese 0: ").strip())
         else:
             print(f'no se encontró la habitación {item}')
-            item=int(input("Ingrese el número de habitación nuevamente: "))
+            item=int(input("Ingrese el número de habitación nuevamente: ").strip())
             
         if flag==1:
-            item=int(input("Ingrese el número de habitación que quiera recuperar: "))
+            item=int(input("Ingrese el número de habitación que quiera recuperar: ").strip())
 
 #VALIDACIÓN DE NÚMEROS-------------------------------------------------------------------------------------------------------------
 es_entero = lambda x: re.search(r'^-?[0-9]+$', x) is not None

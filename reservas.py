@@ -329,8 +329,6 @@ def print_elegir_opcion(matriz_reservas= reservas):
         print_tabla_reservas(matriz_reservas)
 
 
-
-
 def print_tabla_reservas(matriz):
     print("")
     print("------------------------------------------------------------------")
@@ -346,9 +344,6 @@ def print_tabla_reservas(matriz):
           str(hab).ljust(3), "|",
           str(pax).ljust(3), "|",
           str(total).ljust(6))
-
-
-
 
 #MODIFICACION --------------------------------------------------------------------------------------------------------------
 def modificacion(matriz_clientes=clientes, matriz_reservas= reservas, matriz_habitaciones=habitaciones, mat_mod_anterior= reservas_ant_mod, mat_mod_posterior= reservas_post_mod):
@@ -400,6 +395,7 @@ def modificacion(matriz_clientes=clientes, matriz_reservas= reservas, matriz_hab
     mostrar_opciones_mod()
     opcion_elegida = int(input("Ingrese la opción elegida: (-1 para retroceder.)"))
     while opcion_elegida != -1:
+
 #FECHAS ----------------------------------------------------------------------       
         if opcion_elegida == 1:
             check_in = pedir_fecha("Ingrese fecha inicio (AAAA-MM-DD): ")
@@ -486,7 +482,6 @@ def modificacion(matriz_clientes=clientes, matriz_reservas= reservas, matriz_hab
 
         opcion_elegida = int(input("Ingrese la opción elegida: (-1 para retroceder.)"))
 
-
 #DELETE: BORRAR --------------------------------------------------------------------------------------
 def eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=reservas_eliminadas):
     id_eliminar = int(input("Ingrese el número de reserva que quiera eliminar: "))
@@ -506,7 +501,6 @@ def eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=reservas_elim
         if flag == 1:
             id_eliminar = int(input("Ingrese el número de reserva que quiera eliminar: "))
 
-
 def deshacer_eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=reservas_eliminadas):
     id_recuperar = int(input("Ingrese el número de reserva que quisiera recuperar: "))
     flag = 1
@@ -523,10 +517,6 @@ def deshacer_eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=rese
             id_recuperar = int(input("Ingrese el número de reserva nuevamente: "))
         if flag == 1:
             id_recuperar = int(input("Ingrese el número de reserva que quiera recuperar: "))
-
-
-
-
 
 #FACTURA    
 def imprimir_factura():

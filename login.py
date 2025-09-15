@@ -1,4 +1,4 @@
-from listas_codeadas import usuarios
+from listas_codeadas import *
 
 def login():
     print("----Login-----")

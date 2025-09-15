@@ -29,6 +29,10 @@ reservas_post_mod = []
 
 reservas_eliminadas=[]
 
+clientes_borrados=[]
+
+habitaciones_borradas=[]
+
 nro_factura= [1,1]
 
 
@@ -45,6 +49,5 @@ IVA = lambda x: x * 1.21
 
 LINEA=("-")*80
 
-habitaciones_borradas=[]
-
 nro_factura= [1,1]
+
