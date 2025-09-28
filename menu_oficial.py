@@ -3,6 +3,7 @@ from clientes import *
 from habitaciones import *
 from reservas import *
 from login import *
+from estadisticas import *
 
 def menu_administrador():
 
@@ -71,7 +72,7 @@ Volver para atrás con -1')
                 elif opcion_reservas==2: #MODIFICAR RESERVA
                     modificacion()
                 elif opcion_reservas==3: # CANCELAR RESERVA
-                    reservas_eliminadas()
+                    eliminar_reserva()
                 elif opcion_reservas==4: #VER RESERVAS
                     print_elegir_opcion()
                 elif opcion_reservas==5:
@@ -120,7 +121,9 @@ Volver para atrás con -1\n\
 Volver para atrás con -1\n\
 {LINEA}')
                 opcion_clientes=int(input("Ingrese numéricamente la opción deseada: "))
-            
+        elif opcion==4:
+            elegir_opcion_estadistica()
+
         print(f'{LINEA}\n\
 1-Gestionar Habitaciones\n\
 2-Gestionar Reservas\n\

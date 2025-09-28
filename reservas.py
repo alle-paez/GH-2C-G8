@@ -3,25 +3,6 @@ from clientes import *
 from habitaciones import *
 import re
 
-"""Lista para hacer: 
-
-reservas = [
-reservas = [
-    [1, 30555999, [2025,8,15], [2025,8,20], 101, 2, 75000],
-    [2, 28444888, [2025,8,18], [2025,8,25], 102, 3, 126000],
-    [3, 33222111, [2025,9,1],  [2025,9,5],  103, 2, 72000],
-    [4, 29888777, [2025,8,10], [2025,8,15], 104, 4, 106250],
-    [5, 31222333, [2025,8,22], [2025,8,24], 105, 1, 22800]
-]
-    - Validar si existe el cliente, si no, crearlo.
-    - Validar si la habitacion solicitada no esta ocupada en la fecha seleccionada.
-    - falta el precio por noche, tiene que estar cargado en la lista habitaciones. 
-    - Reordenar reservas. 
-    - verificacion de cantidad de pasajeros. Se pueden 2 mas maximo de la capacidad de la habitacion, con adicional. 
-    - verificar en la tabla reservas que no exista otra reserva para la fecha ingresada en el dto engresado. 
-    
-     """
-
 #Validaciones de fecha ----------------------------------------------------------------------------------------
 def verificar_formato_fecha(fecha):
     formato = r"^\d{4}-\d{2}-\d{2}$"
@@ -518,8 +499,8 @@ def imprimir_factura():
     #ENCABEZADO
     linea=("-")*80
     factura=(f'{str(nro_factura[0]).zfill(4)}-{str(nro_factura[1]).zfill(8)}'.ljust(40))
-    print(f'{linea}\n{empresa['nombre'].capitalize().ljust(80)}\n{linea}\nFactura: {factura}\n\
-Domicilio fiscal: {empresa['dirección'].capitalize().ljust(40)}    CUIT:{empresa['cuit'].rjust(10)} \n\
+    print(f'{linea}\n{empresa['nombre'].title().ljust(80)}\n{linea}\nFactura: {factura}\n\
+Domicilio fiscal: {empresa['dirección'].title().ljust(40)}    CUIT:{empresa['cuit'].rjust(10)} \n\
 Web: {empresa['web'].ljust(80)}\nPeríodo: 2025-08\n\
 Soporte: {empresa['email']}')
     print (f'{linea}\n')
@@ -528,3 +509,4 @@ Soporte: {empresa['email']}')
     #CUERPO
     #print(f'Total: {IVA(total_por_precio())}'.ljust(80))
     
+imprimir_factura()
