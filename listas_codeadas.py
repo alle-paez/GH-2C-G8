@@ -39,7 +39,7 @@ nro_factura= [1,1]
 
 empresa={
     'nombre':'departamentos sobre el mar',
-    'dirección':'villa gessel',
+    'dirección':'villa gesell',
     'email':'departamentos.sm@gmail.com',
     'teléfono':'6291-2367',
     'web':'www.departamentossobreelmar.com.ar',

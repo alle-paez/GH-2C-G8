@@ -66,7 +66,7 @@ def mostrar_diccionario(diccionario):
 
 
 
-def aaaamm(fecha):
+def aaaa_mm(fecha):
     return str(fecha[0]).zfill(4) + "-" + str(fecha[1]).zfill(2)
 
 def estadisticas_globales(reservas):
@@ -108,7 +108,7 @@ def  estadisticas_mensuales(reservas):
     stats_mensuales = {} 
     for res in reservas:
         _, _, checkin, checkout, _, pax, total = res
-        mm = aaaamm(checkin)
+        mm = aaaa_mm(checkin)
         if mm not in stats_mensuales:
             stats_mensuales[mm] = {"reservas":0,"noches":0,"ingresos":0,"pax":0}
 
