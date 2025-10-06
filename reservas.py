@@ -494,19 +494,41 @@ def deshacer_eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=rese
         if flag == 1:
             id_recuperar = int(input("Ingrese el número de reserva que quiera recuperar: "))
 
-#FACTURA    
-def imprimir_factura():
-    #ENCABEZADO
+def imprimir_factura(clt_act, hoy):
+    #encabezado
     linea=("-")*80
-    factura=(f'{str(nro_factura[0]).zfill(4)}-{str(nro_factura[1]).zfill(8)}'.ljust(40))
-    print(f'{linea}\n{empresa['nombre'].title().ljust(80)}\n{linea}\nFactura: {factura}\n\
-Domicilio fiscal: {empresa['dirección'].title().ljust(40)}    CUIT:{empresa['cuit'].rjust(10)} \n\
-Web: {empresa['web'].ljust(80)}\nPeríodo: 2025-08\n\
-Soporte: {empresa['email']}')
-    print (f'{linea}\n')
+    factura=(f'{str(nro_factura[0]).zfill(4)}-{str(nro_factura[1]).zfill(8)}')
+    print(f'{linea}\n'\
+    f'{empresa["nombre"].title():^80}\n'\
+    f'{linea}\n'\
+    f'{"Factura: "+factura:<40}{"Cuit: "+empresa["cuit"]:>40}\n'\
+    f'{"Domicilio fiscal: "+empresa['dirección'].title():<80}\n'\
+    f'{"Web: "+empresa['web']:<80}\n'\
+    f'Período: 2025-08\n'\
+    f'{"Soporte: "+empresa['email']:<80}\n'\
+    f'{linea}\n')
+    
     nro_factura[0]+=1
     nro_factura[1]+=1
-    #CUERPO
-    #print(f'Total: {IVA(total_por_precio())}'.ljust(80))
-    
-imprimir_factura()
+    #cuerpo
+    print(f'{'Datos del cliente':^80}\n'\
+    f'{"Nombre y Apellido: "+ clientes[clt_act][1]+" "+ clientes[clt_act][2]:<80}\n'\
+    f'{"Dni: "+ str(clientes[clt_act][0])}\n')
+
+    print(f'{LINEA}\n|{"Nro. de reserva":^17}|{"Descripción":^19}|{"Precio por día":^18}|{"Días":^10}|{"Valor":^10}|\n{LINEA}')
+    reservas_del_clt=[]
+    total=0
+    for i in range(len(reservas)):
+        if reservas[i][1]==clientes[clt_act][0]:
+            reservas_del_clt.append(reservas[i])
+    for i in range(len(reservas_del_clt)):
+        dias=diferencia_dias_entre(check_in=reservas_del_clt[i][2],check_out=reservas_del_clt[i][3])
+        valor=reservas_del_clt[i][6]*dias
+        total+=valor
+        print(f'|{reservas_del_clt[i][0]:^17}|{"Habitación "+str(reservas_del_clt[i][4]):^19}|{reservas_del_clt[i][6]:^18}|{dias:^10}|{valor:^10}|')
+    print(LINEA)
+    print(f'{"Fecha de impresión: "+ str(hoy):<40}{"Subtotal: "+str(total):>40}\n{"Total IVA: "+str(0.21*total):>80}\n{"Total: "+ str((IVA(total))):>80}\n')
+#f'{pi:.2f}'
+
+
+
