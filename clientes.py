@@ -9,8 +9,9 @@ def llenar_clientes(m):
     dni = input("Ingrese el Dni del cliente: (-1 para finalizar la carga): ")
     flag=verificar_formato(dni)
 
-    if int(dni)==-1:
-        flag=True
+    if flag:
+        if int(dni)==-1:
+            flag=True
 
     while flag==False:
         dni = input("Ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga:)")
