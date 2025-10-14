@@ -101,17 +101,17 @@ Volver para atrás con -1\n\
             while opcion_clientes!=-1:
 
                 if opcion_clientes==1: #AGREGAR CLIENTES
-                    llenar_clientes(clientes)
+                    llenar_clientes(m_clientes)
                 elif opcion_clientes==2: #MODIFICAR CLIENTES
                     pass
                 elif opcion_clientes==3: # BORRAR CLIENTES
-                    print_clt(clientes)
-                    borrar_clientes(clientes, clientes_borrados)
+                    print_clt(m_clientes)
+                    borrar_clientes(m_clientes, clientes_borrados)
                 elif opcion_clientes==4: #VER CLIENTES
-                    print_clt(clientes)
+                    print_clt(m_clientes)
                 elif opcion_clientes==5:
                     print_clt(clientes_borrados)
-                    deshacer_borrar_clt(clientes, clientes_borrados)
+                    deshacer_borrar_clt(m_clientes, clientes_borrados)
                 print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\

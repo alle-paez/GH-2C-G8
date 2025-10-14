@@ -16,7 +16,7 @@ habitaciones = [
     [105, 12000, "Single", 1, "Disponible"]
 ]
 
-clientes = [
+m_clientes = [
     [30555999, "Juan", "Pérez", "1123456789", "juan.perez@email.com"],
     [28444888, "María", "Gómez", "1167894321", "maria.gomez@email.com"],
     [33222111, "Lucas", "Martínez", "1134567890", "lucas.martinez@email.com"],
