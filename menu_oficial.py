@@ -16,8 +16,14 @@ def menu_administrador():
 4-Estadísticas\n\
 Salir del programa con -1 \n\
 {LINEA}')
-    opcion=int(input("Ingrese numéricamente la opción deseada: "))
-
+    
+    try:
+        opcion=int(input("Ingrese numéricamente la opción deseada: "))
+    except ValueError:
+        print("No se ingreso un numero entero.")
+    except:
+        print("Error inesperado.")
+        raise
     while opcion!=-1:
         if opcion==1:
             print(f'{LINEA}\n\
@@ -28,7 +34,14 @@ Salir del programa con -1 \n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1 \n\
 {LINEA}')
-            opcion_habitaciones=int(input("Ingrese numéricamente la opción deseada: "))
+
+            try:   
+                opcion_habitaciones=int(input("Ingrese numéricamente la opción deseada: "))
+            except ValueError:
+                print("No se ingreso un numero entero.")
+            except:
+                print("Error inesperado.")
+                raise
 
             while opcion_habitaciones!=-1:
                 if opcion_habitaciones==1:#AGREGAR HABITACIONES
@@ -57,14 +70,19 @@ Volver para atrás con -1\n\
 
         elif opcion==2:
             print(f'\
-1-Agregar reserva\n\
-2-Modificar reserva\n\
-3-Cancelar reserva\n\
-4-Ver reservas\n\
-5-Papelera de reciclaje\n\
-Volver para atrás con -1')
-            opcion_reservas=int(input("Ingrese numéricamente la opción deseada: "))
-
+    1-Agregar reserva\n\
+    2-Modificar reserva\n\
+    3-Cancelar reserva\n\
+    4-Ver reservas\n\
+    5-Papelera de reciclaje\n\
+    Volver para atrás con -1')
+            try:
+                opcion_reservas=int(input("Ingrese numéricamente la opción deseada: "))
+            except ValueError:
+                print("No se ingreso un numero entero.")
+            except:
+                print("Error inesperado.")
+                raise
             while opcion_reservas!=-1:
 
                 if opcion_reservas==1: #AGREGAR RESERVA
@@ -78,15 +96,22 @@ Volver para atrás con -1')
                 elif opcion_reservas==5:
                     deshacer_eliminar_reserva()
 
-                print(f'{LINEA}\n\
+            print(f'{LINEA}\n\
 1-Agregar reserva\n\
 2-Modificar reserva\n\
 3-Cancelar reserva\n\
 4-Ver reservas\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-    {LINEA}')
+{LINEA}')
+            try:
                 opcion_reservas=int(input("Ingrese numéricamente la opción deseada: "))
+            except ValueError:
+                print("No se ingreso un numero entero.")
+            except:
+                print("Error inesperado.")
+                raise
+    
         elif opcion==3:
             print(f'{LINEA}\n\
 1-Agregar cliente\n\
@@ -95,9 +120,15 @@ Volver para atrás con -1\n\
 4-Ver clientes\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-{LINEA}')
-            opcion_clientes=int(input("Ingrese numéricamente la opción deseada: "))
-
+{LINEA}')   
+        
+            try:
+                opcion_clientes=int(input("Ingrese numéricamente la opción deseada: "))
+            except ValueError:
+                print("No se ingreso un numero entero.")
+            except:
+                print("Error inesperado.")
+                raise
             while opcion_clientes!=-1:
 
                 if opcion_clientes==1: #AGREGAR CLIENTES
@@ -119,8 +150,15 @@ Volver para atrás con -1\n\
 4-Ver clientes\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-{LINEA}')
+{LINEA}')   
+            try:
                 opcion_clientes=int(input("Ingrese numéricamente la opción deseada: "))
+            except ValueError:
+                print("No se ingreso un numero entero.")
+            except:
+                print("Error inesperado.")
+                raise
+                    
         elif opcion==4:
             elegir_opcion_estadistica()
 
@@ -131,7 +169,14 @@ Volver para atrás con -1\n\
 4-Ver Estadísticas\n\
 Salir del programa con -1\n\
 {LINEA}')
-        opcion=int(input("Ingrese numéricamente la opción deseada: "))
+        try:
+            opcion=int(input("Ingrese numéricamente la opción deseada: "))
+        except ValueError:
+            print("No se ingreso un numero entero.")
+        except:
+            print("Error inesperado.")
+            raise
 
-login()
-menu_administrador()
+if __name__=="__main__":
+    login()
+    menu_administrador()

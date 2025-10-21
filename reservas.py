@@ -176,7 +176,6 @@ def llenar_reservas(matriz_reservas= reservas, matriz_clientes= m_clientes, matr
         nro_reserva = len(matriz_reservas) + 1
 
         matriz_reservas.append([nro_reserva, nro_dni, check_in, check_out, dto, int(cant_pax), total])
-        print(f"{nro_reserva, nro_dni, check_in, check_out, dto, cant_pax, total}")
         print("Se agrego todo correctamente.")
         nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
 
