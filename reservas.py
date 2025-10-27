@@ -1,6 +1,6 @@
-from listas_codeadas import *
-from clientes import *
+#from listas_codeadas import *
 from habitaciones import *
+#from clientes import *
 import re
 import json
 
@@ -71,13 +71,7 @@ leerArchivo("reservas.txt","rt")"""
            
 abrirArchivo("reservas.txt")
 #Validaciones de fecha ----------------------------------------------------------------------------------------
-def verificar_formato_fecha(fecha):
-    formato = r"^\d{4}-\d{2}-\d{2}$"
-    if re.match(formato, fecha):
-        return True
-    else:
-        return False
-        
+
 def separar_en_lista(fecha):
     matriz_fecha = fecha.split('-')
     anio = int(matriz_fecha[0])
@@ -465,7 +459,7 @@ def print_tabla_reservas(archivo):
 
 
 #MODIFICACION --------------------------------------------------------------------------------------------------------------
-def modificacion(matriz_clientes=clientes, matriz_reservas= reservas, matriz_habitaciones=habitaciones, mat_mod_anterior= reservas_ant_mod, mat_mod_posterior= reservas_post_mod):
+def modificacion(matriz_clientes=m_clientes, matriz_reservas= reservas, matriz_habitaciones=habitaciones, mat_mod_anterior= reservas_ant_mod, mat_mod_posterior= reservas_post_mod):
     busq = modo_busqueda()
     while busq != 1 and busq != 2:
         busq = modo_busqueda()
@@ -655,14 +649,14 @@ def imprimir_factura(clt_act, hoy):
     nro_factura[1]+=1
     #cuerpo
     print(f'{'Datos del cliente':^80}\n'\
-    f'{"Nombre y Apellido: "+ clientes[clt_act][1]+" "+ clientes[clt_act][2]:<80}\n'\
-    f'{"Dni: "+ str(clientes[clt_act][0])}\n')
+    f'{"Nombre y Apellido: "+ m_clientes[clt_act][1]+" "+ m_clientes[clt_act][2]:<80}\n'\
+    f'{"Dni: "+ str(m_clientes[clt_act][0])}\n')
 
     print(f'{LINEA}\n|{"Nro. de reserva":^17}|{"Descripción":^19}|{"Precio por día":^18}|{"Días":^10}|{"Valor":^10}|\n{LINEA}')
     reservas_del_clt=[]
     total=0
     for i in range(len(reservas)):
-        if reservas[i][1]==clientes[clt_act][0]:
+        if reservas[i][1]==m_clientes[clt_act][0]:
             reservas_del_clt.append(reservas[i])
     for i in range(len(reservas_del_clt)):
         dias=diferencia_dias_entre(check_in=reservas_del_clt[i][2],check_out=reservas_del_clt[i][3])
@@ -672,4 +666,8 @@ def imprimir_factura(clt_act, hoy):
     print(LINEA)
     print(f'{"Fecha de impresión: "+ str(hoy):<40}{"Subtotal: "+str(total):>40}\n{"Total IVA: "+str(0.21*total):>80}\n{"Total: "+ str((IVA(total))):>80}\n')
 #f'{pi:.2f}'
+
+if __name__ == "__main__":
+    # pruebas manuales acá
+    pass
 

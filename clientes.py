@@ -1,5 +1,4 @@
 from listas_codeadas import *
-from reservas import *
 import re
 from habitaciones import ubicar
 import json
@@ -23,8 +22,9 @@ def llenar_clientes(m):
     dni = input("Ingrese el Dni del cliente: (-1 para finalizar la carga): ")
     flag=verificar_formato(dni)
 
-    if int(dni)==-1:
-        flag=True
+    if flag:
+        if int(dni)==-1:
+            flag=True
 
     while flag==False:
         dni = input("Ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga:)")
@@ -63,11 +63,9 @@ def llenar_clientes(m):
         while not flag:
             dni = input("Ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga:)")
             flag=verificar_formato(dni)
-    ordenar_clt(clientes)
+    ordenar_clt(m_clientes)
 
 #MODIFICAR CLIENTES-------------------------------------------------------------------------------------------------------
-def modificar_clientes():
-    pass
 
 def modificar_clientes(m):
     print_clt(m)
@@ -170,7 +168,7 @@ def borrar_clientes(clt,clt_borr):
                         flag=int(input("Si desea eliminar otro cliente ingrese 1, si no, ingrese 0: "))
                         while flag !=1 and flag !=0:
                             flag=int(input("Si desea eliminar otro cliente ingrese 1, si no, ingrese 0: ").strip())
-    ordenar_clt(clientes)
+    ordenar_clt(m_clientes)
     ordenar_clt(clientes_borrados)
 
 #DESHACER BORRAR DE UN CLIENTE--------------------------------------------------------------------------------------------------
@@ -205,7 +203,7 @@ def deshacer_borrar_clt(clt, clt_borr):
                         flag=int(input("Si desea recuperar otro cliente ingrese 1, si no, ingrese 0: ").strip())
                         while flag !=1 and flag !=0:
                             flag=int(input("Si desea recuperar otro cliente ingrese 1, si no, ingrese 0: ").strip())
-    ordenar_clt(clientes)
+    ordenar_clt(m_clientes)
     ordenar_clt(clientes_borrados)
 
 #ORDENAR POR NOMBRE-----------------------------------------------------------------------------------------------------------

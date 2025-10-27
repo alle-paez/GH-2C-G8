@@ -4,7 +4,7 @@ from habitaciones import *
 from reservas import *
 from login import *
 from estadisticas import *
-
+from validaciones import pedir_opcion
 def menu_administrador():
 
     print("")
@@ -16,8 +16,8 @@ def menu_administrador():
 4-Estadísticas\n\
 Salir del programa con -1 \n\
 {LINEA}')
-    opcion=int(input("Ingrese numéricamente la opción deseada: "))
-
+    
+    opcion=pedir_opcion("Ingrese numéricamente la opción deseada: ")
     while opcion!=-1:
         if opcion==1:
             print(f'{LINEA}\n\
@@ -28,8 +28,8 @@ Salir del programa con -1 \n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1 \n\
 {LINEA}')
-            opcion_habitaciones=int(input("Ingrese numéricamente la opción deseada: "))
-
+  
+            opcion_habitaciones = pedir_opcion("Ingrese numéricamente la opción deseada: ")
             while opcion_habitaciones!=-1:
                 if opcion_habitaciones==1:#AGREGAR HABITACIONES
                     llenar_habitaciones(habitaciones)
@@ -53,17 +53,18 @@ Volver para atrás con -1 \n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
 {LINEA}')
-                opcion_habitaciones=int(input("Ingrese numéricamente la opción deseada: "))
+                opcion_habitaciones = pedir_opcion("Ingrese numéricamente la opción deseada: ")
 
         elif opcion==2:
             print(f'\
-1-Agregar reserva\n\
-2-Modificar reserva\n\
-3-Cancelar reserva\n\
-4-Ver reservas\n\
-5-Papelera de reciclaje\n\
-Volver para atrás con -1')
-            opcion_reservas=int(input("Ingrese numéricamente la opción deseada: "))
+    1-Agregar reserva\n\
+    2-Modificar reserva\n\
+    3-Cancelar reserva\n\
+    4-Ver reservas\n\
+    5-Papelera de reciclaje\n\
+    Volver para atrás con -1')
+
+            opcion_reservas = pedir_opcion("Ingrese numéricamente la opción deseada: ")
 
             while opcion_reservas!=-1:
 
@@ -78,15 +79,17 @@ Volver para atrás con -1')
                 elif opcion_reservas==5:
                     deshacer_eliminar_reserva()
 
-                print(f'{LINEA}\n\
+            print(f'{LINEA}\n\
 1-Agregar reserva\n\
 2-Modificar reserva\n\
 3-Cancelar reserva\n\
 4-Ver reservas\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-    {LINEA}')
-                opcion_reservas=int(input("Ingrese numéricamente la opción deseada: "))
+{LINEA}')
+            opcion_reservas = pedir_opcion("Ingrese numéricamente la opción deseada: ")
+
+    
         elif opcion==3:
             print(f'{LINEA}\n\
 1-Agregar cliente\n\
@@ -95,23 +98,24 @@ Volver para atrás con -1\n\
 4-Ver clientes\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-{LINEA}')
-            opcion_clientes=int(input("Ingrese numéricamente la opción deseada: "))
+{LINEA}')   
+        
+            opcion_clientes=pedir_opcion("Ingrese numéricamente la opción deseada: ")
 
             while opcion_clientes!=-1:
 
                 if opcion_clientes==1: #AGREGAR CLIENTES
-                    llenar_clientes(clientes)
+                    llenar_clientes(m_clientes)
                 elif opcion_clientes==2: #MODIFICAR CLIENTES
                     pass
                 elif opcion_clientes==3: # BORRAR CLIENTES
-                    print_clt(clientes)
-                    borrar_clientes(clientes, clientes_borrados)
+                    print_clt(m_clientes)
+                    borrar_clientes(m_clientes, clientes_borrados)
                 elif opcion_clientes==4: #VER CLIENTES
-                    print_clt(clientes)
+                    print_clt(m_clientes)
                 elif opcion_clientes==5:
                     print_clt(clientes_borrados)
-                    deshacer_borrar_clt(clientes, clientes_borrados)
+                    deshacer_borrar_clt(m_clientes, clientes_borrados)
                 print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\
@@ -119,8 +123,8 @@ Volver para atrás con -1\n\
 4-Ver clientes\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-{LINEA}')
-                opcion_clientes=int(input("Ingrese numéricamente la opción deseada: "))
+{LINEA}')   
+            opcion_clientes=pedir_opcion("Ingrese numéricamente la opción deseada: ")
         elif opcion==4:
             elegir_opcion_estadistica()
 
@@ -131,8 +135,9 @@ Volver para atrás con -1\n\
 4-Ver Estadísticas\n\
 Salir del programa con -1\n\
 {LINEA}')
-        opcion=int(input("Ingrese numéricamente la opción deseada: "))
+        opcion=pedir_opcion("Ingrese numéricamente la opción deseada: ")
 
 
-login()
-menu_administrador()
+if __name__=="__main__":
+    login()
+    menu_administrador()

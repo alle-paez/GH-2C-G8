@@ -91,7 +91,7 @@ def estadisticas_globales(reservas):
 def estadisticas_habitacion(reservas=reservas):
     estadistica_hab = {}
     for res in reservas:
-        _, _, checkin, checkout, hab, pax, total = res
+        checkin, checkout, hab, pax, total = res[2:7]
         if hab not in estadistica_hab:
             estadistica_hab[hab] = {"reservas":0,"noches":0,"ingresos":0,"pax":0}
 
