@@ -1,0 +1,27 @@
+{
+  "102": {
+    "Precio": 20000,
+    "Tipo": "Triple",
+    "Capacidad": 3,
+    "Estado": "Ocupada"
+  },
+  "103": {
+    "Precio": 18000,
+    "Tipo": "Doble",
+    "Capacidad": 2,
+    "Estado": "Mantenimiento"
+  },
+  "104": {
+    "Precio": 25000,
+    "Tipo": "Suite",
+    "Capacidad": 4,
+    "Estado": "Disponible"
+  },
+  "105": {
+    "Precio": 12000,
+    "Tipo": "Single",
+    "Capacidad": 1,
+    "Estado": "Disponible"
+  }
+}
+

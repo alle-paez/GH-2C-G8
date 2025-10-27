@@ -2,7 +2,21 @@ from listas_codeadas import *
 from reservas import *
 import re
 from habitaciones import ubicar
+import json
 
+def leer_clientes(archivo="tabla_cliente.json"):
+    try:
+        contenido = open(archivo, "r")
+        clientes = json.load(contenido)
+        return clientes
+    except:
+        print("Error, no se pudo acceder a la base de datos")
+    finally:
+        try:
+            archivo.close()
+        except:
+            print("Error al cerrar el archivo")
+        
 #AGREGAR CLIENTES--------------------------------------------------------------------------------
 
 def llenar_clientes(m):
@@ -198,3 +212,4 @@ def deshacer_borrar_clt(clt, clt_borr):
 def ordenar_clt(clt):
     clt.sort(key=lambda x: x[1])
     return clt
+

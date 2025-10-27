@@ -1,6 +1,6 @@
 from listas_codeadas import *
 import re
-
+import json
 #IMPRIMIR HABITACIONES----------------------------------------------------------------------------------------------
 def print_habitaciones(matriz):
     print("Número    |Precio    |Tipo      |Capacidad |Estado    |")
@@ -214,6 +214,8 @@ def ubicar(matriz, item):
         if i == len(matriz):
             flag = 1
     return pos
+
+
 
 """def leer_numero(num,mensaje="Ingrese el número, cerrar con-1", permitir_menos1=False):
     

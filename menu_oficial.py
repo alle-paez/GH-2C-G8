@@ -133,5 +133,6 @@ Salir del programa con -1\n\
 {LINEA}')
         opcion=int(input("Ingrese numéricamente la opción deseada: "))
 
+
 login()
 menu_administrador()
