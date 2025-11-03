@@ -706,7 +706,7 @@ def eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=reservas_elim
             aux=open(temp, "wt", encoding="UTF-8")
             encontrado=False
             linea=reservas.readline()
-
+            
         except:
             pass
         """    flag = 0
