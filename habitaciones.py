@@ -79,14 +79,9 @@ es_entero = lambda x: re.search(r'^-?[0-9]+$', x) is not None
 
 #LLENAR HABITACIONES-----------------------------------------------------------------------------------------------------------------
 def llenar_habitaciones(matriz):
-    numero = input("Número de habitación (-1 para salir): ")
-    flag=es_entero(numero)
-    #chekeo que el número sea válido
-    while flag==False:
-        numero = input("El valor ingresado no es válido, ingrese nuevamente(-1 para salir): ")
-        flag=es_entero(numero)
+    numero = pedir_opcion("Número de habitación (-1 para salir): ") #Chequea enteros con excepciones. 
     #checkeo que no exista ya
-    while int(numero) != -1:
+    while numero != -1:
         idx = ubicar(matriz, int(numero))
         while idx != -1:
             print("Esta habitación ya existe.")
