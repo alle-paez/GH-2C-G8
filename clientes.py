@@ -2,10 +2,11 @@ from listas_codeadas import *
 import re
 from habitaciones import ubicar
 import json
+from validaciones import *
 
-def leer_clientes(archivo="tabla_cliente.json"):
+def leer_clientes(archivo="tabla_cliente.json", modo="r"):
     try:
-        contenido = open(archivo, "r")
+        contenido = open(archivo, modo, encoding="UTF-8")
         clientes = json.load(contenido)
         return clientes
     except:
