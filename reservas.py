@@ -3,11 +3,15 @@ from habitaciones import *
 from clientes import *
 import re
 import json
+<<<<<<< HEAD
 import os
 from validaciones import *
 
 habitaciones=leer_habitaciones()
 clientes=leer_clientes()
+=======
+from validaciones import *
+>>>>>>> 4c2c5edf92e413d915d009b241b6a8e3aabd4001
 
 def cuantas_lineas_txt(archivo):
     f = open(archivo, "r", encoding="UTF-8")
@@ -356,8 +360,13 @@ def buscar_reserva_x_id(idd):
     linea=reservas.readline()
     
     while linea:
+<<<<<<< HEAD
         identificador, _, _, _, _, _, _ = linea.split(";").strip()
         if identificador == idd:
+=======
+        id, _, existente_desde, existente_hasta, hab, _, _ = linea.split(";").strip()
+        if id == idd: 
+>>>>>>> 4c2c5edf92e413d915d009b241b6a8e3aabd4001
             return True
         linea=reservas.readline()
     return -1
@@ -467,6 +476,7 @@ def ordenar_totales_mayor_menor():
 
     return matriz_reservas
 
+#MOSTRAR LEER ETC
 def print_elegir_opcion(matriz_reservas= reservas):
     menu_mostrar()
     op = int(input("Ingrese la opción elegida:"))
@@ -696,7 +706,7 @@ def eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=reservas_elim
             aux=open(temp, "wt", encoding="UTF-8")
             encontrado=False
             linea=reservas.readline()
-            
+
         except:
             pass
         """    flag = 0
