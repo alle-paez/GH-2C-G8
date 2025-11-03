@@ -26,5 +26,6 @@ def pedir_opcion(mensaje):
     return num
 
 
+
 if __name__ == "__main__":
     pedir_opcion("Ingrese un numero: ")
