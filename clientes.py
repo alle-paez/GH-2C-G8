@@ -1,6 +1,7 @@
 from listas_codeadas import *
 import re
 from habitaciones import ubicar
+from validaciones import *
 import json
 
 def leer_clientes(archivo="tabla_cliente.json"):

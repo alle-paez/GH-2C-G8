@@ -1,8 +1,9 @@
 #from listas_codeadas import *
 from habitaciones import *
-#from clientes import *
+from clientes import *
 import re
 import json
+from validaciones import *
 
 def cuantas_lineas_txt(archivo):
     f = open(archivo, "r", encoding="UTF-8")
@@ -311,7 +312,7 @@ def buscar_reserva_x_id(idd):
     
     while linea:
         id, _, existente_desde, existente_hasta, hab, _, _ = linea.split(";").strip()
-        if id == idd:
+        if id == idd: 
             return True
         linea=reservas.readline()
     return -1
@@ -377,6 +378,7 @@ def ordenar_totales_mayor_menor(reservas):
     reservas.sort(key=lambda x: x[6], reverse=True)
     return reservas
 
+#MOSTRAR LEER ETC
 def print_elegir_opcion(matriz_reservas= reservas):
     menu_mostrar()
     op = int(input("Ingrese la opción elegida:"))
