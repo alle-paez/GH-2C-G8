@@ -1,0 +1,9 @@
+[
+    {
+        "hab": 106,
+        "precio": 24000,
+        "tipo": "Triple",
+        "capacidad": 3,
+        "estado": "Mantenimiento"
+    }
+]
