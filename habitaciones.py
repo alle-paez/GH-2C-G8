@@ -1,6 +1,19 @@
 import re
 import json
-from validaciones import *
+
+def leer_habitaciones(archivo="tabla_habitaciones.json"):
+    try:
+        contenido = open(archivo, "r", encoding="UTF-8")
+        habitaciones = json.load(contenido)
+        return habitaciones
+    except:
+        print("Error, no se pudo acceder a la base de datos")
+    finally:
+        try:
+            archivo.close()
+        except:
+            print("Error al cerrar el archivo")
+
 #IMPRIMIR HABITACIONES----------------------------------------------------------------------------------------------
 def print_habitaciones(matriz):
     print("Número    |Precio    |Tipo      |Capacidad |Estado    |")
