@@ -15,9 +15,9 @@ def verificar_formato_fecha(fecha):
     else:
         return False
     
-def pedir_opcion(mensaje):
+def validar_entero(mensaje):
     while True: 
-        valor = input(mensaje)
+        valor = input(mensaje).strip()
         try: 
             num = int(valor)
             break
@@ -25,7 +25,17 @@ def pedir_opcion(mensaje):
             print("Se ingreso un formato incorrecto. ")
     return num
 
+def esta_vacio(mensaje):
+    while True:
+        try:
+            txt = input(mensaje).strip().capitalize()
+            if not txt: #vacio
+                raise ValueError("Debe ingresar algo.")
+            return txt
+        except ValueError as error:
+            print(f"error! {error}")
+    
 
 
 if __name__ == "__main__":
-    pedir_opcion("Ingrese un numero: ")
+    validar_entero("Ingrese un numero: ")
