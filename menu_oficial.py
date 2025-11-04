@@ -37,13 +37,11 @@ Volver para atrás con -1 \n\
                 elif opcion_habitaciones==2: #MODIFICAR HABITACIONES
                     modificar_habitacion()
                 elif opcion_habitaciones==3: #ELIMINAR HABITACIONES
-                    print_habitaciones(habitaciones)
-                    eliminar_hab(habitaciones, habitaciones_borradas)
+                    eliminar_hab()
                 elif opcion_habitaciones==4:#VER HABITACIONES
-                    print_habitaciones(habitaciones)
+                    print_habitaciones()
                 elif opcion_habitaciones==5:
-                    print_habitaciones(habitaciones_borradas)
-                    deshacer_borrar(habitaciones, habitaciones_borradas)
+                    deshacer_borrar()
                 
                 print(f'{LINEA}\n\
 1-Agregar habitación\n\

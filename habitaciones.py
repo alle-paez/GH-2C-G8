@@ -1,27 +1,29 @@
 import re
 import json
+from validaciones import *
 
-def leer_habitaciones(archivo="tabla_habitaciones.json"):
+def leer_habitaciones(archivo):
     try:
-        contenido = open(archivo, "r", encoding="UTF-8")
-        habitaciones = json.load(contenido)
-        return habitaciones
-    except:
-        print("Error, no se pudo acceder a la base de datos")
-    finally:
-        try:
-            archivo.close()
-        except:
-            print("Error al cerrar el archivo")
+        with open(archivo, "r", encoding="UTF-8") as contenido:
+            habitaciones = json.load(contenido)
+            return habitaciones
+    except Exception as e:
+        print(f"Error, no se pudo acceder a la base de datos: {e}")
 
 #IMPRIMIR HABITACIONES----------------------------------------------------------------------------------------------
-def print_habitaciones(matriz):
-    print("Número    |Precio    |Tipo      |Capacidad |Estado    |")
-    for i in range(len(matriz)):
-        for j in range(len(matriz[i])):
-            print(f'{matriz[i][j]} '.ljust(10), end="")
-        print()
-    return matriz
+def print_habitaciones(archivo):
+    try: 
+        with open(archivo, 'r', encoding="UTF-8") as data:
+            habitaciones = json.load(data)
+            print(f"\nLista de las Habitaciones ----------------------------")
+            print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
+
+            for hab in habitaciones:
+                print(f"{hab["hab"]:<10}{hab["precio"]:<10}{hab["tipo"]:<15}{hab["capacidad"]:<5}{hab["estado"]:<10}")
+    
+    except (FileNotFoundError, OSError) as error:
+        print(f"Error! {error}")
+
 
 #ORDENAR POR ÍNDICE: NÚMERO DE HABITACIÓN------------------------------------------------------------------------------------
 def ordenar_hab(hab):
@@ -29,11 +31,64 @@ def ordenar_hab(hab):
     return hab
 
 #ELIMINAR HABITACIONES------------------------------------------------------------------------------------------------------
-def eliminar_hab(hab, hab_borradas):
-    item=int(input("Ingrese el número de habitación que quiera eliminar: ").strip())
-    flag=1
+def eliminar_hab(archivo1="GH-2C-G8/tabla_habitaciones.json", archivo2="habitaciones_borradas.json"):
+    while True:
+        print_habitaciones(archivo1)
+        item=validar_entero("Ingrese el número de habitación que quiera eliminar: (-1 para salir.)")
+        if item == -1:
+            break
 
-    while flag ==1:
+        try: 
+            with open(archivo1, 'r', encoding="UTF-8") as data:
+                habitaciones = json.load(data)
+            
+            nros_hab = [habi["hab"] for habi in habitaciones]
+            if item in nros_hab: 
+                indice = nros_hab.index(item)
+                eliminado = habitaciones.pop(indice)
+                with open(archivo1, 'w', encoding="UTF-8") as data:
+                    json.dump(habitaciones, data, ensure_ascii=False, indent=4)
+                    print(f"La habitación {item} de tipo {eliminado["tipo"]} ha sido eliminada con exito.")
+                
+                with open(archivo2,'r',encoding="UTF-8") as borrados:
+                    hab_borradas = json.load(borrados)
+
+                hab_borradas.append(eliminado)
+                with open(archivo2, 'w', encoding="UTF-8") as borrados:
+                    json.dump(hab_borradas, borrados, ensure_ascii=False, indent=4)
+
+
+            else:
+                s = True
+                while item not in nros_hab and s:
+                    n_ingreso = input("El número de habitación ingresado no existe. ¿Desea ingresar otro? s/n: ")
+                    if n_ingreso.isdigit():
+                        raise TypeError("No se permiten enteros. ")
+                    if not n_ingreso:
+                        raise ValueError("Debe ingresar algo.")
+                    if n_ingreso.lower == "s":
+                        s = True
+                        item=validar_entero("Ingrese el número de habitación que quiera eliminar: ")
+                        if item in nros_hab: 
+                            indice = nros_hab.index(item)
+                            eliminado = habitaciones.pop(indice)
+                            with open(archivo1, 'w', encoding="UTF-8") as data:
+                                json.dump(habitaciones, data, ensure_ascii=False, indent=4)
+                                print(f"La habitación {item} de tipo {eliminado["tipo"]} ha sido eliminada con exito.")
+
+                            with open(archivo2,'r',encoding="UTF-8") as borrados:
+                                hab_borradas = json.load(borrados)
+
+                            hab_borradas.append(eliminado)
+                            with open(archivo2, 'w', encoding="UTF-8") as borrados:
+                                json.dump(hab_borradas, borrados, ensure_ascii=False, indent=4)
+                    else:
+                        s = False
+
+        except (FileNotFoundError, OSError) as error:
+            print(f"Error! {error}")
+            
+"""while flag ==1:
         flag=0
         pos=ubicar(hab, item)
         if pos!=-1:
@@ -50,17 +105,46 @@ def eliminar_hab(hab, hab_borradas):
         
 
         if flag==1:
-            item=int(input("Ingrese el número de habitación que quiera eliminar: ").strip())
+            item=int(input("Ingrese el número de habitación que quiera eliminar: ").strip())"""
 
 #DESHACER BORRAR DE UNA HABITACIÓN--------------------------------------------------------------------------------------------------
-def deshacer_borrar(hab, hab_borradas):
-
-    item=int(input("Ingrese el número de habitación que quiera recuperar: ").strip())
+def deshacer_borrar(archivo1="GH-2C-G8/tabla_habitaciones.json", archivo2="habitaciones_borradas.json"):
+    print_habitaciones(archivo2)
+    item=validar_entero("Ingrese el número de habitación que quiera recuperar: ")
     flag=1
 
     while flag ==1:
         flag=0
-        pos=ubicar(hab_borradas, item)
+        habitaciones_borradas = leer_habitaciones(archivo2)
+        habitaciones = leer_habitaciones(archivo1)
+        nros_hab = [habi["hab"] for habi in habitaciones_borradas]
+        if item in nros_hab:
+            indice = nros_hab.index(item)
+            habitaciones.append(habitaciones_borradas.pop(indice))
+            try:
+                with open(archivo1, 'w', encoding="UTF-8") as data:
+                    json.dump(habitaciones, data, ensure_ascii=False, indent=4)
+
+                with open(archivo2, 'w',encoding = "UTF-8") as borrados:
+                    json.dump(habitaciones_borradas, borrados, ensure_ascii=False, indent=4)
+
+                print(f"La habitación {item} ha sido recuperada con exito.")
+                flag=validar_entero("Si desea recuperar otra habitación ingrese 1, si no, ingrese 0: ")
+                        
+            except (FileNotFoundError, OSError) as error:
+                print(f"Error! {error}")
+        
+        else:
+            print(f"No se encontro la habitación {item}. ")
+            item=validar_entero("Ingrese el número de habitación nuevamente: ")
+            flag == 1
+
+        if flag == 1:
+            item = validar_entero("Ingrese el numero de habitación que quiera recuperar. ")
+        
+
+            
+"""pos=ubicar(hab_borradas, item)
         if pos!=-1:
             hab.append(hab_borradas[pos])
             del (hab_borradas[pos])
@@ -71,10 +155,10 @@ def deshacer_borrar(hab, hab_borradas):
             item=int(input("Ingrese el número de habitación nuevamente: ").strip())
             
         if flag==1:
-            item=int(input("Ingrese el número de habitación que quiera recuperar: ").strip())
+            item=int(input("Ingrese el número de habitación que quiera recuperar: ").strip())"""
 
 #VALIDACIÓN DE NÚMEROS-------------------------------------------------------------------------------------------------------------
-es_entero = lambda x: re.search(r'^-?[0-9]+$', x) is not None
+#es_entero = lambda x: re.search(r'^-?[0-9]+$', x) is not None
 
 #LLENAR HABITACIONES-----------------------------------------------------------------------------------------------------------------
 
@@ -97,17 +181,17 @@ def llenar_habitaciones(archivo="GH-2C-G8/tabla_habitaciones.json"):
             
             nueva_habitacion = {
                 "hab":numero,
-                "Precio": precio,
-                "Tipo": tipo_txt,
-                "Capacidad": capacidad,
-                "Estado": estado_txt
+                "precio": precio,
+                "tipo": tipo_txt,
+                "capacidad": capacidad,
+                "estado": estado_txt
             }
 
             habitaciones.append(nueva_habitacion)
 
             with open(archivo, 'w', encoding="UTF-8") as data:
                 json.dump(habitaciones, data, ensure_ascii=False, indent=4) #Ensure... Evita la codificacion del formato unicode dentro del json.
-            print(f"Se ha agregado la habitacion {nueva_habitacion["hab"]} de tipo {nueva_habitacion["Tipo"]}.")
+            print(f"Se ha agregado la habitacion {nueva_habitacion["hab"]} de tipo {nueva_habitacion["tipo"]}.")
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
         finally: 
@@ -264,7 +348,6 @@ def ubicar(matriz, item):
         if i == len(matriz):
             flag = 1
     return pos
-
 
 
 """def leer_numero(num,mensaje="Ingrese el número, cerrar con-1", permitir_menos1=False):
