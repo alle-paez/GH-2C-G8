@@ -32,7 +32,7 @@ def opciones_ver_habitaciones():
         4 - Filtrar por precio \n\
         5 - Filtrar por estado\n")
     
-def busquedas_habitaciones(archivo="GH-2C-G8/tabla_habitaciones.json"):
+def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
     opciones_ver_habitaciones()
     while True:
         op = validar_entero("Ingrese una opción del 1 al 5. (-1 para salir): ")
@@ -79,25 +79,63 @@ def busquedas_habitaciones(archivo="GH-2C-G8/tabla_habitaciones.json"):
                 print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
                 for hab in filtrado:
                     print(f"{hab["hab"]:<10}{hab["precio"]:<10}{hab["tipo"]:<15}{hab["capacidad"]:<5}{hab["estado"]:<10}")
+
+            elif op == 4:
+                while True:
+                    precio = input("Ingrese el precio que desea buscar: ")
+                    try:
+                        precio = int(precio)
+                        if precio < 0:
+                            raise ValueError("El precio no puede ser negativo.")
+                        break  
+                    except ValueError as error:
+                        print(f"Error! {error}")
+                 
+                modo = menor_mayor_igual()
+                filtrado = []
+
+                if modo == "Menor":
+                    print(f"Habitaciones con precio por noche {modo.lower()} a {precio}: ")
+                    for hab in habitaciones:
+                        if int(hab["precio"]) <= precio:
+                            filtrado.append(hab)
+                
+                elif modo == "Mayor":
+                    print(f"Habitaciones con precio por noche {modo.lower()} a {precio}: ")
+                    for hab in habitaciones:
+                        if int(hab["precio"]) >= precio:
+                            filtrado.append(hab)
+                
+                elif modo == "Igual":
+                    print(f"Habitaciones con precio por noche {modo.lower()} a {precio}: ")
+                    for hab in habitaciones:
+                        if int(hab["precio"]) >= precio:
+                            filtrado.append(hab)
+                
+                if len(filtrado) > 0:
+                    print()
+                    print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
+                    for hab in filtrado:
+                        print(f"{hab["hab"]:<10}{hab["precio"]:<10}{hab["tipo"]:<10}{hab["capacidad"]:<10}{hab["estado"]:<10}")
+                
+                else: 
+                    print("No se registran habitaciones. ")
+            
+            elif op == 5:
+                estado = leer_estado()
+                filtrado = []
+                for hab in habitaciones:
+                    if hab["estado"] == estado:
+                        filtrado.append(hab)
+                print()
+                print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
+                for hab in filtrado:
+                    print(f"{hab["hab"]:<10}{hab["precio"]:<10}{hab["tipo"]:<10}{hab["capacidad"]:<10}{hab["estado"]:<10}")
         
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
 
                 
-                
-                    
-
-                
-            
-
-                
-                
-
-
-            
-
-
-
 
 
 #ORDENAR POR ÍNDICE: NÚMERO DE HABITACIÓN------------------------------------------------------------------------------------
@@ -106,7 +144,7 @@ def ordenar_hab(hab):
     return hab
 
 #ELIMINAR HABITACIONES------------------------------------------------------------------------------------------------------
-def eliminar_hab(archivo1="GH-2C-G8/tabla_habitaciones.json", archivo2="habitaciones_borradas.json"):
+def eliminar_hab(archivo1="tabla_habitaciones.json", archivo2="habitaciones_borradas.json"):
     while True:
         print_habitaciones(archivo1)
         item=validar_entero("Ingrese el número de habitación que quiera eliminar: (-1 para salir.)")
@@ -183,7 +221,7 @@ def eliminar_hab(archivo1="GH-2C-G8/tabla_habitaciones.json", archivo2="habitaci
             item=int(input("Ingrese el número de habitación que quiera eliminar: ").strip())"""
 
 #DESHACER BORRAR DE UNA HABITACIÓN--------------------------------------------------------------------------------------------------
-def deshacer_borrar(archivo1="GH-2C-G8/tabla_habitaciones.json", archivo2="habitaciones_borradas.json"):
+def deshacer_borrar(archivo1="tabla_habitaciones.json", archivo2="habitaciones_borradas.json"):
     print_habitaciones(archivo2)
     item=validar_entero("Ingrese el número de habitación que quiera recuperar: ")
     flag=1
@@ -237,7 +275,7 @@ def deshacer_borrar(archivo1="GH-2C-G8/tabla_habitaciones.json", archivo2="habit
 
 #LLENAR HABITACIONES-----------------------------------------------------------------------------------------------------------------
 
-def llenar_habitaciones(archivo="GH-2C-G8/tabla_habitaciones.json"):
+def llenar_habitaciones(archivo="tabla_habitaciones.json"):
     numero = validar_entero("Número de habitación (-1 para salir): ") #Chequea enteros con excepciones. 
     while numero != -1:
         try: 
@@ -298,7 +336,7 @@ def llenar_habitaciones(archivo="GH-2C-G8/tabla_habitaciones.json"):
     ordenar_hab(matriz)"""
 
 #MODIFICAR HABITACIONES----------------------------------------------------------------------------------------------
-def modificar_habitacion(archivo="GH-2C-G8/tabla_habitaciones.json"):
+def modificar_habitacion(archivo="tabla_habitaciones.json"):
     numero= validar_entero("Número de habitación a modificar (-1 para volver): ")
 
     while numero != -1:
@@ -392,13 +430,14 @@ def modificar_habitacion(archivo="GH-2C-G8/tabla_habitaciones.json"):
 #LEER TIPOS Y SUS OPCIONES--------------------------------------------------------------------------------------------------------
 tipos   = ["Single", "Doble", "Triple", "Suite"]
 estados = ["Disponible", "Ocupada", "Mantenimiento"]
+modos = ["Menor","Mayor","Igual"]
 
 def leer_tipo():
     
     tipo = esta_vacio("Escribí el tipo de habitación (Single/Doble/Triple/Suite): ")
     valido = list(filter(lambda x: x == tipo, tipos))
     while len(valido) == 0:
-        tipo = input("Tipo inválido. Volvé a escribir: ").capitalize()
+        tipo = esta_vacio("Tipo inválido. Volvé a escribir: ")
         valido = list(filter(lambda x: x == tipo, tipos))
     return tipo
 
@@ -406,9 +445,17 @@ def leer_estado():
     estado = esta_vacio("Escribí el estado (Disponible/Ocupada/Mantenimiento): ")
     valido = list(filter(lambda x: x == estado, estados))
     while len(valido) == 0:
-        estado = input("Estado inválido. Volvé a escribir: ").capitalize()
+        estado = esta_vacio("Estado inválido. Volvé a escribir: ")
         valido = list(filter(lambda x: x == estado, estados))
     return estado
+
+def menor_mayor_igual():
+    modo = esta_vacio(f"Buscar mayores, menores o iguales a ese numero? (menor/mayor/igual):\nOpción: ")
+    valido = list(filter(lambda x: x == modo, modos))
+    while len(valido)==0:
+        modo = esta_vacio("Modo invalido. Volve a escribir: ")
+        valido = list(filter(lambda x: x == modo, modos))
+    return modo
 
 #UBICAR-------------------------------------------------------------------------------------------------------------------------
 def ubicar(matriz, item):

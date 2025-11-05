@@ -3,7 +3,6 @@ import re
 from habitaciones import ubicar
 from validaciones import *
 import json
-from validaciones import *
 
 def leer_clientes(archivo="tabla_cliente.json", modo="r"):
     try:
