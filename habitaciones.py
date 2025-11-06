@@ -23,6 +23,8 @@ def print_habitaciones(archivo):
     
     except (FileNotFoundError, OSError) as error:
         print(f"Error! {error}")
+    except:
+        print("Error inesperado. Intente nuevamente. ")
 
 def opciones_ver_habitaciones():
     print(f"Seleccione un filtro: \n\
@@ -121,9 +123,12 @@ def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
                 print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
                 for hab in filtrado:
                     print(f"{hab["hab"]:<10}{hab["precio"]:<10}{hab["tipo"]:<10}{hab["capacidad"]:<10}{hab["estado"]:<10}")
-        
+
+            op = validar_entero("Ingrese una opción del 1 al 5. (-1 para salir): ")
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
+        except:
+            print("Error inesperado. Intente nuevamente. ")
 
                 
 
@@ -188,6 +193,8 @@ def eliminar_hab(archivo1="tabla_habitaciones.json", archivo2="habitaciones_borr
             item=validar_entero("Ingrese el número de habitación que quiera eliminar: (-1 para salir.)") 
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
+        except:
+            print("Error inesperado. Intente nuevamente. ")
             
 """while flag ==1:
         flag=0
@@ -238,6 +245,9 @@ def deshacer_borrar(archivo1="tabla_habitaciones.json", archivo2="habitaciones_b
                         
             except (FileNotFoundError, OSError) as error:
                 print(f"Error! {error}")
+            
+            except:
+                print("Error inesperado. Intente nuevamente. ")
         
         else:
             print(f"No se encontro la habitación {item}. ")
@@ -279,10 +289,33 @@ def llenar_habitaciones(archivo="tabla_habitaciones.json"):
                     print("La habitación ya existe. ")
                     numero = validar_entero("Número de habitación: ")
 
-
-            precio = validar_entero("Precio (entero > 0): ")
             tipo_txt = leer_tipo()
-            capacidad = validar_entero("Capacidad (> 0): ")
+
+            err = True
+            while err:
+                try:
+                    precio = validar_entero("Precio (entero > 0): ")
+                    if precio < 0:
+                        raise ValueError("No puede ser un valor negativo.")
+                    err = False
+                except ValueError as e:
+                    print(f"Error! {e}")
+            
+            err = True 
+            while err:
+                try:
+                    capacidad = validar_entero("Capacidad (> 0): ")
+                    if capacidad < 0:
+                        raise ValueError("No puede ser un valor negativo.")
+                    if capacidad > 10:
+                        raise Exception("No existen habitaciones tan grandes.")
+                    err = False
+                except (ValueError,Exception) as e:
+                    print(f"Error! {e}")
+                except:
+                    print("Error inesperado. Intente nuevamente. ")
+
+                    
             estado_txt = leer_estado()
             
             nueva_habitacion = {
@@ -300,6 +333,8 @@ def llenar_habitaciones(archivo="tabla_habitaciones.json"):
             print(f"Se ha agregado la habitacion {nueva_habitacion["hab"]} de tipo {nueva_habitacion["tipo"]}.")
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
+        except:
+            print("Error inesperado. Intente nuevamente. ")
         finally: 
             numero = validar_entero("Número de habitación (-1 para salir): ")
 
@@ -329,8 +364,39 @@ def llenar_habitaciones(archivo="tabla_habitaciones.json"):
     ordenar_hab(matriz)"""
 
 #MODIFICAR HABITACIONES----------------------------------------------------------------------------------------------
+
+def incremento_porcentual(tabla):
+    precios_hab = [tb["precio"] for tb in tabla]
+    err = True
+    while err:
+        inc = input("Ingrese el porcentaje que quiera incrementar. (-75% a 300%(ingresar sin %)): ")
+        try:
+            inc = float(inc)
+            if inc < -75:
+                raise Exception("No se puede bajar más de un 75%.")
+            elif inc > 300:
+                raise Exception("No se puede aumentar más de un 300%. ")
+            err = False           
+        except ValueError:
+            print("Se ingreso un formato incorrecto. (Ingresar sin %)")
+        except Exception as er:
+            print(f"Error! {er}")
+        except:
+            print("Error inesperado. Intente nuevamente. ")
+      
+    precios_inc = list(map(lambda x: x * (1 + inc / 100), precios_hab))
+
+    for pre in precios_inc:
+        precio_ent = int(pre)
+        i = precios_inc.index(pre)
+        tabla[i]["precio"] = precio_ent
+
+    return tabla
+
+
 def modificar_habitacion(archivo="tabla_habitaciones.json"):
     print_habitaciones(archivo)
+    print("Incremento porcentual del precio a todas las habitaciones, ingrese 1.")
     numero= validar_entero("Número de habitación a modificar (-1 para volver): ")
 
     while numero != -1:
@@ -341,19 +407,33 @@ def modificar_habitacion(archivo="tabla_habitaciones.json"):
             nros_hab = [habi["hab"] for habi in habitaciones]
             if numero in nros_hab: 
                 indice = nros_hab.index(numero)
-            
-            else:
-                while numero not in nros_hab and numero !=-1:
+
+            elif numero not in nros_hab and numero !=-1 and numero != 1:
+                while numero not in nros_hab and numero !=-1 and numero != 1:
                     print("El número de habitación ingresado no existe. Ingrese otro.")
                     numero = validar_entero("Número de habitación a modificar(-1 para salir): ")
-                
-            if numero !=-1:
+            
+            if numero == 1:
+                incremento_porcentual(habitaciones)
+                with open(archivo, 'w', encoding="UTF-8") as data:
+                    json.dump(habitaciones, data, ensure_ascii=False, indent=4)
+                print("Incremento porcentual terminado. ")
+     
+            elif numero !=-1:
                 indice = nros_hab.index(numero)
                        
-                op_txt = input("\n1-Precio  2-Tipo  3-Capacidad  4-Estado  5-Todos  (-1 volver)\nOpción: ").strip()
+                op_txt = input("Ingrese una opción: \n\
+            1-Precio\n\
+            2-Tipo\n\
+            3-Capacidad\n\
+            4-Estado\n\
+            5-Todos \n\
+            (-1 volver)\n\
+            Opción:").strip()
+                
                 while not (op_txt.lstrip("-").isdigit() and int(op_txt) in {1,2,3,4,5,-1}):
                     print("Opción inválida.")
-                    op_txt = input("\n1-Precio  2-Tipo  3-Capacidad  4-Estado  5-Todos  (-1 volver)\nOpción: ").strip()
+                    op_txt = input().strip()
                 op = int(op_txt)
 
                 while op != -1:
@@ -421,6 +501,8 @@ def modificar_habitacion(archivo="tabla_habitaciones.json"):
     
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
+        except:
+            print("Error inesperado. Intente nuevamente. ")
         finally: 
             numero = validar_entero("Número de habitación (-1 para salir): ")            
 

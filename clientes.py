@@ -100,7 +100,8 @@ def llenar_clientes(archivo="tabla_clientes.json"):
 
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
-
+        except:
+            print("Error inesperado. Intente nuevamente. ")
             
 
 #MODIFICAR CLIENTES-------------------------------------------------------------------------------------------------------
@@ -113,6 +114,8 @@ def abrir_archivo(archivo):
         print(f"Error! No se pudo abrir el archivo. {error}")
     except Exception as e:
         print(f"Error! {e}")
+    except:
+        print("Error inesperado. Intente nuevamente. ")
 
 def escribir_archivo(archivo,tabla,mensaje="Dump generado con exito"):
     try:
@@ -203,6 +206,79 @@ def print_clt(archivo):
             print(f"{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<15}{cli["mail"]:<15}")
     except (FileNotFoundError, OSError) as error:
         print(f"Error! {error}")
+    except:
+        print("Error inesperado. Intente nuevamente. ")
+
+def opciones_busquedas_cli():
+    print(f"seleccione un filtro: \n\
+          1 - Todos los clientes.\n\
+          2 - Busqueda por DNI. \n\
+          3 - Coincidencias nombre y apellido. \n\
+          4 - Ver opciones de busqueda.")
+
+def busquedas_clientes(archivo="tabla_clientes.json"):
+    opciones_busquedas_cli()
+    op = validar_entero("Ingrese una opción de las disponibles. (1-4)(-1 para salir): ")
+
+    while op not in (-1,1,2,3,4):
+        op = validar_entero("Ingrese una opción de las disponibles. (1-4)(-1 para salir): ")
+    
+    while op != -1:
+        clientes = abrir_archivo(archivo)
+        match op:
+            case 1:
+                cadena = "Resultados de la busqueda"
+                print(cadena.center(50,"-"))
+                print_clt(archivo)
+                print()
+            case 2:
+                busq_dni(clientes)
+                print()
+            case 3:
+                coincidencias_n_y_a(clientes)
+                print()
+            case 4:
+                opciones_busquedas_cli()
+        
+        op = validar_entero("Ingrese una opción de las disponibles. (1-4)(-1 para salir, 4 para ver opciones): ")
+
+        while op not in (-1,1,2,3,4):
+            op = validar_entero("Ingrese una opción de las disponibles. (1-4)(-1 para salir): ")
+    
+def busq_dni(clientes):
+    cli = validar_entero("Ingrese el dni del cliente que desea buscar: ")
+    if verificar_formato(cli):
+        dnis_cli = [clt["dni"] for clt in clientes]
+        if cli in dnis_cli:
+            i = dnis_cli.index(cli)
+            cadena = "Resultados de la busqueda"
+            print(cadena.center(50,"-"))
+            print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}")
+            print(f"{clientes[i]["dni"]:<10}{clientes[i]["nombre"]:<10}{clientes[i]["apellido"]:<10}{clientes[i]["telefono"]:<15}{clientes[i]["mail"]:<15}")
+        else:
+            print("No existe cliente con ese DNI.")
+    else: 
+        print("Dni invalido.")
+
+def coincidencias_n_y_a(clientes):
+    ingreso = esta_vacio("Ingrese el nombre o apellido que desea buscar: ")
+    flag_ing = es_texto(ingreso)
+    while not flag_ing:
+        ingreso = esta_vacio("Formato Incorrecto, ingrese el nombre o apellido que desea buscar: ")
+        flag_ing = es_texto(ingreso)
+
+    patron = re.compile(ingreso.strip(), re.IGNORECASE)
+    cadena = "Resultados de la busqueda"
+    print(cadena.center(50,"-"))
+    print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}")
+    for cli in clientes:
+        nombre = cli["nombre"]
+        apellido = cli["apellido"]
+        nombre_completo = f"{nombre} {apellido}"
+        if (re.search(patron, nombre) or re.search(patron, apellido) or re.search(patron, nombre_completo)):
+            print(f"{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<15}{cli["mail"]:<15}")
+
+
 
 
 

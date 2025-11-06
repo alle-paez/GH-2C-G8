@@ -109,7 +109,7 @@ Volver para atrás con -1\n\
                 elif opcion_clientes==3: # BORRAR CLIENTES
                     borrar_clientes("tabla_clientes.json", "clientes_borrados.json","elimina")
                 elif opcion_clientes==4: #VER CLIENTES
-                    print_clt("tabla_clientes.json")
+                    busquedas_clientes()
                 elif opcion_clientes==5:
                     borrar_clientes("clientes_borrados.json", "tabla_clientes.json", "recupera")
                 print(f'{LINEA}\n\

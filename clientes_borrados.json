@@ -1,1 +1,9 @@
-[]
+[
+    {
+        "dni": 34553433,
+        "nombre": "Maxi",
+        "apellido": "Broggi",
+        "telefono": 1132434343,
+        "mail": "Theallecanal@gmail.com"
+    }
+]
