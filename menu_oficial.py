@@ -103,7 +103,7 @@ Volver para atrás con -1\n\
             while opcion_clientes!=-1:
 
                 if opcion_clientes==1: #AGREGAR CLIENTES
-                    llenar_clientes(m_clientes)
+                    llenar_clientes()
                 elif opcion_clientes==2: #MODIFICAR CLIENTES
                     pass
                 elif opcion_clientes==3: # BORRAR CLIENTES

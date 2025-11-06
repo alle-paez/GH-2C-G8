@@ -1,19 +1,5 @@
 [
     {
-        "hab": 104,
-        "precio": 25000,
-        "tipo": "Suite",
-        "capacidad": 4,
-        "estado": "Disponible"
-    },
-    {
-        "hab": 105,
-        "precio": 12000,
-        "tipo": "Single",
-        "capacidad": 1,
-        "estado": "Disponible"
-    },
-    {
         "hab": 102,
         "precio": "23000",
         "tipo": "Triple",
@@ -26,5 +12,19 @@
         "tipo": "Single",
         "capacidad": 2,
         "estado": "Mantenimiento"
+    },
+    {
+        "hab": 104,
+        "precio": 25000,
+        "tipo": "Suite",
+        "capacidad": 4,
+        "estado": "Disponible"
+    },
+    {
+        "hab": 105,
+        "precio": 12000,
+        "tipo": "Single",
+        "capacidad": 1,
+        "estado": "Disponible"
     }
 ]

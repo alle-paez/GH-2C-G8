@@ -2,7 +2,7 @@ import re
 
 def verificar_formato(dni):
     patron = r'^\d{8}$'
-    if re.match(patron, dni):
+    if re.match(patron, str(dni)):
         return True
     else: 
         return False
@@ -16,26 +16,29 @@ def verificar_formato_fecha(fecha):
         return False
     
 def validar_entero(mensaje):
-    while True: 
+    error = True
+    while error: 
         valor = input(mensaje).strip()
         try: 
             num = int(valor)
-            break
+            error = False
         except ValueError:
             print("Se ingreso un formato incorrecto. ")
     return num
 
 def esta_vacio(mensaje):
-    while True:
+    error = True
+    while error:
         try:
             txt = input(mensaje).strip().capitalize()
             if not txt: #vacio
                 raise ValueError("Debe ingresar algo.")
-            return txt
-        except ValueError as error:
-            print(f"error! {error}")
+            error = False
+        except ValueError as err:
+            print(f"error! {err}")
+    return txt
     
 
 
 if __name__ == "__main__":
-    validar_entero("Ingrese un numero: ")
+    xd = esta_vacio("xdxd: ")

@@ -19,59 +19,74 @@ def leer_clientes(archivo="tabla_cliente.json", modo="r"):
         
 #AGREGAR CLIENTES--------------------------------------------------------------------------------
 
-def llenar_clientes(m):
-    dni = input("Ingrese el Dni del cliente: (-1 para finalizar la carga): ")
+def llenar_clientes(archivo="tabla_clientes.json"):
+    dni = validar_entero("Ingrese el Dni del cliente: (-1 para finalizar la carga): ")
     flag=verificar_formato(dni)
-
     if flag:
-        if int(dni)==-1:
+        if dni ==-1:
             flag=True
 
     while flag==False:
-        dni = input("Ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga:)")
+        dni = validar_entero("Ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga:)")
         flag=verificar_formato(dni)
-
+           
+    while dni != -1: 
+        try: 
+            with open(archivo, 'r', encoding="UTF-8") as data:
+                clientes = json.load(data)
             
-    while int(dni) != -1: 
-        nombre = input("Ingrese el nombre del cliente: ")
-        flag_name=es_texto(nombre)
-        while not flag_name:
-            nombre = input("Ingrese el nombre del cliente nuevamente: ")
+            nombre = esta_vacio("Ingrese el nombre del cliente: ")
             flag_name=es_texto(nombre)
+            while not flag_name:
+                nombre = esta_vacio("Ingrese el nombre del cliente nuevamente: ")
+                flag_name=es_texto(nombre)
 
-        apellido = input("Ingrese el apellido del cliente: ")
-        flag_sur=es_texto(apellido)
-        while not flag_sur:
-            apellido = input("Ingrese el apellido del cliente: ")
+            apellido = esta_vacio("Ingrese el apellido del cliente: ")
             flag_sur=es_texto(apellido)
+            while not flag_sur:
+                apellido = esta_vacio("Ingrese el apellido del cliente: ")
+                flag_sur=es_texto(apellido)
 
-        telefono = input("Ingrese el telefono del cliente: ")
-        flag_tel=es_telefono(telefono)
-        while not flag_tel:
-            telefono = input("Ingrese el telefono del cliente: ")
+            telefono = validar_entero("Ingrese el telefono del cliente: ")
             flag_tel=es_telefono(telefono)
+            while not flag_tel:
+                telefono = validar_entero("Ingrese el telefono del cliente: ")
+                flag_tel=es_telefono(telefono)
 
-        mail = input("Ingrese el e-mail del cliente: ")
-        flag_mail=es_mail(mail)
-        while not flag_mail:
-            mail = input("Ingrese el e-mail del cliente: ")
-            flag_mail=es_mail(mail) 
+            mail = esta_vacio("Ingrese el e-mail del cliente: ")
+            flag_mail=es_mail(mail)
+            while not flag_mail:
+                mail = esta_vacio("Ingrese el e-mail del cliente: ")
+                flag_mail=es_mail(mail) 
 
-        m.append([dni,nombre,apellido,telefono,mail])
+            nuevo_cliente ={
+                "dni":dni,
+                "nombre":nombre,
+                "apellido":apellido,
+                "telefono":telefono,
+                "mail":mail
+                }
+            
+            clientes.append(nuevo_cliente)
+            with open(archivo, 'w', encoding="UTF-8") as data:
+                json.dump(clientes, data, ensure_ascii=False, indent=4)
+            
+            print(f"Se ha ahregado al cliente {nuevo_cliente["nombre"]} {nuevo_cliente["apellido"]} de dni {nuevo_cliente["dni"]}.")
 
-        dni = input("Ingrese el Dni del cliente: (-1 para finalizar la carga:)")
-        flag=verificar_formato(dni)
-        while not flag:
-            dni = input("Ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga:)")
+        except (FileNotFoundError, OSError) as error:
+            print(f"Error! {error}")
+
+            dni = validar_entero("Ingrese el Dni del cliente: (-1 para finalizar la carga): ")
             flag=verificar_formato(dni)
-    ordenar_clt(m_clientes)
+            while not flag:
+                dni = validar_entero("Ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga:)")
+                flag=verificar_formato(dni)
 
 #MODIFICAR CLIENTES-------------------------------------------------------------------------------------------------------
 
-def modificar_clientes(m):
-    print_clt(m)
-    dni = input("\nIngrese DNI del cliente a modificar (-1 para salir): ").strip()
-
+def modificar_clientes(archivo="tabla_clientes.json"):
+    print_clt(archivo)
+    dni = validar_entero("\nIngrese DNI del cliente a modificar (-1 para salir): ")
     while dni != "-1":
         if re.match(r"^\d{8}$", dni):
             dni = int(dni)
@@ -122,20 +137,18 @@ es_telefono= lambda x: re.search(r'\d{4}-\d{4}$', x) is not None
 es_mail= lambda x: re.search(r'\w*@gmail\.com$', x) is not None
 
 #IMPRESIÓN DE CLIENTES----------------------------------------------------------------------------------------------------
-def print_clt(matriz):
-    print("")
-    print("---------------------------------------------------------------------------------")
-    print("DNI       |Nombre       |Apellido       |Teléfono     |Mail                      ")
-    print("---------------------------------------------------------------------------------")
-    for valor in matriz:
-        fila = valor
-        dni, nombre, apellido, telefono, mail= fila
+def print_clt(archivo):
+    try:
+        with open(archivo, 'r', encoding="UTF-8") as data:
+            clientes = json.load(data)
+        print("Tabla clientes -------------------------------------")
+        print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<10}{"Mail":<10}")
+        for cli in clientes:
+            print(f"{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<10}{cli["mail"]:<10}")
+    except (FileNotFoundError, OSError) as error:
+        print(f"Error! {error}")
 
-        print(str(dni).ljust(9), "|",
-            str(nombre).ljust(11), "|",
-            str(apellido).ljust(13), "|",
-            str(telefono).ljust(14), "|",
-            str(mail).ljust(14))
+
 
 #ELIMINAR CLIENTES-----------------------------------------------------------------------------------------------------------
 def borrar_clientes(clt,clt_borr):
