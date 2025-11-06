@@ -1,2 +1,8 @@
+from clientes import *
+from habitaciones import *
 from reservas import *
-print_tabla_reservas("tabla_reservas.txt")
+
+print(total_por_precio(102, 18, 3))
+#WRITELINE!!!!!!!!
+
+#print(type(habitaciones))

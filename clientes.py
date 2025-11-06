@@ -5,7 +5,7 @@ from validaciones import *
 import json
 from validaciones import *
 
-def leer_clientes(archivo="tabla_cliente.json", modo="r"):
+def leer_clientes(archivo="tabla_clientes.json", modo="r"):
     try:
         contenido = open(archivo, modo, encoding="UTF-8")
         clientes = json.load(contenido)
@@ -13,10 +13,11 @@ def leer_clientes(archivo="tabla_cliente.json", modo="r"):
     except:
         print("Error, no se pudo acceder a la base de datos")
     finally:
-        try:
-            archivo.close()
-        except:
-            print("Error al cerrar el archivo")
+        if contenido is not None:           # solo cerramos si se abrió
+            try:
+                contenido.close()
+            except:
+                print("Error al cerrar el archivo")
         
 #AGREGAR CLIENTES--------------------------------------------------------------------------------
 
