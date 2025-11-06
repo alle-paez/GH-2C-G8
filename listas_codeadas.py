@@ -56,7 +56,7 @@ LINEA=("-")*80
 nro_factura= [1,1]
 
 
-habitaciones = [
+m_habitaciones = [
     [101, 15000, "Doble", 2, "Disponible"],
     [102, 20000, "Triple", 3, "Ocupada"],
     [103, 18000, "Doble", 2, "Mantenimiento"],

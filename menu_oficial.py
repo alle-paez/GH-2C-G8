@@ -3,8 +3,8 @@ from clientes import *
 from habitaciones import *
 from reservas import *
 from login import *
-from estadisticas import *
-from validaciones import pedir_opcion
+#from estadisticas import *
+from validaciones import *
 def menu_administrador():
 
     print("")
@@ -17,7 +17,7 @@ def menu_administrador():
 Salir del programa con -1 \n\
 {LINEA}')
     
-    opcion=pedir_opcion("Ingrese numéricamente la opción deseada: ")
+    opcion=validar_entero("Ingrese numéricamente la opción deseada: ")
     while opcion!=-1:
         if opcion==1:
             print(f'{LINEA}\n\
@@ -29,21 +29,19 @@ Salir del programa con -1 \n\
 Volver para atrás con -1 \n\
 {LINEA}')
   
-            opcion_habitaciones = pedir_opcion("Ingrese numéricamente la opción deseada: ")
+            opcion_habitaciones = validar_entero("Ingrese numéricamente la opción deseada: ")
             while opcion_habitaciones!=-1:
                 if opcion_habitaciones==1:#AGREGAR HABITACIONES
-                    llenar_habitaciones(habitaciones)
+                    llenar_habitaciones()
                     #AGREGAR CHECKEOS
                 elif opcion_habitaciones==2: #MODIFICAR HABITACIONES
-                    modificar_habitacion(habitaciones)
+                    modificar_habitacion()
                 elif opcion_habitaciones==3: #ELIMINAR HABITACIONES
-                    print_habitaciones(habitaciones)
-                    eliminar_hab(habitaciones, habitaciones_borradas)
+                    eliminar_hab()
                 elif opcion_habitaciones==4:#VER HABITACIONES
-                    print_habitaciones(habitaciones)
+                    busquedas_habitaciones()
                 elif opcion_habitaciones==5:
-                    print_habitaciones(habitaciones_borradas)
-                    deshacer_borrar(habitaciones, habitaciones_borradas)
+                    deshacer_borrar()
                 
                 print(f'{LINEA}\n\
 1-Agregar habitación\n\
@@ -53,7 +51,7 @@ Volver para atrás con -1 \n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
 {LINEA}')
-                opcion_habitaciones = pedir_opcion("Ingrese numéricamente la opción deseada: ")
+                opcion_habitaciones = validar_entero("Ingrese numéricamente la opción deseada: ")
 
         elif opcion==2:
             print(f'\
@@ -64,7 +62,7 @@ Volver para atrás con -1\n\
     5-Papelera de reciclaje\n\
     Volver para atrás con -1')
 
-            opcion_reservas = pedir_opcion("Ingrese numéricamente la opción deseada: ")
+            opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
 
             while opcion_reservas!=-1:
 
@@ -87,7 +85,7 @@ Volver para atrás con -1\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
 {LINEA}')
-            opcion_reservas = pedir_opcion("Ingrese numéricamente la opción deseada: ")
+            opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
 
         elif opcion==3:
             print(f'{LINEA}\n\
@@ -97,7 +95,13 @@ Volver para atrás con -1\n\
 4-Ver clientes\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
+<<<<<<< HEAD
 {LINEA}')
+=======
+{LINEA}')   
+        
+            opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
+>>>>>>> 87d59979e08ff9cef32587636d194cfd0eda867f
 
             if opcion_clientes==1: #AGREGAR CLIENTES
                 llenar_clientes(m_clientes)
@@ -118,9 +122,14 @@ Volver para atrás con -1\n\
 4-Ver clientes\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
+<<<<<<< HEAD
 {LINEA}')
             opcion_clientes=pedir_opcion("Ingrese numéricamente la opción deseada: ")
             
+=======
+{LINEA}')   
+            opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
+>>>>>>> 87d59979e08ff9cef32587636d194cfd0eda867f
         elif opcion==4:
             elegir_opcion_estadistica()
 
@@ -131,7 +140,7 @@ Volver para atrás con -1\n\
 4-Ver Estadísticas\n\
 Salir del programa con -1\n\
 {LINEA}')
-        opcion=pedir_opcion("Ingrese numéricamente la opción deseada: ")
+        opcion=validar_entero("Ingrese numéricamente la opción deseada: ")
 
 
 if __name__=="__main__":
