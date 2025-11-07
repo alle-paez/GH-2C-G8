@@ -1,4 +1,6 @@
 import re
+import json
+import reservas
 
 def verificar_formato(dni):
     patron = r'^\d{8}$'
@@ -8,12 +10,12 @@ def verificar_formato(dni):
         return False
     
 
-def verificar_formato_fecha(fecha):
+"""def verificar_formato_fecha(fecha):
     formato = r"^\d{4}-\d{2}-\d{2}$"
     if re.match(formato, fecha):
         return True
     else:
-        return False
+        return False"""
     
 def validar_entero(mensaje):
     error = True
@@ -52,3 +54,26 @@ def esta_vacio(mensaje):
 
 if __name__ == "__main__":
     xd = esta_vacio("xdxd: ")
+
+"""def buscar_habitacion(nro_hab, i=0):
+    with open("tabla_habitaciones.json", "r", encoding="UTF-8") as archivo:
+        tabla_habitaciones = json.load(archivo)
+
+        if i >= len(tabla_habitaciones):
+            return False
+        else:
+            if str(tabla_habitaciones[i]["hab"]) == str(nro_hab):
+                return True
+        return buscar_habitacion(nro_hab, i + 1)
+    
+
+
+
+def verificar_existencia_habitación():
+    while True:
+        try:
+            hab=input("Ingrese el número de habitación: ")
+            assert buscar_habitacion(hab) == True
+            return hab
+        except AssertionError:
+            print("La habitación ingresada no existe.")"""

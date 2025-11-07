@@ -71,11 +71,11 @@ Volver para atrás con -1\n\
                 elif opcion_reservas==2: #MODIFICAR RESERVA
                     modificacion()
                 elif opcion_reservas==3: # CANCELAR RESERVA
-                    eliminar_reserva()
+                    eliminar_reserva("tabla_reservas.txt", "reservas_borradas.txt", "eliminar")
                 elif opcion_reservas==4: #VER RESERVAS
                     print_elegir_opcion()
                 elif opcion_reservas==5:
-                    deshacer_eliminar_reserva()
+                    eliminar_reserva("reservas_borradas.txt", "tabla_reservas.txt", "recuperar")
 
             print(f'{LINEA}\n\
 1-Agregar reserva\n\
@@ -99,17 +99,17 @@ Volver para atrás con -1\n\
         
             opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
 
-                if opcion_clientes==1: #AGREGAR CLIENTES
-                    llenar_clientes()
-                elif opcion_clientes==2: #MODIFICAR CLIENTES
-                    modificar_clientes()
-                elif opcion_clientes==3: # BORRAR CLIENTES
-                    borrar_clientes("tabla_clientes.json", "clientes_borrados.json","elimina")
-                elif opcion_clientes==4: #VER CLIENTES
-                    busquedas_clientes()
-                elif opcion_clientes==5:
-                    borrar_clientes("clientes_borrados.json", "tabla_clientes.json", "recupera")
-                print(f'{LINEA}\n\
+            if opcion_clientes==1: #AGREGAR CLIENTES
+                llenar_clientes()
+            elif opcion_clientes==2: #MODIFICAR CLIENTES
+                modificar_clientes()
+            elif opcion_clientes==3: # BORRAR CLIENTES
+                borrar_clientes("tabla_clientes.json", "clientes_borrados.json","elimina")
+            elif opcion_clientes==4: #VER CLIENTES
+                busquedas_clientes()
+            elif opcion_clientes==5:
+                borrar_clientes("clientes_borrados.json", "tabla_clientes.json", "recupera")
+            print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\
 3-Eliminar cliente\n\
@@ -117,7 +117,7 @@ Volver para atrás con -1\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
 {LINEA}')   
-                opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
+            opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
         elif opcion==4:
             elegir_opcion_estadistica()
 
