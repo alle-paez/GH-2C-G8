@@ -2,7 +2,7 @@ import re
 import json
 from validaciones import *
 
-def leer_habitaciones(archivo):
+def leer_habitaciones(archivo="tabla_habitaciones.json"):
     try:
         with open(archivo, "r", encoding="UTF-8") as contenido:
             habitaciones = json.load(contenido)

@@ -1,9 +1,9 @@
 from listas_codeadas import *
 from clientes import *
 from habitaciones import *
-#from reservas import *
+from reservas import *
 from login import *
-#from estadisticas import *
+from estadisticas import *
 from validaciones import *
 def menu_administrador():
 
@@ -87,7 +87,6 @@ Volver para atrás con -1\n\
 {LINEA}')
             opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
 
-    
         elif opcion==3:
             print(f'{LINEA}\n\
 1-Agregar cliente\n\
@@ -99,8 +98,6 @@ Volver para atrás con -1\n\
 {LINEA}')   
         
             opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
-
-            while opcion_clientes!=-1:
 
                 if opcion_clientes==1: #AGREGAR CLIENTES
                     llenar_clientes()

@@ -20,17 +20,18 @@ def cuantas_lineas_txt(archivo):
     f.close()
     return contador
 
-def leer_reservas(archivo="tabla_reservas.txt", modo_de_lectura="rt"):
+def leer_reservas(archivo="tabla_reservas.txt", modo_de_lectura="r"):
     try:
-        contenido = open(archivo, modo_de_lectura, encoding="UTF-8")
-        return contenido
+        with  open(archivo, modo_de_lectura, encoding="UTF-8") as contenido:
+                return contenido
+
     except FileNotFoundError:
         print("Error, no se pudo acceder a la base de datos.")
-    finally:
+"""    finally:
         try:
             contenido.close() # Siempre debe cerrarse
         except:
-            print("Error al cerrar el archivo")
+            print("Error al cerrar el archivo")"""
 
 reservas=leer_reservas()
 
@@ -192,22 +193,77 @@ def existe_cliente(dni):
 def buscar_cliente(dni):
     if not existe_cliente(dni):
         print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
-        llenar_clientes_desde_reservas(clientes, dni)
+        llenar_clientes_desde_reservas(dni)
         
 """    if not existe_cliente(matriz_clientes, dni):
         print("El cliente ingresado no existe en nuestra base de datos. \n Por favor, ingrese los siguientes datos: ")
         llenar_clientes_desde_reservas(matriz_clientes, dni)"""
-        
+
+def pedir_nombre():
+    while True:
+        try:
+            nombre = input(str("Ingrese el nombre del cliente: "))
+            break
+        except ValueError:
+            print("Error, ingrese un nombre válido.")
+
+    return nombre
+
+def pedir_apellido():
+    while True:
+        try:
+            apellido = input(str("Ingrese el apellido del cliente: "))
+            break
+        except ValueError:
+            print("Error, ingrese un apellido válido.")
+            
+    return apellido
+
+def pedir_telefono():
+    while True:
+        try:
+            telefono = input("Ingrese el telefono del cliente: ")
+            assert len(telefono) >= 8
+            break
+        except ValueError:
+            print("Error, ingrese un teléfono válido.")
+            
+        except AssertionError:
+            print("Error, el teléfono debe tener al menos 8 dígitos.")
+            
+    return telefono
+
+def pedir_mail():
+    while True:
+        try:
+            mail = input(str("Ingrese el e-mail del cliente: "))
+            mail_correcto = mail.count("@")
+            assert mail_correcto == 1
+            break
+        except AssertionError:
+            print("Error, ingrese un e-mail válido.")
+            
+        except ValueError:
+            print("Error, el mail debe ser texto.")
+            
+    return mail
+
 def llenar_clientes_desde_reservas(dni):
-        nombre = input("Ingrese el nombre del cliente: ")
-        apellido = input("Ingrese el apellido del cliente: ")
-        telefono = input("Ingrese el telefono del cliente: ")
-        mail = input("Ingrese el e-mail del cliente: ")
-        archivo=leer_clientes("tabla_clientes.json", "wt")
-        archivo.append(f'\"Dni\": {dni},\n\"Nombre\": {nombre}, \n\"Apellido\": {apellido}, \n\"Teléfono\": {telefono},\n\"Mail\": {mail}')
-        json.dump(archivo, "tabla_clientes.json")
-        archivo.close()
-        print("Finalizo la carga, prosiguiendo con la reserva. ")
+    nombre=pedir_nombre()
+    apellido=pedir_apellido()
+    telefono=pedir_telefono()
+    mail=pedir_mail()
+        
+    nuevo_cliente = {"Dni": dni, "Nombre": nombre, "Apellido": apellido, "Teléfono": telefono, "Mail": mail}
+
+    with open("tabla_clientes.json", "r", encoding="UTF-8") as datos:
+        archivo = json.load(datos)
+        archivo.append(nuevo_cliente)
+        
+    with open("tabla_clientes.json", "w", encoding="UTF-8") as datos:
+        json.dump(archivo, datos, ensure_ascii=False)
+
+    print("Finalizo la carga, prosiguiendo con la reserva. ")
 
 #VERIFICAR HABITACIÓN  ---------------------------------------------------------------------------------------
 def comparar_fechas(fecha_1, fecha_2):
@@ -229,18 +285,26 @@ def verificar_reservas_disponibilidad(nro_hab, check_in, check_out):
                 if coinciden_fechas(check_in, check_out, existente_desde, existente_hasta):
                     return False
             linea = contenido.readline()"""
-        linea=reservas.readline()
-        while linea or es_hab==0:
-            _, _, existente_desde, existente_hasta, hab, _, _ = linea.split(";").strip()
-            
-            if hab == nro_hab: 
-                es_hab=1
-                if coinciden_fechas(check_in, check_out, existente_desde, existente_hasta):
-                    return False
-            linea = reservas.readline()
+        with open("tabla_reservas.txt", "r", encoding="UTF-8") as reservas:
+            linea=reservas.readline()
+            es_hab=0
+            flag=0
+            coinciden_fechas=0
+            while flag==0:
+                _, _, existente_desde, existente_hasta, hab, _, _ = linea.split(";")
+                
+                if hab == str(nro_hab): 
+                    es_hab=1
+                    flag=1
+                    if coinciden_fechas(check_in, check_out, existente_desde, existente_hasta):
+                        coinciden_fechas=1
+                linea = reservas.readline()
+                if linea==None:
+                    flag=1
         
-
-        if es_hab==0:
+        if coinciden_fechas==1:
+            return False
+        else:
             return True
     
     except FileNotFoundError:
@@ -253,13 +317,13 @@ def verificar_reservas_disponibilidad(nro_hab, check_in, check_out):
             print("Error al cerrar el archivo")"""
     
 def total_por_precio(dto, dias, ad):
-    #habitaciones=open("tabla_habitaciones.json", "r", encoding="utf-8")
-    #matriz_habitaciones = json.load(habitaciones)
-
+    with open("tabla_habitaciones.json", "r", encoding="UTF-8") as habs:
+        habitaciones = json.load(habs)
     for hab in habitaciones:
-        if hab == dto:
-            precio_noche = hab["Precio"]
-            return precio_noche * dias + ad * 4000
+        if hab["hab"] == dto:
+            precio_noche =hab["precio"]
+            precio_total= int(precio_noche) * int(dias) + int(ad) * 4000
+            return precio_total
 
 def verificar_cant_max(dto):
     #habitaciones=open("tabla_habitaciones.json", "r", encoding="utf-8")
@@ -269,11 +333,15 @@ def verificar_cant_max(dto):
             cant_maxima = hab["Capacidad"]
             return cant_maxima
         dto = str(dto)"""
-    dto = str(dto)
-    if dto in habitaciones:
-        return habitaciones[dto]["Capacidad"]
-    else:
+    cant_maxima=0
+    for hab in habitaciones:
+        if dto == hab["hab"]:
+            cant_maxima=hab["capacidad"]
+        
+    if cant_maxima==0:
         print(f"No se encontró la habitación {dto}")
+    else:
+        return cant_maxima
 
 def validar_cant(pax, dto):
     cap_max = verificar_cant_max(dto)
@@ -291,8 +359,7 @@ def digito_unico(pax):
 
 #LLENAR RESERVAS: CREATE ---------------------------------------------------------------------------------------------
 def llenar_reservas():
-    reservas_write=leer_reservas(modo_de_lectura="wt")
-
+        
     nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
     ver_dni = verificar_formato(nro_dni)
     while not ver_dni:
@@ -323,7 +390,7 @@ def llenar_reservas():
 #Validar habitaciones y fechas --------------------------------------------------
         
         dto = int(input("Ingrese el numero de habitación: "))
-        while not verificar_reservas_disponibilidad("tabla_reservas.txt", dto, check_in, check_out):
+        while not verificar_reservas_disponibilidad(dto, check_in, check_out):
             print(f"La habitación {dto} ya está ocupada en ese rango.")
             dto = int(input("Ingrese el numero de habitación: "))
 
@@ -343,7 +410,11 @@ def llenar_reservas():
         total = total_por_precio(dto, dias, adicionales)
         nro_reserva = cuantas_lineas_txt("tabla_reservas.txt") + 1
 
-        reservas_write.write((f'{nro_reserva}, {nro_dni}, {check_in}, {check_out}, {dto}, {cant_pax}, {total}'))
+        reserva_nueva=((f'\n{nro_reserva};{nro_dni};{check_in};{check_out};{dto};{cant_pax};{total}\n'))
+        
+        with open("tabla_reservas.txt", "a", encoding="UTF-8") as reservas_write:
+            reservas_write.write(reserva_nueva)
+        
         print(f"{nro_reserva, nro_dni, check_in, check_out, dto, cant_pax, total}")
         print("Se agrego todo correctamente.")
         nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
@@ -441,7 +512,7 @@ def ordenar_menor_mayor(parametro):
     matriz_reservas.sort(key=lambda x: x[parametro])
     reservas.close()
 
-    leer_reservas(modo_de_lectura="wt")
+    leer_reservas(modo_de_lectura="w")
     for fila in matriz_reservas:
         linea = ";".join(map(str, fila))
         reservas.write(linea + "\n")
@@ -459,7 +530,7 @@ def ordenar_totales_mayor_menor():
     matriz_reservas.sort(key=lambda x: x[6], reverse=True)
     reservas.close()
 
-    leer_reservas(modo_de_lectura="wt")
+    leer_reservas(modo_de_lectura="w")
     for fila in matriz_reservas:
         linea = ";".join(map(str, fila))
         reservas.write(linea + "\n")
@@ -501,24 +572,6 @@ def print_elegir_opcion(matriz_reservas= reservas):
     elif op==6:
         ordenar_menor_mayor(2)
         print_tabla_reservas("reservas.txt")
-
-"""
-def print_tabla_reservas(matriz):
-    print("")
-    print("------------------------------------------------------------------")
-    print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
-    print("------------------------------------------------------------------")
-    for valor in matriz:
-        fila = valor
-        id_reserva, dni, check_in, check_out, hab, pax, total = fila
-        print(str(id_reserva).ljust(4), "|",
-          str(dni).ljust(11), "|",
-          formatear_fecha(check_in).ljust(11), "|",
-          formatear_fecha(check_out).ljust(11), "|",
-          str(hab).ljust(3), "|",
-          str(pax).ljust(3), "|",
-          str(total).ljust(6))"""
-
 
 def print_tabla_reservas(archivo):
     try:
@@ -694,7 +747,7 @@ def eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=reservas_elim
     flag = 1
     while flag == 1:
         try:
-            aux=open(temp, "wt", encoding="UTF-8")
+            aux=open(temp, "w", encoding="UTF-8")
             encontrado=False
             linea=reservas.readline()
 
