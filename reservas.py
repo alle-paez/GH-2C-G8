@@ -186,7 +186,7 @@ def verificar_formato(dni):
 def existe_cliente(dni):
     
     for c in clientes:
-        if c["Dni"] == dni:
+        if c["dni"] == dni:
             return True
     return False
 
@@ -254,7 +254,7 @@ def llenar_clientes_desde_reservas(dni):
     telefono=pedir_telefono()
     mail=pedir_mail()
         
-    nuevo_cliente = {"Dni": dni, "Nombre": nombre, "Apellido": apellido, "Teléfono": telefono, "Mail": mail}
+    nuevo_cliente = {"dni": dni, "nombre": nombre, "apellido": apellido, "telefono": telefono, "mail": mail}
 
     with open("tabla_clientes.json", "r", encoding="UTF-8") as datos:
         archivo = json.load(datos)
@@ -289,7 +289,7 @@ def verificar_reservas_disponibilidad(nro_hab, check_in, check_out):
             linea=reservas.readline()
             es_hab=0
             flag=0
-            coinciden_fechas=0
+            coinciden=0
             while flag==0:
                 _, _, existente_desde, existente_hasta, hab, _, _ = linea.split(";")
                 
@@ -297,12 +297,12 @@ def verificar_reservas_disponibilidad(nro_hab, check_in, check_out):
                     es_hab=1
                     flag=1
                     if coinciden_fechas(check_in, check_out, existente_desde, existente_hasta):
-                        coinciden_fechas=1
+                        coinciden=1
                 linea = reservas.readline()
                 if linea==None:
                     flag=1
         
-        if coinciden_fechas==1:
+        if coinciden==1:
             return False
         else:
             return True
