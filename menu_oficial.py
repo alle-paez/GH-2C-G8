@@ -5,6 +5,8 @@ from reservas import *
 from login import *
 from estadisticas import *
 from validaciones import *
+from pruebas import *
+
 def menu_administrador():
 
     print("")

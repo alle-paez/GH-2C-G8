@@ -111,9 +111,26 @@ def pedir_fecha(mensaje):
             print("Formato incorrecto, use AAAA-MM-DD.")
     return fecha
 
+def pedir_fecha_mod(mensaje):
+    valido = False
+    while not valido:
+        fecha_str = input(mensaje)
+        if fecha_str=="":
+            return fecha_str
+        else:
+            if verificar_formato_fecha(fecha_str):
+                fecha = separar_en_lista(fecha_str)
+                if verificar_ingresos_fecha(fecha):
+                    valido = True
+                else:
+                    print("La fecha no existe, vuelva a intentar.")
+            else:
+                print("Formato incorrecto, use AAAA-MM-DD.")
+    return fecha
+
 def dias_en_mes(anio, mes):
     dias_mes = [31, 29 if bisiesto(anio) else 28, 31, 30, 31, 30,
-                31, 31, 30, 31, 30, 31]
+31, 31, 30, 31, 30, 31]
     return dias_mes[mes - 1]
 
 def contar_dias(fecha):
@@ -224,7 +241,7 @@ def llenar_clientes_desde_reservas(dni):
 #VERIFICAR HABITACIÓN  ---------------------------------------------------------------------------------------
 def verificar_formato_fecha(fecha):
     formato = r"^\d{4}-\d{2}-\d{2}$"
-    if re.match(formato, fecha):
+    if re.match(formato, str(fecha)):
         return True
     else:
         return False
@@ -390,14 +407,23 @@ def llenar_reservas():
 #UPDATE: ACTUALIZAR Y LEER ----------------------------------------------------------------------------------
 def buscar_reserva_x_id(idd):
 
-    linea=reservas.readline()
-    
-    while linea:
-        identificador, _, _, _, _, _, _ = linea.split(";").strip()
-        if identificador == idd:
-            return True
-        linea=reservas.readline()
-    return -1
+    try:
+        with open("tabla_reservas.txt", "r", encoding="UTF-8") as reservas:
+                linea=reservas.readline()
+                identificador, _, _, _, _, _, _ = linea.strip().split(";")
+                identificador=str(identificador)
+                while linea:
+                    
+                    if identificador == str(idd):
+                        return True
+                    else:
+                        linea=reservas.readline()
+                        identificador, _, _, _, _, _, _ = linea.strip().split(";")
+                        identificador=str(identificador)
+                    
+                return -1
+    except:
+        print("Error, no se pudo acceder a la base de datos.")
 
 """def dar_reserva_x_id(matriz_reservas, idd):
     i = buscar_reserva_x_id(matriz_reservas, idd)
@@ -424,7 +450,7 @@ def modo_busqueda():
 def formatear_fecha(fecha):
     return str(fecha[0]).zfill(4) + "-" + str(fecha[1]).zfill(2) + "-" + str(fecha[2]).zfill(2)
 
-def print_reserva(matriz, pos):
+"""def print_reserva(matriz, pos):
     fila = matriz[pos]
     id_reserva, dni, check_in, check_out, hab, pax, total = fila
     print("")
@@ -437,7 +463,7 @@ def print_reserva(matriz, pos):
           formatear_fecha(check_out).ljust(11), "|",
           str(hab).ljust(3), "|",
           str(pax).ljust(3), "|",
-          str(total).ljust(6))
+          str(total).ljust(6))"""
 
 def menu_mostrar():
     print(f"¿Que desea ver? Ingrese una opción: \n \
@@ -567,10 +593,8 @@ def print_tabla_reservas(archivo):
         except:
             print("No se pudo cerrar el archivo")
         
-
-
 #MODIFICACION --------------------------------------------------------------------------------------------------------------
-def modificacion():
+"""def modificacion():
     busq = modo_busqueda()
     while busq != 1 and busq != 2:
         busq = modo_busqueda()
@@ -649,9 +673,9 @@ def modificacion():
             total = total_por_precio(dto, dias, adicionales)
             print(total)
             modif = [modificados_reservas[0], modificados_reservas[1], check_in, check_out, dto, cant_pax, total]
-"""            mat_mod_anterior.append(modificados_reservas.pop())
+            mat_mod_anterior.append(modificados_reservas.pop())
             mat_mod_posterior.append(modif)
-            matriz_reservas.insert(i, modif)"""
+            matriz_reservas.insert(i, modif)
             print_reserva(matriz_reservas, i)
         
         if opcion_elegida == 2:
@@ -705,7 +729,7 @@ def modificacion():
             print_reserva(matriz_reservas, i)
 
         opcion_elegida = int(input("Ingrese la opción elegida: (-1 para retroceder.)"))
-
+"""
 #DELETE: BORRAR --------------------------------------------------------------------------------------
 def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_o_recuperar="eliminar"):
     with open(archivo_del_que_eliminar, "r", encoding="UTF-8") as reservass:
@@ -738,24 +762,20 @@ def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_
             os.remove("temp.txt")  # eliminamos el temporal si no se usó
             print(f"No se encontró el producto {id_eliminar}.")
 
-"""def deshacer_eliminar_reserva(matriz_reservas=reservas, reservas_eliminadas=reservas_eliminadas):
-    id_recuperar = int(input("Ingrese el número de reserva que quisiera recuperar: "))
-    flag = 1
-    while flag == 1: 
-        flag = 0
-        pos=buscar_reserva_x_id(reservas_eliminadas, id_recuperar)
-        if pos != -1:
-            reserva = reservas_eliminadas.pop(pos)
-            matriz_reservas.insert(reserva[0]-1, reserva)
-            print(f"La reserva nro {id_recuperar} ha sido recuperada con exito.")
-            flag = int(input("Si desea recuperar otra habitación, ingrese 1, si no, ingrese 0: "))
-        else: 
-            print(f"No se encontro la habitación {id_recuperar}.")
-            id_recuperar = int(input("Ingrese el número de reserva nuevamente: "))
-        if flag == 1:
-            id_recuperar = int(input("Ingrese el número de reserva que quiera recuperar: "))"""
+if __name__ == "__main__":
+    # pruebas manuales acá
+    pass
 
-def imprimir_factura(clt_act, hoy):
+#FACTURACIÓN --------------------------------------------------------------------------------------------------------------
+
+def imprimir_factura(dni_clt_act, hoy):
+
+    with open("tabla_clientes.json", "r", encoding="UTF-8") as datos:
+        clientes = json.load(datos)
+        for c in clientes:
+            if c["dni"] == dni_clt_act:
+                cliente_act = c
+    print(type(cliente_act))
     #encabezado
     linea=("-")*80
     factura=(f'{str(nro_factura[0]).zfill(4)}-{str(nro_factura[1]).zfill(8)}')
@@ -773,25 +793,25 @@ def imprimir_factura(clt_act, hoy):
     nro_factura[1]+=1
     #cuerpo
     print(f'{'Datos del cliente':^80}\n'\
-    f'{"Nombre y Apellido: "+ m_clientes[clt_act][1]+" "+ m_clientes[clt_act][2]:<80}\n'\
-    f'{"Dni: "+ str(m_clientes[clt_act][0])}\n')
+    f'{"Nombre y Apellido: "+ cliente_act["nombre"]+" "+ cliente_act["apellido"]:<80}\n'\
+    f'{"Dni: "+ str(cliente_act["dni"])}\n')
 
     print(f'{LINEA}\n|{"Nro. de reserva":^17}|{"Descripción":^19}|{"Precio por día":^18}|{"Días":^10}|{"Valor":^10}|\n{LINEA}')
     reservas_del_clt=[]
     total=0
-    for i in range(len(reservas)):
-        if reservas[i][1]==m_clientes[clt_act][0]:
-            reservas_del_clt.append(reservas[i])
+
+    with open("tabla_reservas.txt", "r", encoding="UTF-8") as archivo:
+        for linea in archivo:
+
+            id_reserva, dni, check_in, check_out, hab, pax, total = linea.strip().split(";")
+            if dni==str(dni_clt_act):
+                reservas_del_clt.append(id_reserva, dni, check_in, check_out, hab, pax, total)
+    archivo.close()
+
     for i in range(len(reservas_del_clt)):
         dias=diferencia_dias_entre(check_in=reservas_del_clt[i][2],check_out=reservas_del_clt[i][3])
         valor=reservas_del_clt[i][6]*dias
         total+=valor
         print(f'|{reservas_del_clt[i][0]:^17}|{"Habitación "+str(reservas_del_clt[i][4]):^19}|{reservas_del_clt[i][6]:^18}|{dias:^10}|{valor:^10}|')
     print(LINEA)
-    print(f'{"Fecha de impresión: "+ str(hoy):<40}{"Subtotal: "+str(total):>40}\n{"Total IVA: "+str(0.21*total):>80}\n{"Total: "+ str((IVA(total))):>80}\n')
-
-
-if __name__ == "__main__":
-    # pruebas manuales acá
-    pass
-
+    print(f'{"Fecha de impresión: "+ str(hoy):<40}{"Subtotal: "+str(total):>40}\n{"Total IVA: "+str(0.21*int(total)):>80}\n{"Total: "+ str((IVA(int(total)))):>80}\n')

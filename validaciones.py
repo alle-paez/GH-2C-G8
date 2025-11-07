@@ -10,12 +10,12 @@ def verificar_formato(dni):
         return False
     
 
-"""def verificar_formato_fecha(fecha):
+def verificar_formato_fecha(fecha):
     formato = r"^\d{4}-\d{2}-\d{2}$"
     if re.match(formato, fecha):
         return True
     else:
-        return False"""
+        return False
     
 def validar_entero(mensaje):
     error = True
