@@ -5,6 +5,7 @@ from reservas import *
 from login import *
 from estadisticas import *
 from validaciones import *
+from menu_clientes import *
 def menu_administrador():
 
     print("")
@@ -99,17 +100,17 @@ Volver para atrás con -1\n\
         
             opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
 
-                if opcion_clientes==1: #AGREGAR CLIENTES
+            if opcion_clientes==1:  #AGREGAR CLIENTES
                     llenar_clientes()
-                elif opcion_clientes==2: #MODIFICAR CLIENTES
+            elif opcion_clientes==2: #MODIFICAR CLIENTES
                     modificar_clientes()
-                elif opcion_clientes==3: # BORRAR CLIENTES
+            elif opcion_clientes==3: # BORRAR CLIENTES
                     borrar_clientes("tabla_clientes.json", "clientes_borrados.json","elimina")
-                elif opcion_clientes==4: #VER CLIENTES
+            elif opcion_clientes==4: #VER CLIENTES
                     busquedas_clientes()
-                elif opcion_clientes==5:
+            elif opcion_clientes==5:
                     borrar_clientes("clientes_borrados.json", "tabla_clientes.json", "recupera")
-                print(f'{LINEA}\n\
+            print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\
 3-Eliminar cliente\n\
@@ -117,7 +118,7 @@ Volver para atrás con -1\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
 {LINEA}')   
-                opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
+            opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
         elif opcion==4:
             elegir_opcion_estadistica()
 
@@ -131,6 +132,9 @@ Salir del programa con -1\n\
         opcion=validar_entero("Ingrese numéricamente la opción deseada: ")
 
 
-if __name__=="__main__":
-    login()
-    menu_administrador()
+if __name__ == "__main__":
+    rol, dni_login = login()
+    if rol == "admin":
+        menu_administrador()
+    elif rol == "cliente":
+        menu_clientes(dni_login)
