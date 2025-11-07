@@ -40,12 +40,5 @@
         "tipo": "Triple",
         "capacidad": 3,
         "estado": "Mantenimiento"
-    },
-    {
-        "hab": 24,
-        "precio": "23000",
-        "tipo": "Single",
-        "capacidad": 3,
-        "estado": "Mantenimiento"
     }
 ]

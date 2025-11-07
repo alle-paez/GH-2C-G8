@@ -76,16 +76,15 @@ Volver para atrás con -1\n\
                     print_elegir_opcion()
                 elif opcion_reservas==5:
                     eliminar_reserva("reservas_borradas.txt", "tabla_reservas.txt", "recuperar")
-
-            print(f'{LINEA}\n\
+                print(f'{LINEA}\n\
 1-Agregar reserva\n\
 2-Modificar reserva\n\
 3-Cancelar reserva\n\
 4-Ver reservas\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-{LINEA}')
-            opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
+{LINEA}\n')
+                opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
 
         elif opcion==3:
             print(f'{LINEA}\n\
