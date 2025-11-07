@@ -259,19 +259,6 @@ def deshacer_borrar(archivo1="tabla_habitaciones.json", archivo2="habitaciones_b
                 flag = 0
         
 
-            
-"""pos=ubicar(hab_borradas, item)
-        if pos!=-1:
-            hab.append(hab_borradas[pos])
-            del (hab_borradas[pos])
-            print(f'La habitación {item} ha sido recuperada con éxito')
-            flag=int(input("Si desea recuperar otra habitación ingrese 1, si no, ingrese 0: ").strip())
-        else:
-            print(f'no se encontró la habitación {item}')
-            item=int(input("Ingrese el número de habitación nuevamente: ").strip())
-            
-        if flag==1:
-            item=int(input("Ingrese el número de habitación que quiera recuperar: ").strip())"""
 
 #VALIDACIÓN DE NÚMEROS-------------------------------------------------------------------------------------------------------------
 #es_entero = lambda x: re.search(r'^-?[0-9]+$', x) is not None
@@ -338,30 +325,6 @@ def llenar_habitaciones(archivo="tabla_habitaciones.json"):
         finally: 
             numero = validar_entero("Número de habitación (-1 para salir): ")
 
-        """idx = ubicar(matriz, int(numero))
-        while idx != -1:
-            print("Esta habitación ya existe.")
-            while flag==False or idx!=-1:
-                numero = input("Número de habitación (-1 para salir): ")
-                flag=es_entero(numero)
-                idx = ubicar(matriz, int(numero))
-
-        if int(numero) != -1 and idx == -1 and flag:
-            precio = input("Precio (entero > 0): ")
-            es_entero(precio)
-
-            tipo_txt = leer_tipo()
-            capacidad = input("Capacidad (> 0): ")
-
-            estado_txt = leer_estado()
-
-            matriz.append([numero, precio, tipo_txt, capacidad, estado_txt])
-            print("Habitación agregada.")
-
-            numero = input("Número de habitación (-1 para salir): ")
-            idx = ubicar(matriz, int(numero))
-            flag=es_entero(numero)
-    ordenar_hab(matriz)"""
 
 #MODIFICAR HABITACIONES----------------------------------------------------------------------------------------------
 
@@ -550,14 +513,3 @@ def ubicar(matriz, item):
             flag = 1
     return pos
 
-
-"""def leer_numero(num,mensaje="Ingrese el número, cerrar con-1", permitir_menos1=False):
-    
-    #Pide un número entero validado con expresión regular.
-    #Si permitir_menos1=True, se permite el valor -1 como salida.
-    
-    patron = r"^-?[0-9]+$"
-    while not re.match(patron, num) or (not permitir_menos1 and int(num) < 1):
-        print("Entrada inválida. Solo números enteros válidos.")
-        num = input(mensaje).strip()
-    return int(num)"""

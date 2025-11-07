@@ -72,11 +72,11 @@ Volver para atrás con -1\n\
                 elif opcion_reservas==2: #MODIFICAR RESERVA
                     modificacion()
                 elif opcion_reservas==3: # CANCELAR RESERVA
-                    eliminar_reserva()
+                    eliminar_reserva("tabla_reservas.txt", "reservas_borradas.txt", "eliminar")
                 elif opcion_reservas==4: #VER RESERVAS
                     print_elegir_opcion()
                 elif opcion_reservas==5:
-                    deshacer_eliminar_reserva()
+                    eliminar_reserva("reservas_borradas.txt", "tabla_reservas.txt", "recuperar")
 
             print(f'{LINEA}\n\
 1-Agregar reserva\n\
