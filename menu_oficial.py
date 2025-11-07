@@ -5,6 +5,7 @@ from reservas import *
 from login import *
 from estadisticas import *
 from validaciones import *
+from menu_clientes import *
 def menu_administrador():
 
     print("")
@@ -98,16 +99,16 @@ Volver para atrás con -1\n\
         
             opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
 
-            if opcion_clientes==1: #AGREGAR CLIENTES
-                llenar_clientes()
+            if opcion_clientes==1:  #AGREGAR CLIENTES
+                    llenar_clientes()
             elif opcion_clientes==2: #MODIFICAR CLIENTES
-                modificar_clientes()
+                    modificar_clientes()
             elif opcion_clientes==3: # BORRAR CLIENTES
-                borrar_clientes("tabla_clientes.json", "clientes_borrados.json","elimina")
+                    borrar_clientes("tabla_clientes.json", "clientes_borrados.json","elimina")
             elif opcion_clientes==4: #VER CLIENTES
-                busquedas_clientes()
+                    busquedas_clientes()
             elif opcion_clientes==5:
-                borrar_clientes("clientes_borrados.json", "tabla_clientes.json", "recupera")
+                    borrar_clientes("clientes_borrados.json", "tabla_clientes.json", "recupera")
             print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\
@@ -130,6 +131,9 @@ Salir del programa con -1\n\
         opcion=validar_entero("Ingrese numéricamente la opción deseada: ")
 
 
-if __name__=="__main__":
-    login()
-    menu_administrador()
+if __name__ == "__main__":
+    rol, dni_login = login()
+    if rol == "admin":
+        menu_administrador()
+    elif rol == "cliente":
+        menu_clientes(dni_login)

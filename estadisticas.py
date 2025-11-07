@@ -3,6 +3,57 @@ from listas_codeadas import *
 from habitaciones import *
 from clientes import *
 
+def _leer_reservas_lista_desde_txt(ruta="tabla_reservas.txt"):
+    lista = []
+    try:
+        f = open(ruta, "r", encoding="UTF-8")
+        linea = f.readline()
+
+        while linea != "":
+            linea = linea.strip()
+            if linea != "":
+                partes = linea.split(";")
+
+                if len(partes) >= 7:
+                    try:
+                        id_reserva = int(partes[0])
+                        dni = int(partes[1])
+                        check_in = partes[2]
+                        check_out = partes[3]
+                        hab = int(partes[4])
+                        pax = int(partes[5])
+
+                        try:
+                            total = float(partes[6])
+                        except:
+                            total = int(partes[6])
+
+                        lista.append([id_reserva, dni, check_in, check_out, hab, pax, total])
+                    except:
+                        pass
+
+            linea = f.readline()
+
+        f.close()
+    except FileNotFoundError:
+        print("No se encontró el archivo de reservas.")
+    except OSError:
+        print("Error al abrir el archivo de reservas.")
+
+    return lista
+
+def es_tupla(fecha):
+    if type(fecha) == tuple:
+        return fecha
+    s = str(fecha).replace("(", "").replace(")", "")
+    partes = s.split(",")
+    if len(partes) == 3:
+        try:
+            return (int(partes[0]), int(partes[1]), int(partes[2]))
+        except:
+            return fecha
+    return fecha
+
 
 def opciones():
     print("")
@@ -18,29 +69,30 @@ def opciones():
 def elegir_opcion_estadistica(reservas=reservas):
     opciones()
     opcion = int(input(f"Seleccione una opción de las anteriores: (-1 para salir)\n"))
-    while opcion < 1 or opcion > 5:
+    while opcion != -1 and (opcion < 1 or opcion > 5):
         print("Opcion no valida.")
-        opcion = opcion = int(input(f"Seleccione una opción de las anteriores: (-1 para salir)\n"))
+        opcion = int(input(f"Seleccione una opción de las anteriores: (-1 para salir)\n"))
     while opcion != -1:
+        datos = _leer_reservas_lista_desde_txt()
         if opcion == 1:
-            globales = estadisticas_globales(reservas)
+            globales = estadisticas_globales(datos)
             mostrar_diccionario(globales)
         if opcion == 2:
-            stat_hab = estadisticas_habitacion(reservas)
+            stat_hab = estadisticas_habitacion(datos)
             mostrar_como_tabla(stat_hab)
         if opcion == 3:
-            stats_mensual = estadisticas_mensuales(reservas)
+            stats_mensual = estadisticas_mensuales(datos)
             mostrar_como_tabla(stats_mensual)
         if opcion == 4:
-            max_min_n = max_min_noches(reservas)
-            max_min_t= max_min_totales(reservas)
+            max_min_n = max_min_noches(datos)
+            max_min_t= max_min_totales(datos)
             print("Maximos y minimos de categoria noches: ")
             mostrar_diccionario(max_min_n)
             print(f"{LINEA}\n\
             Máximos y minimos de categoria totales: \n ")
             mostrar_diccionario(max_min_t)
         if opcion == 5:
-            porcentajes = porcentajes_reservas_x_habitacion(reservas)
+            porcentajes = porcentajes_reservas_x_habitacion(datos)
             mostrar_diccionario(porcentajes)
 
         print("")
@@ -67,9 +119,12 @@ def mostrar_diccionario(diccionario):
 
 
 def aaaa_mm(fecha):
-    return str(fecha[0]).zfill(4) + "-" + str(fecha[1]).zfill(2)
+    t = es_tupla(fecha)
+    return str(t[0]).zfill(4) + "-" + str(t[1]).zfill(2)
 
 def estadisticas_globales(reservas):
+    if type(reservas) != list:
+        reservas = _leer_reservas_lista_desde_txt()
     glob = {
         "total_reservas": 0,
         "noches_totales":0,
@@ -77,8 +132,10 @@ def estadisticas_globales(reservas):
         "pax_total":0  }
     for res in reservas: 
         _, _, desde, hasta, _, pax, total = res
+        d = es_tupla(desde)
+        h = es_tupla(hasta)        
         glob["total_reservas"] += 1
-        glob["noches_totales"] += diferencia_dias_entre(desde,hasta)
+        glob["noches_totales"] += diferencia_dias_entre(d,h)
         glob["ingreso_total"] += total
         glob["pax_total"] += pax
 
@@ -88,15 +145,19 @@ def estadisticas_globales(reservas):
         glob["pax_promedio"] = glob["pax_total"] / may
     return glob
 
-def estadisticas_habitacion(reservas=reservas):
+def estadisticas_habitacion(reservas_lista):
+    if type(reservas_lista) != list:
+        reservas_list = _leer_reservas_lista_desde_txt()    
     estadistica_hab = {}
-    for res in reservas:
+    for res in reservas_lista:
         checkin, checkout, hab, pax, total = res[2:7]
+        ci = es_tupla(checkin)
+        co = es_tupla(checkout)        
         if hab not in estadistica_hab:
             estadistica_hab[hab] = {"reservas":0,"noches":0,"ingresos":0,"pax":0}
 
         estadistica_hab[hab]["reservas"] += 1
-        estadistica_hab[hab]["noches"]   += diferencia_dias_entre(checkin, checkout)
+        estadistica_hab[hab]["noches"]   += diferencia_dias_entre(ci, co)
         estadistica_hab[hab]["ingresos"] += total
         estadistica_hab[hab]["pax"]      += pax
 
@@ -108,12 +169,14 @@ def  estadisticas_mensuales(reservas):
     stats_mensuales = {} 
     for res in reservas:
         _, _, checkin, checkout, _, pax, total = res
-        mm = aaaa_mm(checkin)
+        ci = es_tupla(checkin)
+        co = es_tupla(checkout)        
+        mm = aaaa_mm(ci)
         if mm not in stats_mensuales:
             stats_mensuales[mm] = {"reservas":0,"noches":0,"ingresos":0,"pax":0}
 
         stats_mensuales[mm]["reservas"] += 1
-        stats_mensuales[mm]["noches"]   += diferencia_dias_entre(checkin, checkout)
+        stats_mensuales[mm]["noches"]   += diferencia_dias_entre(ci, co)
         stats_mensuales[mm]["ingresos"] += total
         stats_mensuales[mm]["pax"]      += pax
     
@@ -133,13 +196,20 @@ def porcentajes_reservas_x_habitacion(reservas):
 
 
 def max_min_noches(reservas):
+    if len(reservas) == 0:
+        return {"max noches": None, "min noches": None}
     max_res = reservas[0]
     min_res = reservas[0]
     for res in reservas:
-        noches_res = diferencia_dias_entre(res[2], res[3])
-        if diferencia_dias_entre(max_res[2], max_res[3]) < noches_res:
+        ci = es_tupla(res[2]); co = es_tupla(res[3])
+        noches_res = diferencia_dias_entre(ci, co)
+
+        m_ci = es_tupla(max_res[2]); m_co = es_tupla(max_res[3])
+        n_ci = es_tupla(min_res[2]); n_co = es_tupla(min_res[3])
+
+        if diferencia_dias_entre(m_ci, m_co) < noches_res:
             max_res = res
-        if diferencia_dias_entre(min_res[2], min_res[3]) > noches_res:
+        if diferencia_dias_entre(n_ci, n_co) > noches_res:
             min_res = res
     return {"max noches":max_res, "min noches":min_res}
 
