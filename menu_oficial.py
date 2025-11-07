@@ -3,7 +3,7 @@ from clientes import *
 from habitaciones import *
 from reservas import *
 from login import *
-#from estadisticas import *
+from estadisticas import *
 from validaciones import *
 def menu_administrador():
 
@@ -95,41 +95,32 @@ Volver para atrás con -1\n\
 4-Ver clientes\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-<<<<<<< HEAD
-{LINEA}')
-=======
 {LINEA}')   
         
             opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
->>>>>>> 87d59979e08ff9cef32587636d194cfd0eda867f
 
-                if opcion_clientes==1: #AGREGAR CLIENTES
-                    llenar_clientes()
-                elif opcion_clientes==2: #MODIFICAR CLIENTES
-                    pass
-                elif opcion_clientes==3: # BORRAR CLIENTES
-                    print_clt(m_clientes)
-                    borrar_clientes(m_clientes, clientes_borrados)
-                elif opcion_clientes==4: #VER CLIENTES
-                    print_clt(m_clientes)
-                elif opcion_clientes==5:
-                    print_clt(clientes_borrados)
-                    deshacer_borrar_clt(m_clientes, clientes_borrados)
-                print(f'{LINEA}\n\
+            if opcion_clientes==1: #AGREGAR CLIENTES
+                llenar_clientes()
+            elif opcion_clientes==2: #MODIFICAR CLIENTES
+                pass
+            elif opcion_clientes==3: # BORRAR CLIENTES
+                print_clt(m_clientes)
+                borrar_clientes(m_clientes, clientes_borrados)
+            elif opcion_clientes==4: #VER CLIENTES
+                print_clt(m_clientes)
+            elif opcion_clientes==5:
+                print_clt(clientes_borrados)
+                deshacer_borrar_clt(m_clientes, clientes_borrados)
+            print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\
 3-Eliminar cliente\n\
 4-Ver clientes\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-<<<<<<< HEAD
-{LINEA}')
-            opcion_clientes=pedir_opcion("Ingrese numéricamente la opción deseada: ")
-            
-=======
 {LINEA}')   
             opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
->>>>>>> 87d59979e08ff9cef32587636d194cfd0eda867f
+
         elif opcion==4:
             elegir_opcion_estadistica()
 

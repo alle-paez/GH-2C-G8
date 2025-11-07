@@ -289,19 +289,22 @@ def verificar_reservas_disponibilidad(nro_hab, check_in, check_out):
             linea=reservas.readline()
             es_hab=0
             flag=0
+            coinciden_fechas=0
             while flag==0:
                 _, _, existente_desde, existente_hasta, hab, _, _ = linea.split(";")
                 
-                if hab == nro_hab: 
+                if hab == str(nro_hab): 
                     es_hab=1
+                    flag=1
                     if coinciden_fechas(check_in, check_out, existente_desde, existente_hasta):
-                        flag=1
-                        return False
+                        coinciden_fechas=1
                 linea = reservas.readline()
-                if not linea:
+                if linea==None:
                     flag=1
         
-        if es_hab==0:
+        if coinciden_fechas==1:
+            return False
+        else:
             return True
     
     except FileNotFoundError:
@@ -317,9 +320,10 @@ def total_por_precio(dto, dias, ad):
     with open("tabla_habitaciones.json", "r", encoding="UTF-8") as habs:
         habitaciones = json.load(habs)
     for hab in habitaciones:
-        if hab == str(dto):
-            precio_noche =hab["Precio"]
-            return precio_noche * dias + ad * 4000
+        if hab["hab"] == dto:
+            precio_noche =hab["precio"]
+            precio_total= int(precio_noche) * int(dias) + int(ad) * 4000
+            return precio_total
 
 def verificar_cant_max(dto):
     #habitaciones=open("tabla_habitaciones.json", "r", encoding="utf-8")
@@ -329,11 +333,15 @@ def verificar_cant_max(dto):
             cant_maxima = hab["Capacidad"]
             return cant_maxima
         dto = str(dto)"""
-    dto = str(dto)
-    if dto in habitaciones:
-        return habitaciones[dto]["Capacidad"]
-    else:
+    cant_maxima=0
+    for hab in habitaciones:
+        if dto == hab["hab"]:
+            cant_maxima=hab["capacidad"]
+        
+    if cant_maxima==0:
         print(f"No se encontró la habitación {dto}")
+    else:
+        return cant_maxima
 
 def validar_cant(pax, dto):
     cap_max = verificar_cant_max(dto)
@@ -564,24 +572,6 @@ def print_elegir_opcion(matriz_reservas= reservas):
     elif op==6:
         ordenar_menor_mayor(2)
         print_tabla_reservas("reservas.txt")
-
-"""
-def print_tabla_reservas(matriz):
-    print("")
-    print("------------------------------------------------------------------")
-    print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
-    print("------------------------------------------------------------------")
-    for valor in matriz:
-        fila = valor
-        id_reserva, dni, check_in, check_out, hab, pax, total = fila
-        print(str(id_reserva).ljust(4), "|",
-          str(dni).ljust(11), "|",
-          formatear_fecha(check_in).ljust(11), "|",
-          formatear_fecha(check_out).ljust(11), "|",
-          str(hab).ljust(3), "|",
-          str(pax).ljust(3), "|",
-          str(total).ljust(6))"""
-
 
 def print_tabla_reservas(archivo):
     try:
