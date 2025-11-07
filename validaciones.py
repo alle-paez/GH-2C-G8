@@ -1,6 +1,4 @@
 import re
-import json
-import reservas
 
 def verificar_formato(dni):
     patron = r'^\d{8}$'

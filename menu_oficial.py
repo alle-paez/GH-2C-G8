@@ -5,6 +5,7 @@ from reservas import *
 from login import *
 from estadisticas import *
 from validaciones import *
+from menu_clientes import *
 from pruebas import *
 
 def menu_administrador():
@@ -78,16 +79,15 @@ Volver para atrás con -1\n\
                     print_elegir_opcion()
                 elif opcion_reservas==5:
                     eliminar_reserva("reservas_borradas.txt", "tabla_reservas.txt", "recuperar")
-
-            print(f'{LINEA}\n\
+                print(f'{LINEA}\n\
 1-Agregar reserva\n\
 2-Modificar reserva\n\
 3-Cancelar reserva\n\
 4-Ver reservas\n\
 5-Papelera de reciclaje\n\
 Volver para atrás con -1\n\
-{LINEA}')
-            opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
+{LINEA}\n')
+                opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
 
         elif opcion==3:
             print(f'{LINEA}\n\
@@ -101,16 +101,16 @@ Volver para atrás con -1\n\
         
             opcion_clientes=validar_entero("Ingrese numéricamente la opción deseada: ")
 
-            if opcion_clientes==1: #AGREGAR CLIENTES
-                llenar_clientes()
+            if opcion_clientes==1:  #AGREGAR CLIENTES
+                    llenar_clientes()
             elif opcion_clientes==2: #MODIFICAR CLIENTES
-                modificar_clientes()
+                    modificar_clientes()
             elif opcion_clientes==3: # BORRAR CLIENTES
-                borrar_clientes("tabla_clientes.json", "clientes_borrados.json","elimina")
+                    borrar_clientes("tabla_clientes.json", "clientes_borrados.json","elimina")
             elif opcion_clientes==4: #VER CLIENTES
-                busquedas_clientes()
+                    busquedas_clientes()
             elif opcion_clientes==5:
-                borrar_clientes("clientes_borrados.json", "tabla_clientes.json", "recupera")
+                    borrar_clientes("clientes_borrados.json", "tabla_clientes.json", "recupera")
             print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\
@@ -133,6 +133,9 @@ Salir del programa con -1\n\
         opcion=validar_entero("Ingrese numéricamente la opción deseada: ")
 
 
-if __name__=="__main__":
-    login()
-    menu_administrador()
+if __name__ == "__main__":
+    rol, dni_login = login()
+    if rol == "admin":
+        menu_administrador()
+    elif rol == "cliente":
+        menu_clientes(dni_login)
