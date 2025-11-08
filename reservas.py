@@ -260,8 +260,7 @@ def verificar_existencia_habitación():
             print("La habitación ingresada no existe.")
    
 def comparar_fechas(fecha_1, fecha_2):
-    return tuple(fecha_1) < tuple(fecha_2)
-
+    return fecha_1 < fecha_2
 def coinciden_fechas(d1, h1, d2, h2):
     return comparar_fechas(d1, h2) and comparar_fechas(d2, h1)
 
@@ -447,7 +446,7 @@ def modo_busqueda():
     print(f"¿Como desea buscar la reserva? \n \
     1 - ID de reserva. \n \
     2 - DNI del cliente.")
-    busq = int(input("Por favor, solo ingrese una opción correcta: "))
+    busq = validar_entero("Por favor, solo ingrese una opción correcta: ")
     return busq
 
 def formatear_fecha(fecha):
@@ -484,7 +483,7 @@ def mostrar_reservas_por_hab_o_clt(hab, x):
         linea=reservas.readline()
         reservas_hab=[]
         while linea:
-            id_reserva, dni, check_in, check_out, nro_hab, pax, total = linea.split(";").strip()
+            id_reserva, dni, check_in, check_out, nro_hab, pax, total = linea.strip().split(";")
             if x==4:
                 if int(nro_hab) == hab:
                     reservas_hab.append([id_reserva, dni, check_in, check_out, nro_hab, pax, total])
@@ -494,7 +493,10 @@ def mostrar_reservas_por_hab_o_clt(hab, x):
                     reservas_hab.append([id_reserva, dni, check_in, check_out, nro_hab, pax, total])
                 linea=reservas.readline()
         reservas.close()
+    if len(reservas_hab)>=1:
         return [res for res in reservas_hab]
+    else:
+        return 0
 
 def ordenar_menor_mayor(parametro):
     #reservas.sort(key=lambda x: x[i])
@@ -597,143 +599,167 @@ def print_tabla_reservas(archivo):
             print("No se pudo cerrar el archivo")
         
 #MODIFICACION --------------------------------------------------------------------------------------------------------------
-"""def modificacion():
+
+def modificacion():
     busq = modo_busqueda()
+    idd= None
     while busq != 1 and busq != 2:
         busq = modo_busqueda()
     if busq == 1: 
-        id_reserva = int(input("Ingrese el id de reserva: "))
+        id_reserva = validar_entero("Ingrese el id de reserva: ")
         existe = buscar_reserva_x_id(id_reserva)
         while not existe:
             id_reserva = int(input("Ingrese el id de reserva: "))
             existe = buscar_reserva_x_id(id_reserva)  
               
-        i = buscar_reserva_x_id(id_reserva)
-
     elif busq == 2:
-        nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
-        ver_dni = verificar_formato(nro_dni)
-        existe = existe_cliente(int(nro_dni))
-        reservas_cliente = mostrar_reservas_por_hab_o_clt(int(nro_dni), x=1)
-        while not ver_dni or not existe or reservas_cliente == 0:
-            if not ver_dni: 
+        while True:
+            try:
+                nro_dni= input("Ingrese el número de dni del cliente: ")
+                assert verificar_formato(nro_dni)== True
+                assert existe_cliente(int(nro_dni)) == True
+                break
+            except AssertionError as dni:
                 print("Se ingreso un dni Invalido.")
-            elif not existe:
+            except AssertionError:
                 print(" El cliente no existe en la base de datos.")
-            elif len(reservas_cliente) == 0:
-                print(" El cliente no tiene reservas registradas.")
 
-            nro_dni= input("Ingrese el número de dni del cliente: (-1 para salir): ")
-            ver_dni = verificar_formato(nro_dni)
-            existe = existe_cliente(int(nro_dni))
+        while True:
+            try:
+                assert mostrar_reservas_por_hab_o_clt(int(nro_dni), x=1)!=0
+                print(mostrar_reservas_por_hab_o_clt(int(nro_dni), x=1))
+                print("Se mostraron las reservas del cliente junto a su id, por favor elija una opción: ")
+                break
+            except:
+                print("El cliente no posee reservas.")
+                while True or nro_dni==-1:
+                    try:
+                        nro_dni= input("Ingrese el número de dni del cliente: ")
+                        assert verificar_formato(nro_dni)== True
+                        assert existe_cliente(int(nro_dni)) == True
+                        break
+                    except AssertionError as dni:
+                        print("Se ingreso un dni Invalido.")
+                    except AssertionError:
+                        print(" El cliente no existe en la base de datos.")
 
-
-        print(f" ID | DNI Cliente | Entrada | Salida | Habitación | Pax | Total")
-        for el in reservas_cliente:
-            print(el, end=" ") 
-            print("")   
-
-        print("Se mostraron las reservas del cliente junto a su id, por favor elija una opción: ")
         id_reserva = int(input("Ingrese el id de reserva: "))
+
         existe = buscar_reserva_x_id(id_reserva)
         while not existe:
             id_reserva = int(input("Ingrese el id de reserva: "))
             existe = buscar_reserva_x_id(id_reserva)  
-              
-        i = buscar_reserva_x_id(id_reserva)
 
-    mostrar_opciones_mod()
-    opcion_elegida = int(input("Ingrese la opción elegida: (-1 para retroceder.)"))
+#-----------------------------------------------------------------------------------------------------------------------------
+#borro la que voy a modificar antes de modificarla
 
- while opcion_elegida != -1:
+    with open("tabla_reservas.txt", "r", encoding="UTF-8") as reservass:
+        aux=open("temp.txt", "w", encoding="UTF-8")
+        reserva_a_mod= open("reserva_a_mod.txt", "w", encoding="UTF-8")
+        encontrado=False
+    
+        for linea in reservass:
+            id_rsrv_a_mod, _, _, _, _, _, _ = linea.strip().split(";")
+            if str(id_reserva)!=id_rsrv_a_mod:
+                aux.write(linea)
+            else:
+                encontrado=True
+                reserva_a_mod.write(linea)
 
-#FECHAS ----------------------------------------------------------------------       
-        if opcion_elegida == 1:
-            check_in = pedir_fecha("Ingrese fecha inicio (AAAA-MM-DD): ")
-            check_out = pedir_fecha("Ingrese fecha final (AAAA-MM-DD): ")
-            #modificados_reservas = matriz_reservas.pop(i)
+        aux.close()
+        reservass.close()
+        reserva_a_mod.close()
 
-            while not verificar_egreso(check_in, check_out):
-                print("El egreso debe ser posterior al ingreso.")
-                check_out = pedir_fecha("Reingrese fecha fin (AAAA-MM-DD): ")
-            
-            dias = diferencia_dias_entre(check_in, check_out)
+    if encontrado:
+        try:
+            os.remove("tabla_reservas.txt")       # elimina el original
+            os.rename("temp.txt", "tabla_reservas.txt") # renombra el temporal
+    
+        except OSError as error:
+            print("Error al reemplazar el archivo:", error)
+    else:
+        os.remove("temp.txt")  # eliminamos el temporal si no se usó
 
-            dto = modificados_reservas[4]
-            while not verificar_reservas_disponibilidad(nro_hab=dto, check_in=check_in, check_out=check_out):
-                print(f"La habitación {dto} ya está ocupada en ese rango.")
-                dto = int(input("Ingrese el numero de habitación: "))
-            
-            cant_pax = modificados_reservas[5]
-            valido, adicionales = validar_cant(cant_pax, dto)
-            while not valido:
-                print("Exceso de pasajeros.")
-                cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
-                while not digito_unico(cant_pax):
-                    cant_pax = int(input("Ingrese la cantidad de pasajeros: "))    
-                valido, adicionales = validar_cant(cant_pax, dto)
+#-----------------------------------------------------------------------------------------------------------------------------
+    reserva_a_mod=open("reserva_a_mod.txt", "r", encoding="UTF-8")
+    linea_mod= reserva_a_mod.readline()
 
-            total = total_por_precio(dto, dias, adicionales)
-            print(total)
-            modif = [modificados_reservas[0], modificados_reservas[1], check_in, check_out, dto, cant_pax, total]
-            mat_mod_anterior.append(modificados_reservas.pop())
-            mat_mod_posterior.append(modif)
-            matriz_reservas.insert(i, modif)
-            matriz_reservas.insert(i, modif)
-            print_reserva(matriz_reservas, i)
-        
-        if opcion_elegida == 2:
-            modificados_reservas = matriz_reservas.pop(i)
-            check_in = modificados_reservas[2]
-            check_out = modificados_reservas[3]
-            dias = diferencia_dias_entre(check_in, check_out)
-            dto = int(input("Ingrese el número de habitación: "))
-            while not verificar_reservas_disponibilidad(dto, check_in, check_out):
-                print(f"La habitación {dto} ya está ocupada en ese rango.")
-                dto = int(input("Ingrese el numero de habitación: "))
-            
-            cant_pax = modificados_reservas[5]
-            valido, adicionales = validar_cant(cant_pax, dto)
-            while not valido:
-                print("Exceso de pasajeros.")
-                cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
-                while not digito_unico(cant_pax):
-                    cant_pax = int(input("Ingrese la cantidad de pasajeros: "))    
-                valido, adicionales = validar_cant(cant_pax, dto)
-            
-            total = total_por_precio(dto, dias, adicionales)
-            modif = [modificados_reservas[0], modificados_reservas[1], check_in, check_out, dto, cant_pax, total]
-            mat_mod_anterior.append(modificados_reservas.pop())
-            mat_mod_posterior.append(modif)
-            matriz_reservas.insert(i, modif)
-            print_reserva(matriz_reservas, i)
+    idd, dni, check_in, check_out, hab, pax, _ = linea_mod.strip().split(";")
 
-        if opcion_elegida == 3:
-            modificados_reservas = matriz_reservas.pop(i)
-            check_in = modificados_reservas[2]
-            check_out = modificados_reservas[3]
-            dias = diferencia_dias_entre(check_in, check_out)
-            dto = modificados_reservas[4]
+    reserva_a_mod.close()
+    os.remove("reserva_a_mod.txt")   
 
-            cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
-            valido, adicionales = validar_cant(cant_pax, dto)
-            while not valido:
-                print("Exceso de pasajeros.")
-                cant_pax = int(input("Ingrese la cantidad de pasajeros: "))
-                while not digito_unico(cant_pax):
-                    cant_pax = int(input("Ingrese la cantidad de pasajeros: "))    
-                valido, adicionales = validar_cant(cant_pax, dto)
+#-----------------------------------------------------------------------------------------------------------------------------
 
-            total = total_por_precio(dto, dias, adicionales)
-            modif = [modificados_reservas[0], modificados_reservas[1], check_in, check_out, dto, cant_pax, total]
-            mat_mod_anterior.append(modificados_reservas.pop())
-            mat_mod_posterior.append(modif)
-            matriz_reservas.insert(i, modif)
-            
-            print_reserva(matriz_reservas, i)
+    print("Si no desea modificar un campo, presione Enter para continuar.")
+    while True:
+        try:
+            dni_nuevo = input(f"Ingrese nuevo DNI del cliente ({dni}): ").strip()
+            if dni_nuevo == "":
+                dni_nuevo = dni
+            else:
+                assert verificar_formato(dni_nuevo) == True
+                assert existe_cliente(int(dni_nuevo)) == True
+            break
+        except AssertionError as formato:
+            print("DNI inválido.")
+        except AssertionError as cliente:
+            print("El cliente no existe en la base de datos.")
+            llenar_clientes_desde_reservas(dni_nuevo)
+            print("Cliente agregado a la base de datos.")
+            dni_nuevo = dni_nuevo 
+    while True:
+        try:
+            check_in_nuevo = pedir_fecha_mod(f"Ingrese nueva fecha de check-in ({check_in})AAAA-MM-DD: ")
+            if check_in_nuevo == "":
+                check_in_nuevo = arreglar_fechas_archivo(check_in)
+            break
+        except AssertionError:
+            print("El formato ingresado es inválido.")
+    while True:
+        try:
+            check_out_nuevo = pedir_fecha_mod(f"Ingrese nueva fecha de check-out ({check_out}) AAAA-MM-DD: ")
+            if check_out_nuevo == "":
+                check_out_nuevo = arreglar_fechas_archivo(check_out)
+            else:
+                assert verificar_egreso(check_in_nuevo, check_out_nuevo) == True
+            break
+        except AssertionError as formato:
+            print("Fecha inválida.")
+        except AssertionError as egreso:
+            print("La fecha de check-out debe ser posterior a la de check-in.")
+    while True:
+        try:
+            dto_nuevo = input(f"Ingrese nuevo número de habitación ({hab}): ").strip()
+            if dto_nuevo == "":
+                dto_nuevo = hab
+                while not verificar_reservas_disponibilidad(dto_nuevo, check_in_nuevo, check_out_nuevo):
+                    print(f"La habitación {dto_nuevo} ya está ocupada en ese rango.")
+                    dto = int(input("Ingrese el numero de habitación: "))
+            else:
+                assert buscar_habitacion(dto_nuevo) == True
+            break
+        except AssertionError:
+            print("La habitación ingresada no existe.") 
+    while True:
+        try:
+            cant_pax_nuevo = input(f"Ingrese nueva cantidad de pasajeros ({pax}): ").strip()
+            if cant_pax_nuevo == "":
+                cant_pax_nuevo = pax
+                valido, adicionales = validar_cant(int(cant_pax_nuevo), int(dto_nuevo))
+            else:
+                valido, adicionales = validar_cant(int(cant_pax_nuevo), int(dto_nuevo))
+                assert valido == True
+            break          
+        except AssertionError:
+            print("Exceso de pasajeros para la habitación seleccionada.")
+                
+    dias = diferencia_dias_entre(check_in_nuevo, check_out_nuevo)
+    total_nuevo = total_por_precio(int(dto_nuevo), dias, adicionales)
 
-        opcion_elegida = int(input("Ingrese la opción elegida: (-1 para retroceder.)"))
-"""
+    nueva_linea=(f'{idd};{dni_nuevo};{check_in_nuevo};{check_out_nuevo};{dto_nuevo};{cant_pax_nuevo};{total_nuevo}\n')
+    with open("tabla_reservas.txt", "a", encoding="UTF-8") as archivo:
+        archivo.write(nueva_linea)
 #DELETE: BORRAR --------------------------------------------------------------------------------------
 def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_o_recuperar="eliminar"):
     with open(archivo_del_que_eliminar, "r", encoding="UTF-8") as reservass:
