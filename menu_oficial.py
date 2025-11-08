@@ -7,6 +7,7 @@ from estadisticas import *
 from validaciones import *
 from menu_clientes import *
 
+
 def menu_administrador():
     print("")
     print(f'Sistema de Gestión Hotelera'.center(80,"-"))

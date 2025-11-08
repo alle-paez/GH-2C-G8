@@ -4,12 +4,14 @@ from habitaciones import *
 from validaciones import *
 import json
 from validaciones import *
+from mas_auxiliares import *
 
 def leer_clientes(archivo="tabla_clientes.json", modo="r"):
     try:
         contenido = open(archivo, modo, encoding="UTF-8")
         clientes = json.load(contenido)
-        return clientes
+        clientes_ordenados_por_dni = ordenar(clientes, "Dni")
+        return clientes_ordenados_por_dni
     except:
         print("Error, no se pudo acceder a la base de datos")
     finally:
@@ -37,8 +39,9 @@ def llenar_clientes(archivo="tabla_clientes.json"):
         try: 
             with open(archivo, 'r', encoding="UTF-8") as data:
                 clientes = json.load(data)
+                clientes_ordenados_por_dni = ordenar(clientes, "Dni")
             
-            dnis_existentes = [cli["dni"] for cli in clientes]
+            dnis_existentes = [cli["dni"] for cli in clientes_ordenados_por_dni]
 
             if dni in dnis_existentes and flag:
                 existe = True
@@ -111,7 +114,8 @@ def abrir_archivo(archivo):
     try:
         with open(archivo, 'r', encoding="UTF-8") as data:
             tabla = json.load(data)
-        return tabla
+            clientes_ordenados_por_dni = ordenar(tabla, "Dni")
+        return clientes_ordenados_por_dni
     except (FileNotFoundError, OSError) as error:
         print(f"Error! No se pudo abrir el archivo. {error}")
     except Exception as e:
@@ -202,9 +206,10 @@ def print_clt(archivo):
     try:
         with open(archivo, 'r', encoding="UTF-8") as data:
             clientes = json.load(data)
+        clientes_ordenados_por_dni = ordenar(clientes, "Dni")
         print("Tabla clientes -------------------------------------")
         print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}")
-        for cli in clientes:
+        for cli in clientes_ordenados_por_dni:
             print(f"{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<15}{cli["mail"]:<15}")
     except (FileNotFoundError, OSError) as error:
         print(f"Error! {error}")
