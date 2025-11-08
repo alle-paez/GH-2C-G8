@@ -206,7 +206,7 @@ def porcentajes_reservas_x_habitacion(reservas):
 
     porcentajes = {}
     print(f"{"Hab":<5} | {"Porcentaje"}")
-    print(f"{"-":<20}")
+    print(f"{"-".center(19,"-")}")
     for hab, cant in conteo.items():
         porcentajes[hab] = (cant / total) * 100
         print(f"{hab:<5} | {round(porcentajes[hab],2)}% ")

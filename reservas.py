@@ -513,10 +513,9 @@ def mostrar_reservas_por_hab_o_clt(hab, x):
                     reservas_hab.append([id_reserva, dni, check_in, check_out, nro_hab, pax, total])
                 linea=reservas.readline()
         reservas.close()
-    if len(reservas_hab)>=1:
+    
         return [res for res in reservas_hab]
-    else:
-        return 0
+
 
 def ordenar_menor_mayor(parametro):
     try:
@@ -582,13 +581,13 @@ def print_elegir_opcion():
         print_tabla_reservas_lst(reservas_habitacion)
     elif op == 4:
         totales_ord = ordenar_totales_mayor_menor()
-        print_tabla_reservas_lst(totales_ord)
+        print_tabla_reservas_lst2(totales_ord)
     elif op == 5:
         totales_ord = ordenar_menor_mayor(6)
-        print_tabla_reservas_lst(totales_ord)
+        print_tabla_reservas_lst2(totales_ord)
     elif op==6:
         totales_ord = ordenar_menor_mayor(2)
-        print_tabla_reservas_lst(totales_ord)
+        print_tabla_reservas_lst2(totales_ord)
 
 def print_tabla_reservas(archivo):
     try:
@@ -617,31 +616,47 @@ def print_tabla_reservas(archivo):
         print("No se pudo leer el archivo")
 
 def print_tabla_reservas_lst(lista):
-    print("")
-    print("------------------------------------------------------------------")
-    print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
-    print("------------------------------------------------------------------")
-    for li in lista:
-        id_reserva, dni, check_in, check_out, hab, pax, total = li
-        check_in_str = f"{check_in[0]}-{check_in[1]}-{check_in[2]}"
-        check_out_str = f"{check_out[0]}-{check_out[1]}-{check_out[2]}"
-        print(str(id_reserva).ljust(4), "|",
-        str(dni).ljust(11), "|",
-        check_in_str.ljust(11), "|",
-        check_out_str.ljust(11), "|",
-        str(hab).ljust(3), "|",
-        str(pax).ljust(3), "|",
-        str(total).ljust(6))
+    if len(lista) == 0:
+        print("No posee información.")
+    else:
+        print("")
+        print("------------------------------------------------------------------")
+        print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
+        print("------------------------------------------------------------------")
+        for li in lista:
+            id_reserva, dni, check_in, check_out, hab, pax, total = li
+            check_in = arreglar_fechas_archivo(check_in)
+            check_out = arreglar_fechas_archivo(check_out)
+            check_in_str = f"{check_in[0]}-{check_in[1]}-{check_in[2]}"
+            check_out_str = f"{check_out[0]}-{check_out[1]}-{check_out[2]}"
+            print(str(id_reserva).ljust(4), "|",
+            str(dni).ljust(11), "|",
+            check_in_str.ljust(11), "|",
+            check_out_str.ljust(11), "|",
+            str(hab).ljust(3), "|",
+            str(pax).ljust(3), "|",
+            str(total).ljust(6))
 
+def print_tabla_reservas_lst2(lista):
+    if len(lista) == 0:
+        print("No posee información.")
+    else:
+        print("")
+        print("------------------------------------------------------------------")
+        print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
+        print("------------------------------------------------------------------")
+        for li in lista:
+            id_reserva, dni, check_in, check_out, hab, pax, total = li
+            check_in_str = f"{check_in[0]}-{check_in[1]}-{check_in[2]}"
+            check_out_str = f"{check_out[0]}-{check_out[1]}-{check_out[2]}"
+            print(str(id_reserva).ljust(4), "|",
+            str(dni).ljust(11), "|",
+            check_in_str.ljust(11), "|",
+            check_out_str.ljust(11), "|",
+            str(hab).ljust(3), "|",
+            str(pax).ljust(3), "|",
+            str(total).ljust(6))
 
-
-
-
-    finally:
-        try:
-            arch.close()
-        except:
-            print("No se pudo cerrar el archivo")
         
 #MODIFICACION --------------------------------------------------------------------------------------------------------------
 
@@ -672,7 +687,8 @@ def modificacion():
         while True:
             try:
                 assert mostrar_reservas_por_hab_o_clt(int(nro_dni), x=1)!=0
-                print(mostrar_reservas_por_hab_o_clt(int(nro_dni), x=1))
+                reservas_cliente = mostrar_reservas_por_hab_o_clt(int(nro_dni), x=1)
+                print_tabla_reservas_lst(reservas_cliente)
                 print("Se mostraron las reservas del cliente junto a su id, por favor elija una opción: ")
                 break
             except:

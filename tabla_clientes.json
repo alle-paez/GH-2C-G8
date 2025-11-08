@@ -61,5 +61,12 @@
         "apellido": "Fake",
         "teléfono": "1122211122",
         "mail": "alfajor@gmail.com"
+    },
+    {
+        "dni": 23242355,
+        "nombre": "Valentina",
+        "apellido": "Fernandez",
+        "teléfono": "1167654398",
+        "mail": "valenfer@gmail.com"
     }
 ]
