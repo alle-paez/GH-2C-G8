@@ -6,7 +6,7 @@ from login import *
 from estadisticas import *
 from validaciones import *
 from menu_clientes import *
-from pruebas import *
+
 
 def menu_administrador():
 
