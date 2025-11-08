@@ -9,7 +9,6 @@ from menu_clientes import *
 
 
 def menu_administrador():
-
     print("")
     print(f'Sistema de Gestión Hotelera'.center(80,"-"))
     print(f'\n\
