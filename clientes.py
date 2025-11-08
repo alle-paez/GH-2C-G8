@@ -1,6 +1,6 @@
 from listas_codeadas import *
 import re
-from habitaciones import ubicar
+from habitaciones import *
 from validaciones import *
 import json
 from validaciones import *
