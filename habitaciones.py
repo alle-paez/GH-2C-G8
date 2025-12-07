@@ -1,6 +1,7 @@
 import re
 import json
 from validaciones import *
+from mas_auxiliares import ordenar
 
 def leer_habitaciones(archivo="tabla_habitaciones.json"):
     try:
@@ -15,10 +16,11 @@ def print_habitaciones(archivo):
     try: 
         with open(archivo, 'r', encoding="UTF-8") as data:
             habitaciones = json.load(data)
+            habitaciones_ordenados_por_num = ordenar(habitaciones, "hab")
         print(f"\nLista de las Habitaciones ----------------------------")
         print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
 
-        for hab in habitaciones:
+        for hab in habitaciones_ordenados_por_num:
             print(f"{hab["hab"]:<10}{hab["precio"]:<10}{hab["tipo"]:<15}{hab["capacidad"]:<5}{hab["estado"]:<10}")
     
     except (FileNotFoundError, OSError) as error:
@@ -46,7 +48,8 @@ def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
         try:
             with open(archivo, 'r', encoding="UTF-8") as data:
                 habitaciones = json.load(data)
-            nros_hab = [habi["hab"] for habi in habitaciones]
+                habitaciones_ordenados_por_num = ordenar(habitaciones, "hab")
+            nros_hab = [habi["hab"] for habi in habitaciones_ordenados_por_num]
             
             if op == 1:
                 print_habitaciones(archivo)
@@ -57,13 +60,13 @@ def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
                     indice = nros_hab.index(room)
                     print("------------------------------------")
                     print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
-                    print(f"{habitaciones[indice]["hab"]:<10}{habitaciones[indice]["precio"]:<10}{habitaciones[indice]["tipo"]:<15}{habitaciones[indice]["capacidad"]:<5}{habitaciones[indice]["estado"]:<10}")
+                    print(f"{habitaciones_ordenados_por_num[indice]["hab"]:<10}{habitaciones_ordenados_por_num[indice]["precio"]:<10}{habitaciones_ordenados_por_num[indice]["tipo"]:<15}{habitaciones_ordenados_por_num[indice]["capacidad"]:<5}{habitaciones_ordenados_por_num[indice]["estado"]:<10}")
                 else:
                     print("La habitación ingresada no existe.")
             elif op == 3:
                 tipo = leer_tipo()
                 filtrado = []
-                for hab in habitaciones:
+                for hab in habitaciones_ordenados_por_num:
                     if hab["tipo"] == tipo:
                         filtrado.append(hab)
                 print()
@@ -88,19 +91,19 @@ def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
 
                 if modo == "Menor":
                     print(f"Habitaciones con precio por noche {modo.lower()} a {precio}: ")
-                    for hab in habitaciones:
+                    for hab in habitaciones_ordenados_por_num:
                         if int(hab["precio"]) <= precio:
                             filtrado.append(hab)
                 
                 elif modo == "Mayor":
                     print(f"Habitaciones con precio por noche {modo.lower()} a {precio}: ")
-                    for hab in habitaciones:
+                    for hab in habitaciones_ordenados_por_num:
                         if int(hab["precio"]) >= precio:
                             filtrado.append(hab)
                 
                 elif modo == "Igual":
                     print(f"Habitaciones con precio por noche {modo.lower()} a {precio}: ")
-                    for hab in habitaciones:
+                    for hab in habitaciones_ordenados_por_num:
                         if int(hab["precio"]) >= precio:
                             filtrado.append(hab)
                 
@@ -116,7 +119,7 @@ def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
             elif op == 5:
                 estado = leer_estado()
                 filtrado = []
-                for hab in habitaciones:
+                for hab in habitaciones_ordenados_por_num:
                     if hab["estado"] == estado:
                         filtrado.append(hab)
                 print()
@@ -146,13 +149,14 @@ def eliminar_hab(archivo1="tabla_habitaciones.json", archivo2="habitaciones_borr
         try: 
             with open(archivo1, 'r', encoding="UTF-8") as data:
                 habitaciones = json.load(data)
+                habitaciones_ordenados_por_num = ordenar(habitaciones, "hab")
             
-            nros_hab = [habi["hab"] for habi in habitaciones]
+            nros_hab = [habi["hab"] for habi in habitaciones_ordenados_por_num]
             if item in nros_hab: 
                 indice = nros_hab.index(item)
-                eliminado = habitaciones.pop(indice)
+                eliminado = habitaciones_ordenados_por_num.pop(indice)
                 with open(archivo1, 'w', encoding="UTF-8") as data:
-                    json.dump(habitaciones, data, ensure_ascii=False, indent=4)
+                    json.dump(habitaciones_ordenados_por_num, data, ensure_ascii=False, indent=4)
                     print(f"La habitación {item} de tipo {eliminado["tipo"]} ha sido eliminada con exito.")
                 
                 with open(archivo2,'r',encoding="UTF-8") as borrados:
@@ -271,7 +275,8 @@ def llenar_habitaciones(archivo="tabla_habitaciones.json"):
         try: 
             with open(archivo, 'r', encoding="UTF-8") as data:
                 habitaciones = json.load(data)
-            for habi in habitaciones: 
+                habitaciones_ordenados_por_num = ordenar(habitaciones, "hab")
+            for habi in habitaciones_ordenados_por_num: 
                 while habi["hab"] == numero:
                     print("La habitación ya existe. ")
                     numero = validar_entero("Número de habitación: ")

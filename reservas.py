@@ -1,10 +1,10 @@
-#from listas_codeadas import *
 from habitaciones import *
 from clientes import *
 import re
 import json
 import os
 from validaciones import *
+
 
 def cuantas_lineas_txt(archivo):
     f = open(archivo, "r", encoding="UTF-8")
@@ -109,6 +109,23 @@ def pedir_fecha(mensaje):
                 print("La fecha no existe, vuelva a intentar.")
         else:
             print("Formato incorrecto, use AAAA-MM-DD.")
+    return fecha
+
+def pedir_fecha_mod(mensaje):
+    valido = False
+    while not valido:
+        fecha_str = input(mensaje)
+        if fecha_str=="":
+            return fecha_str
+        else:
+            if verificar_formato_fecha(fecha_str):
+                fecha = separar_en_lista(fecha_str)
+                if verificar_ingresos_fecha(fecha):
+                    valido = True
+                else:
+                    print("La fecha no existe, vuelva a intentar.")
+            else:
+                print("Formato incorrecto, use AAAA-MM-DD.")
     return fecha
 
 def pedir_fecha_mod(mensaje):
@@ -462,8 +479,8 @@ def formatear_fecha(fecha):
     print("------------------------------------------------------------------")
     print(str(id_reserva).ljust(4), "|",
           str(dni).ljust(11), "|",
-          formatear_fecha(check_in).ljust(11), "|",
-          formatear_fecha(check_out).ljust(11), "|",
+          arreglar_fechas_archivo(check_in).ljust(11), "|",
+          arreglar_fechas_archivo(check_out).ljust(11), "|",
           str(hab).ljust(3), "|",
           str(pax).ljust(3), "|",
           str(total).ljust(6))"""
@@ -484,6 +501,9 @@ def mostrar_reservas_por_hab_o_clt(hab, x):
         linea=reservas.readline()
         reservas_hab=[]
         while linea:
+            id_reserva, dni, check_in, check_out, nro_hab, pax, total = list(map(str, linea.strip().split(";")))
+            check_in = arreglar_fechas_archivo(check_in)
+            check_out = arreglar_fechas_archivo(check_out)
             id_reserva, dni, check_in, check_out, nro_hab, pax, total = linea.strip().split(";")
             if x==4:
                 if int(nro_hab) == hab:
@@ -500,49 +520,48 @@ def mostrar_reservas_por_hab_o_clt(hab, x):
         return 0
 
 def ordenar_menor_mayor(parametro):
-    #reservas.sort(key=lambda x: x[i])
-    #return reservas
-    matriz_reservas=[]
-    linea=reservas.readline()
-    while linea:
-        id_reserva, dni, check_in, check_out, hab, pax, total = linea.split(";").strip()
-        matriz_reservas.append([id_reserva, dni, check_in, check_out, hab, pax, total])
-        linea=reservas.readline()
-    matriz_reservas.sort(key=lambda x: x[parametro])
-    reservas.close()
+    try:
+        matriz_reservas=[]
+        with open("tabla_reservas.txt", 'r', encoding="UTF-8") as reservas:
+            linea=reservas.readline()
+            while linea:
+                id_reserva, dni, check_in, check_out, hab, pax, total = list(map(str, linea.strip().split(";")))
+                check_in = arreglar_fechas_archivo(check_in)
+                check_out = arreglar_fechas_archivo(check_out)
+                total = int(total)
+                matriz_reservas.append([id_reserva, dni, check_in, check_out, hab, pax, total])
+                linea=reservas.readline()
 
-    leer_reservas(modo_de_lectura="w")
-    for fila in matriz_reservas:
-        linea = ";".join(map(str, fila))
-        reservas.write(linea + "\n")
-    reservas.close()
-
-    return matriz_reservas
+            matriz_reservas.sort(key=lambda x: x[parametro])
+            return matriz_reservas
+    except Exception as e:
+        print(f"Error con la base de datos. {e}")
 
 def ordenar_totales_mayor_menor():
-    matriz_reservas=[]
-    linea=reservas.readline()
-    while linea:
-        id_reserva, dni, check_in, check_out, hab, pax, total = linea.split(";").strip()
-        matriz_reservas.append([id_reserva, dni, check_in, check_out, hab, pax, total])
-        linea=reservas.readline()
-    matriz_reservas.sort(key=lambda x: x[6], reverse=True)
-    reservas.close()
+    try:
+        matriz_reservas=[]
+        with open("tabla_reservas.txt", 'r', encoding="UTF-8") as reservas:
+            linea=reservas.readline()
+            while linea:
+                id_reserva, dni, check_in, check_out, hab, pax, total = list(map(str, linea.strip().split(";")))
+                check_in = arreglar_fechas_archivo(check_in)
+                check_out = arreglar_fechas_archivo(check_out)
+                total = int(total)
+                matriz_reservas.append([id_reserva, dni, check_in, check_out, hab, pax, total])
+                linea=reservas.readline()
 
-    leer_reservas(modo_de_lectura="w")
-    for fila in matriz_reservas:
-        linea = ";".join(map(str, fila))
-        reservas.write(linea + "\n")
-    reservas.close()
-
-    return matriz_reservas
+            matriz_reservas.sort(key=lambda x: x[6], reverse=True)
+            return matriz_reservas
+    except Exception as e:
+        print(f"Error con la base de datos. {e}")
+    
 
 #MOSTRAR LEER ETC
-def print_elegir_opcion(matriz_reservas= reservas):
+def print_elegir_opcion():
     menu_mostrar()
     op = int(input("Ingrese la opción elegida:"))
     if op == 1:
-        print_tabla_reservas("reservas.txt")
+        print_tabla_reservas("tabla_reservas.txt")
     elif op == 2:
         cliente = input("Ingrese el DNI del cliente: ")
         ver_dni = verificar_formato(cliente)
@@ -555,44 +574,70 @@ def print_elegir_opcion(matriz_reservas= reservas):
         if len(reservas_cliente)==0:
             print(f"El Dni {cliente} no tiene ninguna reserva en el alojamiento.")
         else: 
-            print_tabla_reservas(reservas_cliente)
+            print_tabla_reservas_lst(reservas_cliente)
     elif op == 3:
         print("Elija el numero de habitación: ")
-        print_habitaciones()
+        print_habitaciones("tabla_habitaciones.json")
         hab = int(input("Habitación elegida: "))
         reservas_habitacion = mostrar_reservas_por_hab_o_clt(hab, x=4)
-        print_tabla_reservas(reservas_habitacion)
+        print_tabla_reservas_lst(reservas_habitacion)
     elif op == 4:
-        ordenar_totales_mayor_menor(6)
-        print_tabla_reservas("reservas.txt")
+        totales_ord = ordenar_totales_mayor_menor()
+        print_tabla_reservas_lst(totales_ord)
     elif op == 5:
-        ordenar_menor_mayor(6)
-        print_tabla_reservas("reservas.txt")
+        totales_ord = ordenar_menor_mayor(6)
+        print_tabla_reservas_lst(totales_ord)
     elif op==6:
-        ordenar_menor_mayor(2)
-        print_tabla_reservas("reservas.txt")
+        totales_ord = ordenar_menor_mayor(2)
+        print_tabla_reservas_lst(totales_ord)
 
 def print_tabla_reservas(archivo):
     try:
-        arch = open(archivo, "rt", encoding="UTF-8")
-        linea = arch.readline()
-        print("")
-        print("------------------------------------------------------------------")
-        print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
-        print("------------------------------------------------------------------")
-        while linea:
-            id_reserva, dni, check_in, check_out, hab, pax, total = linea.split(";").strip()
-            print(str(id_reserva).ljust(4), "|",
-            str(dni).ljust(11), "|",
-            formatear_fecha(check_in).ljust(11), "|",
-            formatear_fecha(check_out).ljust(11), "|",
-            str(hab).ljust(3), "|",
-            str(pax).ljust(3), "|",
-            str(total).ljust(6))
+        with open(archivo, "rt", encoding="UTF-8") as data:
+            linea = data.readline()
+            print("")
+            print("------------------------------------------------------------------")
+            print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
+            print("------------------------------------------------------------------")
 
-            linea = arch.readline() # Leemos la línea siguiente
+            while linea:
+                id_reserva, dni, check_in, check_out, hab, pax, total = list(map(str, linea.strip().split(";")))
+                check_in = arreglar_fechas_archivo(check_in)
+                check_out = arreglar_fechas_archivo(check_out)
+                check_in_str = f"{check_in[0]}-{check_in[1]}-{check_in[2]}"
+                check_out_str = f"{check_out[0]}-{check_out[1]}-{check_out[2]}"
+                print(str(id_reserva).ljust(4), "|",
+                str(dni).ljust(11), "|",
+                check_in_str.ljust(11), "|",
+                check_out_str.ljust(11), "|",
+                str(hab).ljust(3), "|",
+                str(pax).ljust(3), "|",
+                str(total).ljust(6))
+                linea = data.readline() # Leemos la línea siguiente
     except OSError:
         print("No se pudo leer el archivo")
+
+def print_tabla_reservas_lst(lista):
+    print("")
+    print("------------------------------------------------------------------")
+    print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
+    print("------------------------------------------------------------------")
+    for li in lista:
+        id_reserva, dni, check_in, check_out, hab, pax, total = li
+        check_in_str = f"{check_in[0]}-{check_in[1]}-{check_in[2]}"
+        check_out_str = f"{check_out[0]}-{check_out[1]}-{check_out[2]}"
+        print(str(id_reserva).ljust(4), "|",
+        str(dni).ljust(11), "|",
+        check_in_str.ljust(11), "|",
+        check_out_str.ljust(11), "|",
+        str(hab).ljust(3), "|",
+        str(pax).ljust(3), "|",
+        str(total).ljust(6))
+
+
+
+
+
     finally:
         try:
             arch.close()
