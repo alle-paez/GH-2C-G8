@@ -261,6 +261,7 @@ def verificar_existencia_habitación():
    
 def comparar_fechas(fecha_1, fecha_2):
     return fecha_1 < fecha_2
+
 def coinciden_fechas(d1, h1, d2, h2):
     return comparar_fechas(d1, h2) and comparar_fechas(d2, h1)
 
