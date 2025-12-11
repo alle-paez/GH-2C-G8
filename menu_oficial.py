@@ -6,10 +6,6 @@ from login import *
 from estadisticas import *
 from validaciones import *
 from menu_clientes import *
-<<<<<<< HEAD
-=======
-
->>>>>>> 15d5a810d2071ce1e783c5fea419f4e70d417194
 
 def menu_administrador():
     print("")

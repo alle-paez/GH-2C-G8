@@ -237,7 +237,7 @@ def llenar_clientes_desde_reservas(dni):
     telefono=pedir_telefono()
     mail=pedir_mail()
         
-    nuevo_cliente = {"dni": dni, "nombre": nombre, "apellido": apellido, "teléfono": telefono, "mail": mail}
+    nuevo_cliente = {"dni": dni, "nombre": nombre, "apellido": apellido, "telefono": telefono, "mail": mail}
 
     with open("tabla_clientes.json", "r", encoding="UTF-8") as datos:
         archivo = json.load(datos)
