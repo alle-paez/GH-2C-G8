@@ -1,11 +1,18 @@
-[   
+[
+    {
+        "hab": 23,
+        "precio": 50079,
+        "tipo": "Single",
+        "capacidad": 7,
+        "estado": "Disponible"
+    },
     {
         "hab": 101,
         "precio": 15000,
         "tipo": "Doble",
         "capacidad": 2,
         "estado": "Ocupada"
-    },    
+    },
     {
         "hab": 102,
         "precio": 25595,
@@ -35,16 +42,16 @@
         "estado": "Disponible"
     },
     {
-        "hab": 23,
-        "precio": 50079,
-        "tipo": "Single",
-        "capacidad": 7,
-        "estado": "Disponible"
-    },
-    {
         "hab": 106,
         "precio": 24000,
         "tipo": "Triple",
+        "capacidad": 3,
+        "estado": "Mantenimiento"
+    },
+    {
+        "hab": 24,
+        "precio": "23000",
+        "tipo": "Single",
         "capacidad": 3,
         "estado": "Mantenimiento"
     }

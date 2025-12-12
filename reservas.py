@@ -515,7 +515,7 @@ def mostrar_reservas_por_hab_o_clt(hab, x):
                 linea=reservas.readline()
         reservas.close()
     if len(reservas_hab)>=1:
-        return [res for res in reservas_hab]
+        return [res for res in reservas_hab]#ARREGLAR SALIDA, ES UNA TUPLA FOR SOME REASON
     else:
         return 0
 
@@ -559,7 +559,7 @@ def ordenar_totales_mayor_menor():
 #MOSTRAR LEER ETC
 def print_elegir_opcion():
     menu_mostrar()
-    op = int(input("Ingrese la opción elegida:"))
+    op = int(input("Ingrese la opción elegida: "))
     if op == 1:
         print_tabla_reservas("tabla_reservas.txt")
     elif op == 2:
@@ -595,10 +595,8 @@ def print_tabla_reservas(archivo):
     try:
         with open(archivo, "rt", encoding="UTF-8") as data:
             linea = data.readline()
-            print("")
-            print("------------------------------------------------------------------")
-            print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
-            print("------------------------------------------------------------------")
+            print(f'\n{LINEA}\n{"ID":^9}|{"DNI Cliente":^13}|{"Entrada":^11}|{"Salida":^11}|{"Hab":^10}|{"Pax":^10}|{"Total":^10}\n\
+{"-"*9}|{"-"*13}|{"-"*11}|{"-"*11}|{"-"*10}|{"-"*10}|{"-"*10}')
 
             while linea:
                 id_reserva, dni, check_in, check_out, hab, pax, total = list(map(str, linea.strip().split(";")))
@@ -606,26 +604,20 @@ def print_tabla_reservas(archivo):
                 check_out = arreglar_fechas_archivo(check_out)
                 check_in_str = f"{check_in[0]}-{check_in[1]}-{check_in[2]}"
                 check_out_str = f"{check_out[0]}-{check_out[1]}-{check_out[2]}"
-                print(str(id_reserva).ljust(4), "|",
-                str(dni).ljust(11), "|",
-                check_in_str.ljust(11), "|",
-                check_out_str.ljust(11), "|",
-                str(hab).ljust(3), "|",
-                str(pax).ljust(3), "|",
-                str(total).ljust(6))
+                print(f'{id_reserva:^9}|{dni:^13}|{check_in_str:^11}|{check_out_str:^11}|{hab:^10}|{pax:^10}|{total:^10}')
+
                 linea = data.readline() # Leemos la línea siguiente
     except OSError:
         print("No se pudo leer el archivo")
 
 def print_tabla_reservas_lst(lista):
-    print("")
-    print("------------------------------------------------------------------")
-    print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
-    print("------------------------------------------------------------------")
+    print(f'\n{LINEA}\n{"ID":^9}|{"DNI Cliente":^13}|{"Entrada":^11}|{"Salida":^11}|{"Hab":^10}|{"Pax":^10}|{"Total":^10}\n\
+{"-"*9}|{"-"*13}|{"-"*11}|{"-"*11}|{"-"*10}|{"-"*10}|{"-"*10}')
     for li in lista:
         id_reserva, dni, check_in, check_out, hab, pax, total = li
         check_in_str = f"{check_in[0]}-{check_in[1]}-{check_in[2]}"
         check_out_str = f"{check_out[0]}-{check_out[1]}-{check_out[2]}"
+
         print(str(id_reserva).ljust(4), "|",
         str(dni).ljust(11), "|",
         check_in_str.ljust(11), "|",
@@ -638,11 +630,7 @@ def print_tabla_reservas_lst(lista):
 
 
 
-    finally:
-        try:
-            arch.close()
-        except:
-            print("No se pudo cerrar el archivo")
+
         
 #MODIFICACION --------------------------------------------------------------------------------------------------------------
 

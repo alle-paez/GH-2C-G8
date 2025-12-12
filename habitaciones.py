@@ -18,10 +18,11 @@ def print_habitaciones(archivo):
             habitaciones = json.load(data)
             habitaciones_ordenados_por_num = ordenar(habitaciones, "hab")
         print(f"\nLista de las Habitaciones ----------------------------")
-        print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
+        print(f'{"Número":<15}|{"Precio":<15}|{"Tipo":<15}|{"Capacidad":<15}|{"Estado":<16}\n\
+{"-"*15}|{"-"*15}|{"-"*15}|{"-"*15}|{"-"*16}')
 
         for hab in habitaciones_ordenados_por_num:
-            print(f"{hab["hab"]:<10}{hab["precio"]:<10}{hab["tipo"]:<15}{hab["capacidad"]:<5}{hab["estado"]:<10}")
+            print(f"{hab["hab"]:<15}|{hab["precio"]:<15}|{hab["tipo"]:<15}|{hab["capacidad"]:<15}|{hab["estado"]:<16}")
     
     except (FileNotFoundError, OSError) as error:
         print(f"Error! {error}")
