@@ -10,7 +10,7 @@ def leer_clientes(archivo="tabla_clientes.json", modo="r"):
     try:
         contenido = open(archivo, modo, encoding="UTF-8")
         clientes = json.load(contenido)
-        clientes_ordenados_por_dni = ordenar(clientes, "Dni")
+        clientes_ordenados_por_dni = ordenar(clientes, "dni")
         return clientes_ordenados_por_dni
     except:
         print("Error, no se pudo acceder a la base de datos")
@@ -39,7 +39,7 @@ def llenar_clientes(archivo="tabla_clientes.json"):
         try: 
             with open(archivo, 'r', encoding="UTF-8") as data:
                 clientes = json.load(data)
-                clientes_ordenados_por_dni = ordenar(clientes, "Dni")
+                clientes_ordenados_por_dni = ordenar(clientes, "dni")
             
             dnis_existentes = [cli["dni"] for cli in clientes_ordenados_por_dni]
 
@@ -114,7 +114,7 @@ def abrir_archivo(archivo):
     try:
         with open(archivo, 'r', encoding="UTF-8") as data:
             tabla = json.load(data)
-            clientes_ordenados_por_dni = ordenar(tabla, "Dni")
+            clientes_ordenados_por_dni = ordenar(tabla, "dni")
         return clientes_ordenados_por_dni
     except (FileNotFoundError, OSError) as error:
         print(f"Error! No se pudo abrir el archivo. {error}")
@@ -206,7 +206,7 @@ def print_clt(archivo):
     try:
         with open(archivo, 'r', encoding="UTF-8") as data:
             clientes = json.load(data)
-        clientes_ordenados_por_dni = ordenar(clientes, "Dni")
+        clientes_ordenados_por_dni = ordenar(clientes, "dni")
         print("Tabla clientes -------------------------------------")
         print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}")
         for cli in clientes_ordenados_por_dni:
@@ -343,7 +343,5 @@ def borrar_clientes(archivo1, archivo2, mensaje):
 
 
 #ORDENAR POR NOMBRE-----------------------------------------------------------------------------------------------------------
-def ordenar_clt(clt):
-    clt.sort(key=lambda x: x[1])
-    return clt
+
 

@@ -59,7 +59,14 @@
         "dni": 23234433,
         "nombre": "Alfajer",
         "apellido": "Fake",
-        "teléfono": "1122211122",
+        "telefono": "1122211122",
         "mail": "alfajor@gmail.com"
+    },
+    {
+        "dni": 23242355,
+        "nombre": "Valentina",
+        "apellido": "Fernandez",
+        "telefono": "1167654398",
+        "mail": "valenfer@gmail.com"
     }
 ]
