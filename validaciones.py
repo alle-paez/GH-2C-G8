@@ -48,30 +48,17 @@ def esta_vacio(mensaje):
             print("Error inesperado. Intente nuevamente. ")
     return txt
     
+def filtrar_reservas_por_dni(matriz, dni):
+    dni_norm = str(dni).strip()
+    return [r for r in matriz if str(r[1]).strip() == dni_norm]
 
+def ordenar(lista, dato):
+    if len(lista) <= 1:
+        return lista
+    
+    menor = min(lista, key=lambda x: x[dato])
+    resto = [x for x in lista if x is not menor]
+    return [menor] + ordenar(resto, dato)
 
 if __name__ == "__main__":
     xd = esta_vacio("xdxd: ")
-
-"""def buscar_habitacion(nro_hab, i=0):
-    with open("data/json/tabla_habitaciones.json", "r", encoding="UTF-8") as archivo:
-        tabla_habitaciones = json.load(archivo)
-
-        if i >= len(tabla_habitaciones):
-            return False
-        else:
-            if str(tabla_habitaciones[i]["hab"]) == str(nro_hab):
-                return True
-        return buscar_habitacion(nro_hab, i + 1)
-    
-
-
-
-def verificar_existencia_habitación():
-    while True:
-        try:
-            hab=input("Ingrese el número de habitación: ")
-            assert buscar_habitacion(hab) == True
-            return hab
-        except AssertionError:
-            print("La habitación ingresada no existe.")"""

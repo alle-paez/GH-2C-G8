@@ -61,12 +61,11 @@ Volver para atrás con -1\n\
     3-Cancelar reserva\n\
     4-Ver reservas\n\
     5-Papelera de reciclaje\n\
-    Volver para atrás con -1')
-
+    Volver para atrás con -1\n\
+    6-Generar factura.')
+            ordenar_archivo_reservas("data/txt/tabla_reservas.txt")
             opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
-
             while opcion_reservas!=-1:
-
                 if opcion_reservas==1: #AGREGAR RESERVA
                     llenar_reservas()
                 elif opcion_reservas==2: #MODIFICAR RESERVA
@@ -77,6 +76,8 @@ Volver para atrás con -1\n\
                     print_elegir_opcion()
                 elif opcion_reservas==5:
                     eliminar_reserva("data/txt/reservas_borradas.txt", "data/txt/tabla_reservas.txt", "recuperar")
+                elif opcion_reservas == 6:
+                     ver_factura()
                 print(f'{LINEA}\n\
 1-Agregar reserva\n\
 2-Modificar reserva\n\

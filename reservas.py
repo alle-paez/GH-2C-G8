@@ -445,13 +445,6 @@ def buscar_reserva_x_id(idd):
     except:
         print("Error, no se pudo acceder a la base de datos.")
 
-"""def dar_reserva_x_id(matriz_reservas, idd):
-    i = buscar_reserva_x_id(matriz_reservas, idd)
-    if i == -1:
-        return False
-    else: 
-        return matriz_reservas[i]"""
-
 
 def mostrar_opciones_mod():
     print(f"¿Que elemento/s de la reserva desea modificar?:\n \
@@ -470,20 +463,6 @@ def modo_busqueda():
 def formatear_fecha(fecha):
     return str(fecha[0]).zfill(4) + "-" + str(fecha[1]).zfill(2) + "-" + str(fecha[2]).zfill(2)
 
-"""def print_reserva(matriz, pos):
-    fila = matriz[pos]
-    id_reserva, dni, check_in, check_out, hab, pax, total = fila
-    print("")
-    print("------------------------------------------------------------------")
-    print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
-    print("------------------------------------------------------------------")
-    print(str(id_reserva).ljust(4), "|",
-          str(dni).ljust(11), "|",
-          arreglar_fechas_archivo(check_in).ljust(11), "|",
-          arreglar_fechas_archivo(check_out).ljust(11), "|",
-          str(hab).ljust(3), "|",
-          str(pax).ljust(3), "|",
-          str(total).ljust(6))"""
 
 def menu_mostrar():
     print(f"¿Que desea ver? Ingrese una opción: \n \
@@ -563,24 +542,29 @@ def print_elegir_opcion():
     if op == 1:
         print_tabla_reservas("data/txt/tabla_reservas.txt")
     elif op == 2:
-        cliente = input("Ingrese el DNI del cliente: ")
+        cliente = validar_entero("Ingrese el DNI del cliente: ")
         ver_dni = verificar_formato(cliente)
-        while not ver_dni:
+        while not ver_dni and cliente != -1:
             print("Se ingreso un dni Invalido.")
-            cliente= input("Ingrese el número de dni del cliente: (-1 para salir): ")
+            cliente= validar_entero("Ingrese el número de dni del cliente: (-1 para salir): ")
             ver_dni = verificar_formato(cliente)
         cliente = int(cliente)
         reservas_cliente = mostrar_reservas_por_hab_o_clt(cliente, x=1)
-        if len(reservas_cliente)==0:
-            print(f"El Dni {cliente} no tiene ninguna reserva en el alojamiento.")
-        else: 
+        if not reservas_cliente:
+            print(f"El Dni {cliente} no tiene ninguna reserva en el alojamiento.")          
+        elif cliente != -1: 
             print_tabla_reservas_lst(reservas_cliente)
+
     elif op == 3:
         print("Elija el numero de habitación: ")
         print_habitaciones("data/json/tabla_habitaciones.json")
-        hab = int(input("Habitación elegida: "))
+        hab = validar_entero("Habitación elegida: ")
         reservas_habitacion = mostrar_reservas_por_hab_o_clt(hab, x=4)
-        print_tabla_reservas_lst(reservas_habitacion)
+        if not reservas_habitacion:
+            print(f"La habitación {hab} no tiene reservas. ")
+        elif hab != -1:
+            print_tabla_reservas_lst(reservas_habitacion)
+
     elif op == 4:
         totales_ord = ordenar_totales_mayor_menor()
         print_tabla_reservas_lst2(totales_ord)
@@ -664,7 +648,7 @@ def modificacion():
         id_reserva = validar_entero("Ingrese el id de reserva: ")
         existe = buscar_reserva_x_id(id_reserva)
         while not existe:
-            id_reserva = int(input("Ingrese el id de reserva: "))
+            id_reserva = validar_entero("Ingrese el id de reserva: ")
             existe = buscar_reserva_x_id(id_reserva)  
               
     elif busq == 2:
@@ -816,24 +800,23 @@ def modificacion():
     nueva_linea=(f'{idd};{dni_nuevo};{check_in_nuevo};{check_out_nuevo};{dto_nuevo};{cant_pax_nuevo};{total_nuevo}\n')
     with open("data/txt/tabla_reservas.txt", "a", encoding="UTF-8") as archivo:
         archivo.write(nueva_linea)
+
 #DELETE: BORRAR --------------------------------------------------------------------------------------
 def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_o_recuperar="eliminar"):
     with open(archivo_del_que_eliminar, "r", encoding="UTF-8") as reservass:
-        id_eliminar = int(input(f"Ingrese el número de reserva que quiera {eliminar_o_recuperar}: "))
+        id_eliminar = validar_entero(f"Ingrese el número de reserva que quiera {eliminar_o_recuperar}: ")
         aux=open("data/txt/temp.txt", "w", encoding="UTF-8")
         encontrado=False
         #linea = reservas.readline()
         for linea in reservass:
             id_reserva, _, _, _, _, _, _ = linea.strip().split(";")
-            if str(id_eliminar)!=id_reserva:
-                while linea:
-                    aux.write(linea)
-                    linea = reservass.readline()
-            else:
+            if str(id_eliminar)==id_reserva:
                 encontrado=True
                 with open(archivo_al_que_guardar, "a", encoding="UTF-8") as eliminadas:
-                    eliminadas.write("\n", linea)
-                linea = reservass.readline()
+                    eliminadas.write(linea)
+            else:
+                aux.write(linea)
+
         aux.close()
         reservass.close()
 
@@ -842,17 +825,58 @@ def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_
                 os.remove(archivo_del_que_eliminar)       # elimina el original
                 os.rename("data/txt/temp.txt", archivo_del_que_eliminar) # renombra el temporal
                 print(f"Producto {id_eliminar} procesado correctamente.")
+                print_tabla_reservas(archivo_del_que_eliminar)
             except OSError as error:
                 print("Error al reemplazar el archivo:", error)
         else:
             os.remove("data/txt/temp.txt")  # eliminamos el temporal si no se usó
             print(f"No se encontró el producto {id_eliminar}.")
 
-if __name__ == "__main__":
-    # pruebas manuales acá
-    pass
+def obtener_id_reserva(linea):
+    try:
+        if not linea.strip():
+            return 9999999
+        
+        id_reserva, _, _, _, _, _, _ = linea.strip().split(";")
+        return int(id_reserva)
 
+    except (ValueError, IndexError):
+        print(f"Advertencia: Línea mal formateada: {linea.strip()}")
+        return 9999999
+
+def ordenar_archivo_reservas(archivo):
+    lineas = []
+    try: 
+        with open(archivo, 'r', encoding="UTF-8") as reservas:
+            linea = reservas.readline()
+            while linea: 
+                if linea.strip():
+                    lineas.append(linea)
+                linea = reservas.readline()
+            
+        if not lineas:
+            print("archivo vacio.")
+        
+        lineas_ordenadas = sorted(lineas, key=obtener_id_reserva)
+
+        with open(archivo, "w", encoding="UTF-8") as reservas:
+            reservas.writelines(lineas_ordenadas)
+    
+    except FileNotFoundError:
+        print(f"Error: El archivo '{archivo}' no fue encontrado.")
+    
+    except OSError as e:
+        print(f"Error al escribir en el archivo: {e}")
+
+
+if __name__ == "__main__":
+    pass
 #FACTURACIÓN --------------------------------------------------------------------------------------------------------------
+
+def ver_factura():
+    dni_cli = validar_entero("Ingrese el Dni del cliente para generar la factura: ")
+    fecha_hoy = pedir_fecha("Ingrese la fecha de hoy (AAAA-MM-DD): ")
+    imprimir_factura(dni_cli, fecha_hoy)
 
 def imprimir_factura(dni_clt_act, hoy):
 
@@ -891,13 +915,17 @@ def imprimir_factura(dni_clt_act, hoy):
 
             id_reserva, dni, check_in, check_out, hab, pax, total = linea.strip().split(";")
             if dni==str(dni_clt_act):
-                reservas_del_clt.append(id_reserva, dni, check_in, check_out, hab, pax, total)
+                reservas_del_clt.append([id_reserva, dni, check_in, check_out, hab, pax, total])
     archivo.close()
 
     for i in range(len(reservas_del_clt)):
-        dias=diferencia_dias_entre(check_in=reservas_del_clt[i][2],check_out=reservas_del_clt[i][3])
+        check_in= arreglar_fechas_archivo(reservas_del_clt[i][2])
+        check_out = arreglar_fechas_archivo(reservas_del_clt[i][3])
+        dias=diferencia_dias_entre(check_in,check_out)
         valor=reservas_del_clt[i][6]*dias
         total+=valor
         print(f'|{reservas_del_clt[i][0]:^17}|{"Habitación "+str(reservas_del_clt[i][4]):^19}|{reservas_del_clt[i][6]:^18}|{dias:^10}|{valor:^10}|')
     print(LINEA)
-    print(f'{"Fecha de impresión: "+ str(hoy):<40}{"Subtotal: "+str(total):>40}\n{"Total IVA: "+str(0.21*int(total)):>80}\n{"Total: "+ str((IVA(int(total)))):>80}\n')
+    iva_monto = float(total) * 0.21
+    total_con_iva = float(total) + iva_monto
+    print(f'{"Fecha de impresión: "+ str(hoy):<40}{"Subtotal: "+str(total):>40}\n{"Total IVA: " + str(round(iva_monto, 2)):>80}\n{"Total: "+ str(round(total_con_iva, 2)):>80}\n')

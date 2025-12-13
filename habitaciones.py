@@ -1,7 +1,7 @@
 import re
 import json
 from validaciones import *
-from mas_auxiliares import ordenar
+
 
 def leer_habitaciones(archivo="data/json/tabla_habitaciones.json"):
     try:

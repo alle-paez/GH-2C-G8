@@ -1,7 +1,6 @@
 import pytest
-from mas_auxiliares import ordenar
 from habitaciones import validar_incremento
-from validaciones import verificar_formato, verificar_formato_fecha
+from validaciones import verificar_formato, verificar_formato_fecha, ordenar
 
 
 @pytest.fixture

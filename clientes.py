@@ -4,7 +4,7 @@ from habitaciones import *
 from validaciones import *
 import json
 from validaciones import *
-from mas_auxiliares import *
+
 
 def leer_clientes(archivo="data/json/tabla_clientes.json", modo="r"):
     try:
