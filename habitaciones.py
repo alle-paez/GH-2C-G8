@@ -3,7 +3,7 @@ import json
 from validaciones import *
 from mas_auxiliares import ordenar
 
-def leer_habitaciones(archivo="tabla_habitaciones.json"):
+def leer_habitaciones(archivo="data/json/tabla_habitaciones.json"):
     try:
         with open(archivo, "r", encoding="UTF-8") as contenido:
             habitaciones = json.load(contenido)
@@ -37,7 +37,7 @@ def opciones_ver_habitaciones():
         4 - Filtrar por precio \n\
         5 - Filtrar por estado\n")
     
-def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
+def busquedas_habitaciones(archivo="data/json/tabla_habitaciones.json"):
     opciones_ver_habitaciones()
     op = validar_entero("Ingrese una opción del 1 al 5. (-1 para salir): ")
     while op != -1:
@@ -143,7 +143,7 @@ def ordenar_hab(hab):
     return hab
 
 #ELIMINAR HABITACIONES------------------------------------------------------------------------------------------------------
-def eliminar_hab(archivo1="tabla_habitaciones.json", archivo2="habitaciones_borradas.json"):
+def eliminar_hab(archivo1="data/json/tabla_habitaciones.json", archivo2="data/json/habitaciones_borradas.json"):
     print_habitaciones(archivo1)
     item=validar_entero("Ingrese el número de habitación que quiera eliminar: (-1 para salir.)")    
     while item !=-1:
@@ -221,7 +221,7 @@ def eliminar_hab(archivo1="tabla_habitaciones.json", archivo2="habitaciones_borr
             item=int(input("Ingrese el número de habitación que quiera eliminar: ").strip())"""
 
 #DESHACER BORRAR DE UNA HABITACIÓN--------------------------------------------------------------------------------------------------
-def deshacer_borrar(archivo1="tabla_habitaciones.json", archivo2="habitaciones_borradas.json"):
+def deshacer_borrar(archivo1="data/json/tabla_habitaciones.json", archivo2="data/json/habitaciones_borradas.json"):
     print_habitaciones(archivo2)
     item=validar_entero("Ingrese el número de habitación que quiera recuperar (-1 para salir): ")
     flag=1
@@ -270,7 +270,7 @@ def deshacer_borrar(archivo1="tabla_habitaciones.json", archivo2="habitaciones_b
 
 #LLENAR HABITACIONES-----------------------------------------------------------------------------------------------------------------
 
-def llenar_habitaciones(archivo="tabla_habitaciones.json"):
+def llenar_habitaciones(archivo="data/json/tabla_habitaciones.json"):
     numero = validar_entero("Número de habitación (-1 para salir): ") #Chequea enteros con excepciones. 
     while numero != -1:
         try: 
@@ -334,18 +334,22 @@ def llenar_habitaciones(archivo="tabla_habitaciones.json"):
 
 #MODIFICAR HABITACIONES----------------------------------------------------------------------------------------------
 
+def validar_incremento(inc):
+    inc = float(inc)
+    if inc < -75:
+        raise ValueError("No se puede bajar más de un 75%.")
+    if inc > 300:
+        raise ValueError("No se puede aumentar más de un 300%.")
+    return inc
+
 def incremento_porcentual(tabla):
     precios_hab = [tb["precio"] for tb in tabla]
     err = True
     while err:
         inc = input("Ingrese el porcentaje que quiera incrementar. (-75% a 300%(ingresar sin %)): ")
         try:
-            inc = float(inc)
-            if inc < -75:
-                raise Exception("No se puede bajar más de un 75%.")
-            elif inc > 300:
-                raise Exception("No se puede aumentar más de un 300%. ")
-            err = False           
+            inc = validar_incremento(inc)
+            err = False          
         except ValueError:
             print("Se ingreso un formato incorrecto. (Ingresar sin %)")
         except Exception as er:
@@ -363,7 +367,7 @@ def incremento_porcentual(tabla):
     return tabla
 
 
-def modificar_habitacion(archivo="tabla_habitaciones.json"):
+def modificar_habitacion(archivo="data/json/tabla_habitaciones.json"):
     print_habitaciones(archivo)
     print("Incremento porcentual del precio a todas las habitaciones, ingrese 1.")
     numero= validar_entero("Número de habitación a modificar (-1 para volver): ")

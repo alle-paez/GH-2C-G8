@@ -54,7 +54,7 @@ if __name__ == "__main__":
     xd = esta_vacio("xdxd: ")
 
 """def buscar_habitacion(nro_hab, i=0):
-    with open("tabla_habitaciones.json", "r", encoding="UTF-8") as archivo:
+    with open("data/json/tabla_habitaciones.json", "r", encoding="UTF-8") as archivo:
         tabla_habitaciones = json.load(archivo)
 
         if i >= len(tabla_habitaciones):

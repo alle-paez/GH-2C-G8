@@ -17,7 +17,7 @@ def cuantas_lineas_txt(archivo):
     f.close()
     return contador
 
-def leer_reservas(archivo="tabla_reservas.txt", modo_de_lectura="r"):
+def leer_reservas(archivo="data/txt/tabla_reservas.txt", modo_de_lectura="r"):
     try:
         with  open(archivo, modo_de_lectura, encoding="UTF-8") as contenido:
                 return contenido
@@ -170,7 +170,7 @@ def diferencia_dias_entre(check_in, check_out):
 #VERIFICACIONES CLIENTE --------------------------------------------------------------------------------------
 
 def existe_cliente(dni):
-    with open("tabla_clientes.json", "r", encoding="UTF-8") as datos:
+    with open("data/json/tabla_clientes.json", "r", encoding="UTF-8") as datos:
         clientes = json.load(datos)
         for c in clientes:
             if c["dni"] == dni:
@@ -239,11 +239,11 @@ def llenar_clientes_desde_reservas(dni):
         
     nuevo_cliente = {"dni": dni, "nombre": nombre, "apellido": apellido, "telefono": telefono, "mail": mail}
 
-    with open("tabla_clientes.json", "r", encoding="UTF-8") as datos:
+    with open("data/json/tabla_clientes.json", "r", encoding="UTF-8") as datos:
         archivo = json.load(datos)
         archivo.append(nuevo_cliente)
         
-    with open("tabla_clientes.json", "w", encoding="UTF-8") as datos:
+    with open("data/json/tabla_clientes.json", "w", encoding="UTF-8") as datos:
         json.dump(archivo, datos, ensure_ascii=False, indent=4)
 
     print("Finalizo la carga, prosiguiendo con la reserva. ")
@@ -257,7 +257,7 @@ def verificar_formato_fecha(fecha):
         return False
 
 def buscar_habitacion(nro_hab, i=0):
-    with open("tabla_habitaciones.json", "r", encoding="UTF-8") as archivo:
+    with open("data/json/tabla_habitaciones.json", "r", encoding="UTF-8") as archivo:
         tabla_habitaciones = json.load(archivo)
 
         if i >= len(tabla_habitaciones):
@@ -289,7 +289,7 @@ def arreglar_fechas_archivo(fecha_str):
 
 def verificar_reservas_disponibilidad(nro_hab, check_in, check_out):
     try:
-        with open("tabla_reservas.txt", "r", encoding="UTF-8") as reservas:
+        with open("data/txt/tabla_reservas.txt", "r", encoding="UTF-8") as reservas:
             linea=reservas.readline()
             linea=linea.strip()
             flag=0
@@ -316,7 +316,7 @@ def verificar_reservas_disponibilidad(nro_hab, check_in, check_out):
     
 def total_por_precio(dto, dias, ad):
     try:
-        with open("tabla_habitaciones.json", "r", encoding="UTF-8") as habs:
+        with open("data/json/tabla_habitaciones.json", "r", encoding="UTF-8") as habs:
             habitaciones = json.load(habs)
         for hab in habitaciones:
             if hab["hab"] == dto:
@@ -328,7 +328,7 @@ def total_por_precio(dto, dias, ad):
 
 def verificar_cant_max(dto):
     try:
-        with open("tabla_habitaciones.json", "r", encoding="UTF-8") as habs:
+        with open("data/json/tabla_habitaciones.json", "r", encoding="UTF-8") as habs:
             habitaciones = json.load(habs)
         cant_maxima=0
         for hab in habitaciones:
@@ -410,12 +410,12 @@ def llenar_reservas():
                 valido, adicionales = validar_cant(cant_pax, dto)
 
             total = total_por_precio(dto, dias, adicionales)
-            nro_reserva = cuantas_lineas_txt("tabla_reservas.txt") + 1
+            nro_reserva = cuantas_lineas_txt("data/txt/tabla_reservas.txt") + 1
 
             reserva_nueva=((f'{nro_reserva};{nro_dni};{check_in};{check_out};{dto};{cant_pax};{total}\n'))
         
             try:   
-                with open("tabla_reservas.txt", "a", encoding="UTF-8") as reservas_write:
+                with open("data/txt/tabla_reservas.txt", "a", encoding="UTF-8") as reservas_write:
                     reservas_write.write(reserva_nueva)
                 
                 print("Se agrego todo correctamente.")
@@ -428,7 +428,7 @@ def llenar_reservas():
 def buscar_reserva_x_id(idd):
 
     try:
-        with open("tabla_reservas.txt", "r", encoding="UTF-8") as reservas:
+        with open("data/txt/tabla_reservas.txt", "r", encoding="UTF-8") as reservas:
                 linea=reservas.readline()
                 identificador, _, _, _, _, _, _ = linea.strip().split(";")
                 identificador=str(identificador)
@@ -497,7 +497,7 @@ def menu_mostrar():
 
 def mostrar_reservas_por_hab_o_clt(hab, x):
     #return [res for res in matriz if res[x] == hab]
-    with open("tabla_reservas.txt", "r", encoding="UTF-8") as reservas: 
+    with open("data/txt/tabla_reservas.txt", "r", encoding="UTF-8") as reservas: 
         linea=reservas.readline()
         reservas_hab=[]
         while linea:
@@ -522,7 +522,7 @@ def mostrar_reservas_por_hab_o_clt(hab, x):
 def ordenar_menor_mayor(parametro):
     try:
         matriz_reservas=[]
-        with open("tabla_reservas.txt", 'r', encoding="UTF-8") as reservas:
+        with open("data/txt/tabla_reservas.txt", 'r', encoding="UTF-8") as reservas:
             linea=reservas.readline()
             while linea:
                 id_reserva, dni, check_in, check_out, hab, pax, total = list(map(str, linea.strip().split(";")))
@@ -540,7 +540,7 @@ def ordenar_menor_mayor(parametro):
 def ordenar_totales_mayor_menor():
     try:
         matriz_reservas=[]
-        with open("tabla_reservas.txt", 'r', encoding="UTF-8") as reservas:
+        with open("data/txt/tabla_reservas.txt", 'r', encoding="UTF-8") as reservas:
             linea=reservas.readline()
             while linea:
                 id_reserva, dni, check_in, check_out, hab, pax, total = list(map(str, linea.strip().split(";")))
@@ -561,7 +561,7 @@ def print_elegir_opcion():
     menu_mostrar()
     op = int(input("Ingrese la opción elegida: "))
     if op == 1:
-        print_tabla_reservas("tabla_reservas.txt")
+        print_tabla_reservas("data/txt/tabla_reservas.txt")
     elif op == 2:
         cliente = input("Ingrese el DNI del cliente: ")
         ver_dni = verificar_formato(cliente)
@@ -577,7 +577,7 @@ def print_elegir_opcion():
             print_tabla_reservas_lst(reservas_cliente)
     elif op == 3:
         print("Elija el numero de habitación: ")
-        print_habitaciones("tabla_habitaciones.json")
+        print_habitaciones("data/json/tabla_habitaciones.json")
         hab = int(input("Habitación elegida: "))
         reservas_habitacion = mostrar_reservas_por_hab_o_clt(hab, x=4)
         print_tabla_reservas_lst(reservas_habitacion)
@@ -709,9 +709,9 @@ def modificacion():
 #-----------------------------------------------------------------------------------------------------------------------------
 #borro la que voy a modificar antes de modificarla
 
-    with open("tabla_reservas.txt", "r", encoding="UTF-8") as reservass:
-        aux=open("temp.txt", "w", encoding="UTF-8")
-        reserva_a_mod= open("reserva_a_mod.txt", "w", encoding="UTF-8")
+    with open("data/txt/tabla_reservas.txt", "r", encoding="UTF-8") as reservass:
+        aux=open("data/txt/temp.txt", "w", encoding="UTF-8")
+        reserva_a_mod= open("data/txt/reserva_a_mod.txt", "w", encoding="UTF-8")
         encontrado=False
     
         for linea in reservass:
@@ -728,22 +728,22 @@ def modificacion():
 
     if encontrado:
         try:
-            os.remove("tabla_reservas.txt")       # elimina el original
-            os.rename("temp.txt", "tabla_reservas.txt") # renombra el temporal
+            os.remove("data/txt/tabla_reservas.txt")       # elimina el original
+            os.rename("data/txt/temp.txt", "data/txt/tabla_reservas.txt") # renombra el temporal
     
         except OSError as error:
             print("Error al reemplazar el archivo:", error)
     else:
-        os.remove("temp.txt")  # eliminamos el temporal si no se usó
+        os.remove("data/txt/temp.txt")  # eliminamos el temporal si no se usó
 
 #-----------------------------------------------------------------------------------------------------------------------------
-    reserva_a_mod=open("reserva_a_mod.txt", "r", encoding="UTF-8")
+    reserva_a_mod=open("data/txt/reserva_a_mod.txt", "r", encoding="UTF-8")
     linea_mod= reserva_a_mod.readline()
 
     idd, dni, check_in, check_out, hab, pax, _ = linea_mod.strip().split(";")
 
     reserva_a_mod.close()
-    os.remove("reserva_a_mod.txt")   
+    os.remove("data/txt/reserva_a_mod.txt")   
 
 #-----------------------------------------------------------------------------------------------------------------------------
 
@@ -814,13 +814,13 @@ def modificacion():
     total_nuevo = total_por_precio(int(dto_nuevo), dias, adicionales)
 
     nueva_linea=(f'{idd};{dni_nuevo};{check_in_nuevo};{check_out_nuevo};{dto_nuevo};{cant_pax_nuevo};{total_nuevo}\n')
-    with open("tabla_reservas.txt", "a", encoding="UTF-8") as archivo:
+    with open("data/txt/tabla_reservas.txt", "a", encoding="UTF-8") as archivo:
         archivo.write(nueva_linea)
 #DELETE: BORRAR --------------------------------------------------------------------------------------
 def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_o_recuperar="eliminar"):
     with open(archivo_del_que_eliminar, "r", encoding="UTF-8") as reservass:
         id_eliminar = int(input(f"Ingrese el número de reserva que quiera {eliminar_o_recuperar}: "))
-        aux=open("temp.txt", "w", encoding="UTF-8")
+        aux=open("data/txt/temp.txt", "w", encoding="UTF-8")
         encontrado=False
         #linea = reservas.readline()
         for linea in reservass:
@@ -840,12 +840,12 @@ def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_
         if encontrado:
             try:
                 os.remove(archivo_del_que_eliminar)       # elimina el original
-                os.rename("temp.txt", archivo_del_que_eliminar) # renombra el temporal
+                os.rename("data/txt/temp.txt", archivo_del_que_eliminar) # renombra el temporal
                 print(f"Producto {id_eliminar} procesado correctamente.")
             except OSError as error:
                 print("Error al reemplazar el archivo:", error)
         else:
-            os.remove("temp.txt")  # eliminamos el temporal si no se usó
+            os.remove("data/txt/temp.txt")  # eliminamos el temporal si no se usó
             print(f"No se encontró el producto {id_eliminar}.")
 
 if __name__ == "__main__":
@@ -856,7 +856,7 @@ if __name__ == "__main__":
 
 def imprimir_factura(dni_clt_act, hoy):
 
-    with open("tabla_clientes.json", "r", encoding="UTF-8") as datos:
+    with open("data/json/tabla_clientes.json", "r", encoding="UTF-8") as datos:
         clientes = json.load(datos)
         for c in clientes:
             if c["dni"] == dni_clt_act:
@@ -886,7 +886,7 @@ def imprimir_factura(dni_clt_act, hoy):
     reservas_del_clt=[]
     total=0
 
-    with open("tabla_reservas.txt", "r", encoding="UTF-8") as archivo:
+    with open("data/txt/tabla_reservas.txt", "r", encoding="UTF-8") as archivo:
         for linea in archivo:
 
             id_reserva, dni, check_in, check_out, hab, pax, total = linea.strip().split(";")

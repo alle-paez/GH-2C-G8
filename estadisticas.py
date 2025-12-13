@@ -4,7 +4,7 @@ from habitaciones import *
 from clientes import *
 from functools import reduce
 
-def _leer_reservas_lista_desde_txt(ruta="tabla_reservas.txt"):
+def _leer_reservas_lista_desde_txt(ruta="data/txt/tabla_reservas.txt"):
     lista = []
     try:
         f = open(ruta, "r", encoding="UTF-8")
