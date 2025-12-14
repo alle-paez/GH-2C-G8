@@ -61,28 +61,30 @@ Volver para atrás con -1\n\
     3-Cancelar reserva\n\
     4-Ver reservas\n\
     5-Papelera de reciclaje\n\
-    Volver para atrás con -1')
-
+    6-Generar factura\n\
+    Volver para atrás con -1.')
+            ordenar_archivo_reservas("data/txt/tabla_reservas.txt")
             opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
-
             while opcion_reservas!=-1:
-
                 if opcion_reservas==1: #AGREGAR RESERVA
                     llenar_reservas()
                 elif opcion_reservas==2: #MODIFICAR RESERVA
                     modificacion()
                 elif opcion_reservas==3: # CANCELAR RESERVA
-                    eliminar_reserva("tabla_reservas.txt", "reservas_borradas.txt", "eliminar")
+                    eliminar_reserva("data/txt/tabla_reservas.txt", "data/txt/reservas_borradas.txt", "eliminar")
                 elif opcion_reservas==4: #VER RESERVAS
                     print_elegir_opcion()
                 elif opcion_reservas==5:
-                    eliminar_reserva("reservas_borradas.txt", "tabla_reservas.txt", "recuperar")
+                    eliminar_reserva("data/txt/reservas_borradas.txt", "data/txt/tabla_reservas.txt", "recuperar")
+                elif opcion_reservas == 6:
+                     ver_factura()
                 print(f'{LINEA}\n\
 1-Agregar reserva\n\
 2-Modificar reserva\n\
 3-Cancelar reserva\n\
 4-Ver reservas\n\
 5-Papelera de reciclaje\n\
+6-Generar factura\n\
 Volver para atrás con -1\n\
 {LINEA}\n')
                 opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
@@ -104,11 +106,11 @@ Volver para atrás con -1\n\
             elif opcion_clientes==2: #MODIFICAR CLIENTES
                     modificar_clientes()
             elif opcion_clientes==3: # BORRAR CLIENTES
-                    borrar_clientes("tabla_clientes.json", "clientes_borrados.json","elimina")
+                    borrar_clientes("data/json/tabla_clientes.json", "data/json/clientes_borrados.json","elimina")
             elif opcion_clientes==4: #VER CLIENTES
                     busquedas_clientes()
             elif opcion_clientes==5:
-                    borrar_clientes("clientes_borrados.json", "tabla_clientes.json", "recupera")
+                    borrar_clientes("data/json/clientes_borrados.json", "data/json/tabla_clientes.json", "recupera")
             print(f'{LINEA}\n\
 1-Agregar cliente\n\
 2-Modificar cliente\n\

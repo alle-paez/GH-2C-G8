@@ -4,9 +4,9 @@ from habitaciones import *
 from validaciones import *
 import json
 from validaciones import *
-from mas_auxiliares import *
 
-def leer_clientes(archivo="tabla_clientes.json", modo="r"):
+
+def leer_clientes(archivo="data/json/tabla_clientes.json", modo="r"):
     try:
         contenido = open(archivo, modo, encoding="UTF-8")
         clientes = json.load(contenido)
@@ -23,85 +23,66 @@ def leer_clientes(archivo="tabla_clientes.json", modo="r"):
         
 #AGREGAR CLIENTES--------------------------------------------------------------------------------
 
-def llenar_clientes(archivo="tabla_clientes.json"):
+def llenar_clientes(archivo="data/json/tabla_clientes.json"):
     dni = validar_entero("Ingrese el Dni del cliente: (-1 para finalizar la carga): ")
-    flag=verificar_formato(dni)
-    if dni ==-1:
-        flag=True
 
-    while flag==False:
-        dni = validar_entero("Ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga:)")
-        flag=verificar_formato(dni)
-        if dni == -1:
-            flag = True
-           
-    while dni != -1: 
-        try: 
+    while dni != -1 and not verificar_formato(dni):
+        dni = validar_entero("Ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga): ")
+
+    # si salió con -1, termina
+    if dni == -1:
+        return
+
+    while dni != -1:
+        try:
             with open(archivo, 'r', encoding="UTF-8") as data:
                 clientes = json.load(data)
                 clientes_ordenados_por_dni = ordenar(clientes, "dni")
-            
-            dnis_existentes = [cli["dni"] for cli in clientes_ordenados_por_dni]
 
-            if dni in dnis_existentes and flag:
-                existe = True
-                while existe:
-                    print("El dni ingresado ya existe, por favor, ingrese otro.")
+            dni_norm = str(dni).strip()
+            dnis_existentes = [str(cli["dni"]).strip() for cli in clientes_ordenados_por_dni]
+
+            if dni_norm in dnis_existentes:
+                print("El dni ingresado ya existe, por favor, ingrese otro.")
+                dni = validar_entero("Ingrese el dni del cliente nuevamente (-1 para finalizar): ")
+
+                while dni != -1 and not verificar_formato(dni):
                     dni = validar_entero("Ingrese el dni del cliente nuevamente (-1 para finalizar): ")
-                    if dni == -1:
-                        existe = False
-                    else:
-                        flag = verificar_formato(dni)
-                        if flag and dni not in dnis_existentes:
-                            existe = False
 
             if dni != -1:
-
                 nombre = esta_vacio("Ingrese el nombre del cliente: ")
-                flag_name=es_texto(nombre)
-                while not flag_name:
+                while not es_texto(nombre):
                     nombre = esta_vacio("Ingrese el nombre del cliente nuevamente: ")
-                    flag_name=es_texto(nombre)
 
                 apellido = esta_vacio("Ingrese el apellido del cliente: ")
-                flag_sur=es_texto(apellido)
-                while not flag_sur:
+                while not es_texto(apellido):
                     apellido = esta_vacio("Ingrese el apellido del cliente: ")
-                    flag_sur=es_texto(apellido)
 
                 telefono = validar_entero("Ingrese el telefono del cliente: ")
-                flag_tel=es_telefono(str(telefono))
-                while not flag_tel:
+                while not es_telefono(str(telefono)):
                     telefono = validar_entero("Ingrese el telefono del cliente: ")
-                    flag_tel=es_telefono(str(telefono))
 
                 mail = esta_vacio("Ingrese el e-mail del cliente: ")
-                flag_mail=es_mail(mail)
-                while not flag_mail:
+                while not es_mail(mail):
                     mail = esta_vacio("Ingrese el e-mail del cliente: ")
-                    flag_mail=es_mail(mail) 
 
-                nuevo_cliente ={
-                    "dni":dni,
-                    "nombre":nombre,
-                    "apellido":apellido,
-                    "telefono":telefono,
-                    "mail":mail
-                    }
-                
+                nuevo_cliente = {
+                    "dni": dni,
+                    "nombre": nombre,
+                    "apellido": apellido,
+                    "telefono": telefono,
+                    "mail": mail
+                }
+
                 clientes.append(nuevo_cliente)
                 with open(archivo, 'w', encoding="UTF-8") as data:
                     json.dump(clientes, data, ensure_ascii=False, indent=4)
-                
-                print(f"Se ha agregado al cliente {nuevo_cliente["nombre"]} {nuevo_cliente["apellido"]} de dni {nuevo_cliente["dni"]}.")
-                
+
+                print(f"Se ha agregado al cliente {nuevo_cliente['nombre']} {nuevo_cliente['apellido']} de dni {nuevo_cliente['dni']}.")
+
                 dni = validar_entero("Ingrese el Dni del cliente: (-1 para finalizar la carga): ")
-                flag=verificar_formato(dni)
-                while not flag:
-                    dni = validar_entero("Formato incorrecto, ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga:)")
-                    flag=verificar_formato(dni)
-                    if dni == -1:
-                        flag = True
+                while dni != -1 and not verificar_formato(dni):
+                    dni = validar_entero("Formato incorrecto, ingrese el Dni del cliente nuevamente: (-1 para finalizar la carga): ")
 
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
@@ -134,7 +115,7 @@ def escribir_archivo(archivo,tabla,mensaje="Dump generado con exito"):
         print(f"Error! {e}")
     
 
-def modificar_clientes(archivo="tabla_clientes.json"):
+def modificar_clientes(archivo="data/json/tabla_clientes.json"):
     print_clt(archivo)
     dni = validar_entero("\nIngrese DNI del cliente a modificar (-1 para salir): ")
     while dni != -1:
@@ -152,8 +133,8 @@ def modificar_clientes(archivo="tabla_clientes.json"):
             if pos != -1:
                 cliente = clientes[pos]
                 print("Cliente encontrado:")
-                print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}")
-                print(f"{cliente["dni"]:<10}{cliente["nombre"]:<10}{cliente["apellido"]:<10}{cliente["telefono"]:<15}{cliente["mail"]:<15}")
+                print(f'{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}')
+                print(f'{cliente["dni"]:<10}{cliente["nombre"]:<10}{cliente["apellido"]:<10}{cliente["telefono"]:<15}{cliente["mail"]:<15}')
 
                 nuevo_nombre   = input(f"Nuevo nombre ({cliente["nombre"]})(Enter para continuar): ").strip()
                 if nuevo_nombre != "":
@@ -186,8 +167,8 @@ def modificar_clientes(archivo="tabla_clientes.json"):
 
                 escribir_archivo(archivo,clientes,"Cliente modificado con éxito.")
                 cliente = clientes[pos]
-                print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}")
-                print(f"{cliente["dni"]:<10}{cliente["nombre"]:<10}{cliente["apellido"]:<10}{cliente["telefono"]:<15}{cliente["mail"]:<15}")
+                print(f'{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}')
+                print(f'{cliente["dni"]:<10}{cliente["nombre"]:<10}{cliente["apellido"]:<10}{cliente["telefono"]:<15}{cliente["mail"]:<15}')
 
             else:
                 print("No existe cliente con ese DNI.")
@@ -208,7 +189,7 @@ def print_clt(archivo):
             clientes = json.load(data)
         clientes_ordenados_por_dni = ordenar(clientes, "dni")
         print("Tabla clientes -------------------------------------")
-        print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}")
+        print(f'{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}')
         for cli in clientes_ordenados_por_dni:
             print(f"{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<15}{cli["mail"]:<15}")
     except (FileNotFoundError, OSError) as error:
@@ -223,7 +204,7 @@ def opciones_busquedas_cli():
     3 - Coincidencias nombre y apellido.\n\
     4 - Ver opciones de busqueda.")
 
-def busquedas_clientes(archivo="tabla_clientes.json"):
+def busquedas_clientes(archivo="data/json/tabla_clientes.json"):
     opciones_busquedas_cli()
     op = validar_entero("Ingrese una opción de las disponibles. (1-4)(-1 para salir): ")
 
@@ -255,16 +236,19 @@ def busquedas_clientes(archivo="tabla_clientes.json"):
 def busq_dni(clientes):
     cli = validar_entero("Ingrese el dni del cliente que desea buscar: ")
     if verificar_formato(cli):
-        dnis_cli = [clt["dni"] for clt in clientes]
-        if cli in dnis_cli:
-            i = dnis_cli.index(cli)
+
+        cli_norm = str(cli).strip()
+        dnis_cli = [str(clt["dni"]).strip() for clt in clientes]
+
+        if cli_norm in dnis_cli:
+            i = dnis_cli.index(cli_norm)
             cadena = "Resultados de la busqueda"
             print(cadena.center(50,"-"))
-            print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}")
-            print(f"{clientes[i]["dni"]:<10}{clientes[i]["nombre"]:<10}{clientes[i]["apellido"]:<10}{clientes[i]["telefono"]:<15}{clientes[i]["mail"]:<15}")
+            print(f'{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}')
+            print(f'{str(clientes[i]["dni"]):<10}{clientes[i]["nombre"]:<10}{clientes[i]["apellido"]:<10}{str(clientes[i]["telefono"]):<15}{clientes[i]["mail"]:<15}')
         else:
             print("No existe cliente con ese DNI.")
-    else: 
+    else:
         print("Dni invalido.")
 
 def coincidencias_n_y_a(clientes):
@@ -277,13 +261,13 @@ def coincidencias_n_y_a(clientes):
     patron = re.compile(ingreso.strip(), re.IGNORECASE)
     cadena = "Resultados de la busqueda"
     print(cadena.center(50,"-"))
-    print(f"{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}")
+    print(f'{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}')
     for cli in clientes:
         nombre = cli["nombre"]
         apellido = cli["apellido"]
         nombre_completo = f"{nombre} {apellido}"
         if (re.search(patron, nombre) or re.search(patron, apellido) or re.search(patron, nombre_completo)):
-            print(f"{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<15}{cli["mail"]:<15}")
+            print(f'{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<15}{cli["mail"]:<15}')
 
 #ELIMINAR CLIENTES-----------------------------------------------------------------------------------------------------------
 def borrar_clientes(archivo1, archivo2, mensaje):
@@ -295,9 +279,12 @@ def borrar_clientes(archivo1, archivo2, mensaje):
         flag=0
         clientes = abrir_archivo(archivo1)
         clientes_borrados = abrir_archivo(archivo2)
-        dnis_cli = [cli["dni"] for cli in clientes]
-        if dni in dnis_cli:
-            pos = dnis_cli.index(dni)
+        dni_norm = str(dni).strip()
+        dnis_cli = [str(cli["dni"]).strip() for cli in clientes]
+
+
+        if dni_norm in dnis_cli:
+            pos = dnis_cli.index(dni_norm)
         else: 
             pos = -1
         
@@ -316,8 +303,9 @@ def borrar_clientes(archivo1, archivo2, mensaje):
                 dni = validar_entero("Ingrese el dni de cliente nuevamente (-1 para salir):  ")
                 formato=verificar_formato(dni)
                 if formato and dni != -1:
-                    if dni in dnis_cli:
-                        pos = dnis_cli.index(dni)
+                    dni_norm = str(dni).strip()
+                    if dni_norm in dnis_cli:
+                        pos = dnis_cli.index(dni_norm)
                     else:
                         pos = -1        
                     if pos!=-1:
