@@ -486,14 +486,13 @@ def formatear_fecha(fecha):
           str(total).ljust(6))"""
 
 def menu_mostrar():
-    print(f"¿Que desea ver? Ingrese una opción: \n \
-        1 - Tabla reservas completa. \n \
-        2 - Buscar por DNI. \n \
-        3 - Buscar por habitación. \n \
-        4 - Totales: Mayor a menor. \n \
-        5 - Totales: Menor a mayor. \n\
-        6 - Ordenar por fecha de entrada: \n \
-")
+    print(f"¿Que desea ver? Ingrese una opción:\n\
+    1 - Tabla reservas completa.\n\
+    2 - Buscar por DNI.\n\
+    3 - Buscar por habitación.\n\
+    4 - Totales: Mayor a menor.\n\
+    5 - Totales: Menor a mayor.\n\
+    6 - Ordenar por fecha de entrada:\n")
 
 def mostrar_reservas_por_hab_o_clt(hab, x):
     #return [res for res in matriz if res[x] == hab]
@@ -846,7 +845,7 @@ def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_
                 print("Error al reemplazar el archivo:", error)
         else:
             os.remove("temp.txt")  # eliminamos el temporal si no se usó
-            print(f"No se encontró el producto {id_eliminar}.")
+            print(f"No se encontró la reserva {id_eliminar}.")
 
 if __name__ == "__main__":
     # pruebas manuales acá

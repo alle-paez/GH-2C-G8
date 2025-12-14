@@ -7,6 +7,13 @@
         "estado": "Disponible"
     },
     {
+        "hab": 24,
+        "precio": "23000",
+        "tipo": "Single",
+        "capacidad": 3,
+        "estado": "Mantenimiento"
+    },
+    {
         "hab": 101,
         "precio": 15000,
         "tipo": "Doble",
@@ -49,10 +56,10 @@
         "estado": "Mantenimiento"
     },
     {
-        "hab": 24,
-        "precio": "23000",
-        "tipo": "Single",
-        "capacidad": 3,
-        "estado": "Mantenimiento"
+        "hab": 107,
+        "precio": 1500,
+        "tipo": "Doble",
+        "capacidad": 2,
+        "estado": "Disponible"
     }
 ]

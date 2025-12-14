@@ -2,6 +2,7 @@ import re
 import json
 from validaciones import *
 from mas_auxiliares import ordenar
+from clientes import *
 
 def leer_habitaciones(archivo="tabla_habitaciones.json"):
     try:
@@ -17,7 +18,7 @@ def print_habitaciones(archivo):
         with open(archivo, 'r', encoding="UTF-8") as data:
             habitaciones = json.load(data)
             habitaciones_ordenados_por_num = ordenar(habitaciones, "hab")
-        print(f"\nLista de las Habitaciones ----------------------------")
+        print(f"\n{"Lista de las Habitaciones":->80}")
         print(f'{"Número":<15}|{"Precio":<15}|{"Tipo":<15}|{"Capacidad":<15}|{"Estado":<16}\n\
 {"-"*15}|{"-"*15}|{"-"*15}|{"-"*15}|{"-"*16}')
 
@@ -31,11 +32,11 @@ def print_habitaciones(archivo):
 
 def opciones_ver_habitaciones():
     print(f"Seleccione un filtro: \n\
-        1 - Ver todas \n\
-        2 - Buscar por número \n\
-        3 - Filtrar por tipo \n\
-        4 - Filtrar por precio \n\
-        5 - Filtrar por estado\n")
+    1 - Ver todas \n\
+    2 - Buscar por número \n\
+    3 - Filtrar por tipo \n\
+    4 - Filtrar por precio \n\
+    5 - Filtrar por estado\n")
     
 def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
     opciones_ver_habitaciones()
@@ -59,7 +60,7 @@ def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
                 room = validar_entero("Ingrese el numero de habitación que desea filtrar: ")
                 if room in nros_hab:
                     indice = nros_hab.index(room)
-                    print("------------------------------------")
+                    print("-"*80)
                     print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
                     print(f"{habitaciones_ordenados_por_num[indice]["hab"]:<10}{habitaciones_ordenados_por_num[indice]["precio"]:<10}{habitaciones_ordenados_por_num[indice]["tipo"]:<15}{habitaciones_ordenados_por_num[indice]["capacidad"]:<5}{habitaciones_ordenados_por_num[indice]["estado"]:<10}")
                 else:
@@ -105,14 +106,15 @@ def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
                 elif modo == "Igual":
                     print(f"Habitaciones con precio por noche {modo.lower()} a {precio}: ")
                     for hab in habitaciones_ordenados_por_num:
-                        if int(hab["precio"]) >= precio:
+                        if int(hab["precio"]) == precio:
                             filtrado.append(hab)
                 
                 if len(filtrado) > 0:
                     print()
-                    print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
+                    print(f'{"Número":<15}|{"Precio":<15}|{"Tipo":<15}|{"Capacidad":<15}|{"Estado":<16}\n\
+{"-"*15}|{"-"*15}|{"-"*15}|{"-"*15}|{"-"*16}')
                     for hab in filtrado:
-                        print(f"{hab["hab"]:<10}{hab["precio"]:<10}{hab["tipo"]:<10}{hab["capacidad"]:<10}{hab["estado"]:<10}")
+                        print(f"{hab["hab"]:<15}|{hab["precio"]:<15}|{hab["tipo"]:<15}|{hab["capacidad"]:<15}|{hab["estado"]:<15}")
                 
                 else: 
                     print("No se registran habitaciones. ")
@@ -124,18 +126,16 @@ def busquedas_habitaciones(archivo="tabla_habitaciones.json"):
                     if hab["estado"] == estado:
                         filtrado.append(hab)
                 print()
-                print(f'{"Número":<10}{"Precio":<10}{"Tipo":<10}{"Capacidad":<10}{"Estado":<10}')
+                print(f'{"Número":<15}|{"Precio":<15}|{"Tipo":<15}|{"Capacidad":<15}|{"Estado":<16}\n\
+{"-"*15}|{"-"*15}|{"-"*15}|{"-"*15}|{"-"*16}')
                 for hab in filtrado:
-                    print(f"{hab["hab"]:<10}{hab["precio"]:<10}{hab["tipo"]:<10}{hab["capacidad"]:<10}{hab["estado"]:<10}")
+                    print(f"{hab["hab"]:<15}|{hab["precio"]:<15}|{hab["tipo"]:<15}|{hab["capacidad"]:<15}|{hab["estado"]:<15}")
 
             op = validar_entero("Ingrese una opción del 1 al 5. (-1 para salir): ")
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
         except:
             print("Error inesperado. Intente nuevamente. ")
-
-                
-
 
 #ORDENAR POR ÍNDICE: NÚMERO DE HABITACIÓN------------------------------------------------------------------------------------
 def ordenar_hab(hab):
@@ -263,8 +263,6 @@ def deshacer_borrar(archivo1="tabla_habitaciones.json", archivo2="habitaciones_b
             if item == -1:
                 flag = 0
         
-
-
 #VALIDACIÓN DE NÚMEROS-------------------------------------------------------------------------------------------------------------
 #es_entero = lambda x: re.search(r'^-?[0-9]+$', x) is not None
 
@@ -365,7 +363,7 @@ def incremento_porcentual(tabla):
 
 def modificar_habitacion(archivo="tabla_habitaciones.json"):
     print_habitaciones(archivo)
-    print("Incremento porcentual del precio a todas las habitaciones, ingrese 1.")
+    print(f"\nPara efectuar un incremento porcentual del precio a todas las habitaciones, ingrese 1.\n")
     numero= validar_entero("Número de habitación a modificar (-1 para volver): ")
 
     while numero != -1:
@@ -390,84 +388,108 @@ def modificar_habitacion(archivo="tabla_habitaciones.json"):
      
             elif numero !=-1:
                 indice = nros_hab.index(numero)
-                       
-                op_txt = input("Ingrese una opción: \n\
-            1-Precio\n\
-            2-Tipo\n\
-            3-Capacidad\n\
-            4-Estado\n\
-            5-Todos \n\
-            (-1 volver)\n\
-            Opción:").strip()
-                
-                while not (op_txt.lstrip("-").isdigit() and int(op_txt) in {1,2,3,4,5,-1}):
-                    print("Opción inválida.")
-                    op_txt = input().strip()
-                op = int(op_txt)
+            
+                print("Si no desea modificar un campo, presione enter")
 
-                while op != -1:
-                    if op == 1:
-                        error = True
-                        while error:
-                            try: 
-                                nuevo_precio = input("Nuevo precio: ")
-                                error = False
-                            except ValueError:
-                                print("Se ingreso un número invalido.")
+                while True:
+                    try:
+                        nuevo_id = input("Nuevo número de habitación: ").strip()
 
-                        habitaciones[indice]["precio"] = nuevo_precio
+                        if nuevo_id == "":
+                            nuevo_id = habitaciones[indice]["hab"]
+                            break
 
-                        with open(archivo, 'w', encoding="UTF-8") as data:
-                            json.dump(habitaciones, data, ensure_ascii=False, indent=4)
-                        print("Precio actualizado.")
+                        nuevo_id = int(nuevo_id)
 
-                    elif op == 2:
-                        nuevo_tipo = leer_tipo()
-                        habitaciones[indice]["tipo"] = nuevo_tipo
+                        if nuevo_id < 0:
+                            raise ValueError("El número no puede ser negativo.")
 
-                        with open(archivo, 'w', encoding="UTF-8") as data:
-                            json.dump(habitaciones, data, ensure_ascii=False, indent=4)
-                        print("Tipo actualizado.")
-                                
-                    elif op == 3:
-                        nueva_cap = validar_entero("Nueva capacidad (> 0): ")
-                        habitaciones[indice]["capacidad"] = nueva_cap
+                        if nuevo_id in nros_hab:
+                            raise AssertionError("El ID ya existe.")
 
-                        with open(archivo, 'w', encoding="UTF-8") as data:
-                            json.dump(habitaciones, data, ensure_ascii=False, indent=4)
-                        print("Capacidad actualizada.")
+                        habitaciones[indice]["hab"]= nuevo_id
+                        break
 
-                    elif op == 4:
-                        nuevo_estado = leer_estado()
-                        habitaciones[indice]["estado"] = nuevo_estado
-                
-                        with open(archivo, 'w', encoding="UTF-8") as data:
-                            json.dump(habitaciones, data, ensure_ascii=False, indent=4)
-                        print("Estado actualizado.")
+                    except ValueError:
+                        print("Se ingresó un formato inválido.")
+                    except AssertionError:
+                        print("Se ingresó un ID ya existente.")
 
-                    elif op == 5:
-                        nuevo_precio = validar_entero("Nuevo precio (> 0):")
-                        nuevo_tipo = leer_tipo()
-                        nueva_cap = validar_entero("Nueva capacidad (> 0): ")
-                        nuevo_estado = leer_estado()
+
+                while True:
+                    try:
+                        nuevo_precio = input("Precio (entero > 0): ").strip()
+
+                        if nuevo_precio == "":
+                            nuevo_precio = habitaciones[indice]["precio"]
+                            break
+
+                        nuevo_precio = int(nuevo_precio)
+
+                        if nuevo_precio <= 0:
+                            raise ValueError("Debe ser mayor a 0.")
 
                         habitaciones[indice]["precio"] = nuevo_precio
+                        break
+
+                    except ValueError:
+                        print("Se ingresó un valor inválido.")
+
+                while True:
+                    try:
+                        nuevo_tipo= input("Ingrese el tipo de habitación (Single/Doble/Triple/Suite): ").strip()
+                        if nuevo_tipo == "":
+                            nuevo_tipo = habitaciones[indice]["tipo"]
+                            break
+                        assert list(filter(lambda x: x == nuevo_tipo, tipos))
                         habitaciones[indice]["tipo"] = nuevo_tipo
+                        break
+                    except ValueError:
+                        print("Se ingreso un formato invalido.")
+                    except AssertionError:
+                        print("Tipo invalido, ingrese nuevamente: ")
+                
+                while True:
+                    try:
+                        nueva_cap = input("Nueva capacidad (> 0): ").strip()
+                        if nueva_cap == "":
+                            nueva_cap = habitaciones[indice]["capacidad"]
+                            break
+                        nueva_cap = int(nueva_cap)
+                        if nueva_cap <= 0:
+                            raise ValueError("Debe ser mayor a 0.")
+                        
                         habitaciones[indice]["capacidad"] = nueva_cap
+                        break
+                    except ValueError:
+                        print("Se ingreso un formato invalido.")                
+
+                while True:
+                    try:
+                        nuevo_estado=input("Escribí el estado (Disponible/Ocupada/Mantenimiento): ").strip()
+                        if nuevo_estado == "":
+                            nuevo_estado = habitaciones[indice]["estado"]
+                            break
+                        assert list(filter(lambda x: x == nuevo_estado, estados))
+
                         habitaciones[indice]["estado"] = nuevo_estado
+                        break
+                    except ValueError:
+                        print("Se ingreso un formato invalido.")      
+                    except AssertionError:
+                        print("Estado invalido, ingrese nuevamente: ")  
+                
+                # después del último while de estado
+                with open(archivo, 'w', encoding="UTF-8") as data:
+                    json.dump(habitaciones, data, ensure_ascii=False, indent=4)
 
-                        with open(archivo, 'w', encoding="UTF-8") as data:
-                            json.dump(habitaciones, data, ensure_ascii=False, indent=4)
-                        print("Todos los campos actualizados.")
+                print("Habitación modificada con éxito.")
 
-                    op_txt = input("\n1-Precio  2-Tipo  3-Capacidad  4-Estado  5-Todos  (-1 volver)\nOpción: ").strip()
-                    while not (op_txt.lstrip("-").isdigit() and int(op_txt) in {1,2,3,4,5,-1}):
-                        print("Opción inválida.")
-                        op_txt = input("\n1-Precio  2-Tipo  3-Capacidad  4-Estado  5-Todos  (-1 volver)\nOpción: ").strip()
-                    op = int(op_txt)
-
-                    numero = validar_entero("Número de otra habitación a modificar (-1 para volver): ")
-    
+                habitacion = habitaciones[indice]
+                print(f"{"ID":^15}|{"Precio":<15}|{"Tipo":<15}|{"Capacidad":<16}|{"Estado":<15}\n\
+{'-'*15}|{'-'*15}|{'-'*15}|{'-'*16}|{'-'*15}")
+                print(f"{habitacion["hab"]:^15}|{habitacion["precio"]:<15}|{habitacion["tipo"]:<15}|{habitacion["capacidad"]:<16}|{habitacion["estado"]:<15}")
+                
         except (FileNotFoundError, OSError) as error:
             print(f"Error! {error}")
         except:

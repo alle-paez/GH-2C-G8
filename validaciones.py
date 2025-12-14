@@ -34,6 +34,7 @@ def validar_entero(mensaje):
             print("Error inesperado. Intente nuevamente. ")
     return num
 
+
 def esta_vacio(mensaje):
     error = True
     while error:
@@ -57,7 +58,9 @@ if __name__ == "__main__":
     with open("tabla_habitaciones.json", "r", encoding="UTF-8") as archivo:
         tabla_habitaciones = json.load(archivo)
 
-        if i >= len(tabla_habitaciones):
+        
+                
+                                if i >= len(tabla_habitaciones):
             return False
         else:
             if str(tabla_habitaciones[i]["hab"]) == str(nro_hab):

@@ -64,13 +64,12 @@ def es_tupla(fecha):
 def opciones():
     print("")
     print(LINEA)
-    print(f"Elija la opción deseada: \n\
-        1 - Mostrar resumen global. \n\
-        2 - Estadisticas de habitaciones. \n\
-        3 - Estadisticas Mensuales. \n\
-        4 - Resumen Maximos y minimos. \n\
-        5 - Porcentajes de habitaciones. \n\
-        ")
+    print(f"Elija la opción deseada:\n\
+    1 - Mostrar resumen global.\n\
+    2 - Estadisticas de habitaciones.\n\
+    3 - Estadisticas Mensuales.\n\
+    4 - Resumen Maximos y minimos.\n\
+    5 - Porcentajes de habitaciones.\n")
     
 def elegir_opcion_estadistica(reservas=reservas):
     opciones()
@@ -99,9 +98,6 @@ Máximos y minimos de categoria totales: \n ")
         if opcion == 5:
             porcentajes_reservas_x_habitacion(datos)
             
-
-        print("")
-        print(LINEA)
         opciones()
         opcion = int(input(f"Seleccione una opción de las anteriores: (-1 para salir): "))
 
@@ -109,18 +105,22 @@ def mostrar_como_tabla(diccionario, titulo_clave ="Clave"):
     claves = list(diccionario.keys())
     primera = diccionario[claves[0]]
     campos = list(primera.keys())
-    encabezado = titulo_clave.ljust(10) + " " + " ".join([c.ljust(12) for c in campos])
+    acu=0
+    for c in campos:
+        acu+=1
+    ult_campo=80-(8+((acu-1)*11))
+    encabezado = titulo_clave.ljust(7) + "|" + "|".join([c.ljust(10) for c in campos])
     print(encabezado)
-    print("-"*len(encabezado))
+    print("-" * 7 + "|" + "|".join("-" * 10 for c in campos[:-1])+"|"+"-"*ult_campo)
     for clave, datos in diccionario.items():
-        fila = str(clave).ljust(10) + " " + " ".join([str(datos[c]).ljust(12) for c in campos])
+        fila = str(clave).ljust(7) + "|" + "|".join([str(datos[c]).ljust(10) for c in campos])
         print(fila)
 
     
 def mostrar_diccionario_reservas(diccionario):
-    print("------------------------------------------------------------------")
+    print(f'{"-"*80}\n')
     print(f"{"":<5}|{"ID":<3}|{"DNI Cliente":<15}|{"Entrada":<10}|{"Salida":<10}|{"Hab":<5}|{"Pax":<4}|{"Total":<8}")
-    print("------------------------------------------------------------------")
+    print(f'{"-"*80}')
     for key in diccionario:
         check_in = diccionario[key][2]
         check_in = pasar_fecha(check_in)
@@ -154,14 +154,15 @@ def estadisticas_globales(reservas):
         glob["Facturación promedio"] = glob["ingreso_total"] / may
         glob["pax_promedio"] = glob["pax_total"] / may
 
-    print(f"Reservas Totales: {glob["total_reservas"]}")
-    print(f"Noches Totales: {glob["noches_totales"]}")
-    print(f"Ingresos Totales: {glob["ingreso_total"]}")
-    print(f"Pasajeros Totales: {glob['pax_total']}")
+    print(f'{LINEA}\n{"Resumen Global":^80}\n{LINEA}')
+    print(f"{"Reservas Totales":<18}| {glob["total_reservas"]}\n{'-'*18}|{'-'*61}")
+    print(f"{"Noches Totales":<18}| {glob["noches_totales"]}\n{'-'*18}|{'-'*61}")
+    print(f"{"Ingresos Totales":<18}| {glob["ingreso_total"]}\n{'-'*18}|{'-'*61}")
+    print(f"{"Pasajeros Totales":<18}| {glob['pax_total']}\n{'-'*80}")
 
 def estadisticas_habitacion(reservas_lista):
-    if type(reservas_lista) != list:
-        reservas_list = _leer_reservas_lista_desde_txt()    
+    #if type(reservas_lista) != list:
+        #reservas_list = _leer_reservas_lista_desde_txt()    
     estadistica_hab = {}
     for res in reservas_lista:
         checkin, checkout, hab, pax, total = res[2:7]
@@ -205,8 +206,8 @@ def porcentajes_reservas_x_habitacion(reservas):
         conteo[hab] = conteo.get(hab, 0) + 1
 
     porcentajes = {}
-    print(f"{"Hab":<5} | {"Porcentaje"}")
-    print(f"{"-".center(19,"-")}")
+    print(f"{"Hab":^6}|{"Porcentaje de ocupación"}")
+    print(f"{"-"*6}|{"-"*73}")
     for hab, cant in conteo.items():
         porcentajes[hab] = (cant / total) * 100
         print(f"{hab:<5} | {round(porcentajes[hab],2)}% ")
@@ -242,6 +243,3 @@ def max_min_totales(reservas):
             min_res = res
 
     return {"max":max_res,"min":min_res}
-
-
-

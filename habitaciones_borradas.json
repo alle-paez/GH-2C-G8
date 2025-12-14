@@ -1,7 +1,7 @@
 [
     {
         "hab": 107,
-        "precio": "",
+        "precio": 15000,
         "tipo": "Doble",
         "capacidad": 2,
         "estado": "Disponible"

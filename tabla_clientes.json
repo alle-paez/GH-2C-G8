@@ -1,47 +1,5 @@
 [
     {
-        "dni": 30555999,
-        "nombre": "Juan",
-        "apellido": "Pérez",
-        "telefono": 1123456789,
-        "mail": "juan.perez@email.com"
-    },
-    {
-        "dni": 28444888,
-        "nombre": "María",
-        "apellido": "Gómez",
-        "telefono": 1167894321,
-        "mail": "maria.gomez@email.com"
-    },
-    {
-        "dni": 33222111,
-        "nombre": "Lucas",
-        "apellido": "Martínez",
-        "telefono": 1134567890,
-        "mail": "lucas.martinez@email.com"
-    },
-    {
-        "dni": 29888777,
-        "nombre": "Sofía",
-        "apellido": "López",
-        "telefono": 1145678901,
-        "mail": "sofia.lopez@email.com"
-    },
-    {
-        "dni": 31222333,
-        "nombre": "Martín",
-        "apellido": "Díaz",
-        "telefono": 1178901234,
-        "mail": "martin.diaz@email.com"
-    },
-    {
-        "dni": 46439115,
-        "nombre": "Allegra",
-        "apellido": "Paez",
-        "telefono": 1135690334,
-        "mail": "Theallecanal@gmail.com"
-    },
-    {
         "dni": 11112222,
         "nombre": "Pepe",
         "apellido": "Foreg",
@@ -49,15 +7,15 @@
         "mail": "pepitoforegnito@gmail.com"
     },
     {
-        "dni": 46751671,
-        "nombre": "Julia",
-        "apellido": "Salvay",
-        "telefono": "1127209968",
-        "mail": "salvayjulia@gmail.com"
+        "dni": 12121212,
+        "nombre": "Juan",
+        "apellido": "Perez",
+        "telefono": 1127209988,
+        "mail": "Juanperez@gmail.com"
     },
     {
         "dni": 23234433,
-        "nombre": "Alfajer",
+        "nombre": "Alfajor",
         "apellido": "Fake",
         "telefono": "1122211122",
         "mail": "alfajor@gmail.com"
@@ -68,5 +26,54 @@
         "apellido": "Fernandez",
         "telefono": "1167654398",
         "mail": "valenfer@gmail.com"
+    },
+    {
+        "dni": 28444888,
+        "nombre": "María",
+        "apellido": "Gómez",
+        "telefono": 1167894321,
+        "mail": "maria.gomez@email.com"
+    },
+    {
+        "dni": 29888777,
+        "nombre": "Sofía",
+        "apellido": "López",
+        "telefono": 1145678901,
+        "mail": "sofia.lopez@email.com"
+    },
+    {
+        "dni": 30555999,
+        "nombre": "Juan",
+        "apellido": "Pérez",
+        "telefono": 1123456789,
+        "mail": "juan.perez@email.com"
+    },
+    {
+        "dni": 31222333,
+        "nombre": "Martín",
+        "apellido": "Díaz",
+        "telefono": 1178901234,
+        "mail": "martin.diaz@email.com"
+    },
+    {
+        "dni": 33222111,
+        "nombre": "Lucas",
+        "apellido": "Martínez",
+        "telefono": 1134567890,
+        "mail": "lucas.martinez@email.com"
+    },
+    {
+        "dni": 46439115,
+        "nombre": "Allegra",
+        "apellido": "Paez",
+        "telefono": 1135690334,
+        "mail": "Theallecanal@gmail.com"
+    },
+    {
+        "dni": 46751671,
+        "nombre": "Julia",
+        "apellido": "Salvay",
+        "telefono": "1127209968",
+        "mail": "salvayjulia@gmail.com"
     }
 ]

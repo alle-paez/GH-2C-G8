@@ -217,11 +217,11 @@ def print_clt(archivo):
         print("Error inesperado. Intente nuevamente. ")
 
 def opciones_busquedas_cli():
-    print(f"seleccione un filtro: \n\
-          1 - Todos los clientes.\n\
-          2 - Busqueda por DNI. \n\
-          3 - Coincidencias nombre y apellido. \n\
-          4 - Ver opciones de busqueda.")
+    print(f"seleccione un filtro:\n\
+    1 - Todos los clientes.\n\
+    2 - Busqueda por DNI.\n\
+    3 - Coincidencias nombre y apellido.\n\
+    4 - Ver opciones de busqueda.")
 
 def busquedas_clientes(archivo="tabla_clientes.json"):
     opciones_busquedas_cli()
@@ -285,10 +285,6 @@ def coincidencias_n_y_a(clientes):
         if (re.search(patron, nombre) or re.search(patron, apellido) or re.search(patron, nombre_completo)):
             print(f"{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<15}{cli["mail"]:<15}")
 
-
-
-
-
 #ELIMINAR CLIENTES-----------------------------------------------------------------------------------------------------------
 def borrar_clientes(archivo1, archivo2, mensaje):
     print_clt(archivo1)
@@ -339,8 +335,6 @@ def borrar_clientes(archivo1, archivo2, mensaje):
                             dni=validar_entero(f"Ingrese el dni del cliente que quiera {mensaje}r (-1 para salir): ")
                             if dni == -1:
                                 flag = 0
-
-
 
 #ORDENAR POR NOMBRE-----------------------------------------------------------------------------------------------------------
 
