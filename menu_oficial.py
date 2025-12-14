@@ -61,8 +61,8 @@ Volver para atrás con -1\n\
     3-Cancelar reserva\n\
     4-Ver reservas\n\
     5-Papelera de reciclaje\n\
-    Volver para atrás con -1\n\
-    6-Generar factura.')
+    6-Generar factura\n\
+    Volver para atrás con -1.')
             ordenar_archivo_reservas("data/txt/tabla_reservas.txt")
             opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")
             while opcion_reservas!=-1:
@@ -84,6 +84,7 @@ Volver para atrás con -1\n\
 3-Cancelar reserva\n\
 4-Ver reservas\n\
 5-Papelera de reciclaje\n\
+6-Generar factura\n\
 Volver para atrás con -1\n\
 {LINEA}\n')
                 opcion_reservas = validar_entero("Ingrese numéricamente la opción deseada: ")

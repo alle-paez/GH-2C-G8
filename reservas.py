@@ -908,7 +908,7 @@ def imprimir_factura(dni_clt_act, hoy):
 
     print(f'{LINEA}\n|{"Nro. de reserva":^17}|{"Descripción":^19}|{"Precio por día":^18}|{"Días":^10}|{"Valor":^10}|\n{LINEA}')
     reservas_del_clt=[]
-    total=0
+    total = 0
 
     with open("data/txt/tabla_reservas.txt", "r", encoding="UTF-8") as archivo:
         for linea in archivo:
@@ -918,14 +918,15 @@ def imprimir_factura(dni_clt_act, hoy):
                 reservas_del_clt.append([id_reserva, dni, check_in, check_out, hab, pax, total])
     archivo.close()
 
+    total_sin_iva = 0
     for i in range(len(reservas_del_clt)):
         check_in= arreglar_fechas_archivo(reservas_del_clt[i][2])
         check_out = arreglar_fechas_archivo(reservas_del_clt[i][3])
         dias=diferencia_dias_entre(check_in,check_out)
-        valor=reservas_del_clt[i][6]*dias
-        total+=valor
+        valor=int(reservas_del_clt[i][6])
+        total_sin_iva = total_sin_iva + valor
         print(f'|{reservas_del_clt[i][0]:^17}|{"Habitación "+str(reservas_del_clt[i][4]):^19}|{reservas_del_clt[i][6]:^18}|{dias:^10}|{valor:^10}|')
     print(LINEA)
-    iva_monto = float(total) * 0.21
-    total_con_iva = float(total) + iva_monto
-    print(f'{"Fecha de impresión: "+ str(hoy):<40}{"Subtotal: "+str(total):>40}\n{"Total IVA: " + str(round(iva_monto, 2)):>80}\n{"Total: "+ str(round(total_con_iva, 2)):>80}\n')
+    iva_monto = float(total_sin_iva) * 0.21
+    total_con_iva = float(total_sin_iva) + iva_monto
+    print(f'{"Fecha de impresión: "+ str(formatear_fecha(hoy)):<40}{"Subtotal: "+str(total):>40}\n{"Total IVA: " + str(round(iva_monto, 2)):>80}\n{"Total: "+ str(round(total_con_iva, 2)):>80}\n')
