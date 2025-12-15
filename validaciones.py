@@ -6,7 +6,6 @@ def verificar_formato(dni):
         return True
     else: 
         return False
-    
 
 def verificar_formato_fecha(fecha):
     formato = r"^\d{4}-\d{2}-\d{2}$"
@@ -33,7 +32,6 @@ def validar_entero(mensaje):
         except: 
             print("Error inesperado. Intente nuevamente. ")
     return num
-
 
 def esta_vacio(mensaje):
     error = True
@@ -63,5 +61,3 @@ def ordenar(lista, dato):
 
 if __name__ == "__main__":
     xd = esta_vacio("xdxd: ")
-
-print("hola")

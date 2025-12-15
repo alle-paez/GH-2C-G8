@@ -17,7 +17,7 @@ def print_habitaciones(archivo):
         with open(archivo, 'r', encoding="UTF-8") as data:
             habitaciones = json.load(data)
             habitaciones_ordenados_por_num = ordenar(habitaciones, "hab")
-        print(f"\n{"Lista de las Habitaciones":->80}")
+        print(f"\n{"Lista de las Habitaciones":-^80}")
         print(f'{"Número":<15}|{"Precio":<15}|{"Tipo":<15}|{"Capacidad":<15}|{"Estado":<16}\n\
 {"-"*15}|{"-"*15}|{"-"*15}|{"-"*15}|{"-"*16}')
 
@@ -287,6 +287,8 @@ def llenar_habitaciones(archivo="data/json/tabla_habitaciones.json"):
                     precio = validar_entero("Precio (entero > 0): ")
                     if precio < 0:
                         raise ValueError("No puede ser un valor negativo.")
+                    if len(str(precio))>15:
+                        raise Exception("El precio es demasiado alto.")
                     err = False
                 except ValueError as e:
                     print(f"Error! {e}")
@@ -401,7 +403,7 @@ def modificar_habitacion(archivo="data/json/tabla_habitaciones.json"):
                         if nuevo_id == "":
                             nuevo_id = habitaciones[indice]["hab"]
                             break
-
+                        
                         nuevo_id = int(nuevo_id)
 
                         if nuevo_id < 0:
@@ -409,6 +411,9 @@ def modificar_habitacion(archivo="data/json/tabla_habitaciones.json"):
 
                         if nuevo_id in nros_hab:
                             raise AssertionError("El ID ya existe.")
+                        
+                        if len(str(nuevo_id))>15:
+                            raise Exception("El ID es demasiado largo.")
 
                         habitaciones[indice]["hab"]= nuevo_id
                         break
@@ -431,6 +436,9 @@ def modificar_habitacion(archivo="data/json/tabla_habitaciones.json"):
 
                         if nuevo_precio <= 0:
                             raise ValueError("Debe ser mayor a 0.")
+                        
+                        if len(str(nuevo_precio))>15:
+                            raise Exception("El precio es demasiado alto.")
 
                         habitaciones[indice]["precio"] = nuevo_precio
                         break

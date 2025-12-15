@@ -1,5 +1,12 @@
 [
     {
+        "hab": 3,
+        "precio": 19,
+        "tipo": "Triple",
+        "capacidad": 90,
+        "estado": "Disponible"
+    },
+    {
         "hab": 23,
         "precio": 50079,
         "tipo": "Single",
@@ -12,6 +19,20 @@
         "tipo": "Single",
         "capacidad": 3,
         "estado": "Mantenimiento"
+    },
+    {
+        "hab": 67,
+        "precio": 6700,
+        "tipo": "Triple",
+        "capacidad": 4,
+        "estado": "Disponible"
+    },
+    {
+        "hab": 80,
+        "precio": 1,
+        "tipo": "Doble",
+        "capacidad": 1,
+        "estado": "Ocupada"
     },
     {
         "hab": 101,

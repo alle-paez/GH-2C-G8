@@ -598,22 +598,22 @@ def print_tabla_reservas_lst(lista):
         print("No posee información.")
     else:
         print("")
-        print("------------------------------------------------------------------")
-        print("ID   | DNI Cliente | Entrada     | Salida      | Hab | Pax | Total")
-        print("------------------------------------------------------------------")
+        print("-"*80)
+        print(f'{"ID":^9}|{"DNI Cliente":^13}|{"Entrada":^12}|{"Salida":^12}|{"Hab":^10}|{"Pax":^8}|{"Total":^10}')
+        print(f'{"-"*9}|{"-"*13}|{"-"*12}|{"-"*12}|{"-"*10}|{"-"*8}|{"-"*10}')
         for li in lista:
             id_reserva, dni, check_in, check_out, hab, pax, total = li
             check_in = arreglar_fechas_archivo(check_in)
             check_out = arreglar_fechas_archivo(check_out)
             check_in_str = f"{check_in[0]}-{check_in[1]}-{check_in[2]}"
             check_out_str = f"{check_out[0]}-{check_out[1]}-{check_out[2]}"
-            print(str(id_reserva).ljust(4), "|",
+            print(str(id_reserva).ljust(8), "|",
             str(dni).ljust(11), "|",
-            check_in_str.ljust(11), "|",
-            check_out_str.ljust(11), "|",
-            str(hab).ljust(3), "|",
-            str(pax).ljust(3), "|",
-            str(total).ljust(6))
+            check_in_str.ljust(10), "|",
+            check_out_str.ljust(10), "|",
+            str(hab).ljust(8), "|",
+            str(pax).ljust(6), "|",
+            str(total).ljust(8))
 
 def print_tabla_reservas_lst2(lista):
     if len(lista) == 0:
@@ -804,6 +804,7 @@ def modificacion():
 #DELETE: BORRAR --------------------------------------------------------------------------------------
 def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_o_recuperar="eliminar"):
     with open(archivo_del_que_eliminar, "r", encoding="UTF-8") as reservass:
+        
         id_eliminar = validar_entero(f"Ingrese el número de reserva que quiera {eliminar_o_recuperar}: ")
         aux=open("data/txt/temp.txt", "w", encoding="UTF-8")
         encontrado=False
