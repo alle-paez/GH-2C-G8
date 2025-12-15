@@ -7,6 +7,7 @@ from validaciones import *
 
 
 def leer_clientes(archivo="data/json/tabla_clientes.json", modo="r"):
+    contenido = None
     try:
         contenido = open(archivo, modo, encoding="UTF-8")
         clientes = json.load(contenido)
@@ -15,11 +16,12 @@ def leer_clientes(archivo="data/json/tabla_clientes.json", modo="r"):
     except:
         print("Error, no se pudo acceder a la base de datos")
     finally:
-        if contenido is not None:           # solo cerramos si se abrió
+        if contenido:  # solo cerramos si se abrió
             try:
                 contenido.close()
             except:
                 print("Error al cerrar el archivo")
+
         
 #AGREGAR CLIENTES--------------------------------------------------------------------------------
 
@@ -58,9 +60,10 @@ def llenar_clientes(archivo="data/json/tabla_clientes.json"):
                 while not es_texto(apellido):
                     apellido = esta_vacio("Ingrese el apellido del cliente: ")
 
-                telefono = validar_entero("Ingrese el telefono del cliente: ")
-                while not es_telefono(str(telefono)):
-                    telefono = validar_entero("Ingrese el telefono del cliente: ")
+                telefono = input("Ingrese el telefono del cliente: ").strip()
+                while not es_telefono(telefono):
+                    telefono = input("Telefono invalido. Reingrese: ").strip()
+
 
                 mail = esta_vacio("Ingrese el e-mail del cliente: ")
                 while not es_mail(mail):
