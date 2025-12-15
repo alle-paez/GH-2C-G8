@@ -150,6 +150,14 @@ def dias_en_mes(anio, mes):
 31, 31, 30, 31, 30, 31]
     return dias_mes[mes - 1]
 
+
+def sumar_meses_r(anio, mes_actual):
+    if mes_actual == 1:
+        return 0 
+    mes_anterior = mes_actual - 1
+    dias_mes_anterior = dias_en_mes(anio, mes_anterior)
+    return dias_mes_anterior + sumar_meses_r(anio, mes_anterior)
+
 def contar_dias(fecha):
     anio, mes, dia = fecha
     dias = 0
@@ -157,12 +165,11 @@ def contar_dias(fecha):
     for a in range(1, anio):
         dias += 366 if bisiesto(a) else 365
 
-    for m in range(1, mes):
-        dias += dias_en_mes(anio, m)
-        
-    dias += dia
+    dias = dias + sumar_meses_r(anio,mes)
+    dias = dias + dia
 
     return dias
+
 
 def diferencia_dias_entre(check_in, check_out):
     return contar_dias(check_out) - contar_dias(check_in)
