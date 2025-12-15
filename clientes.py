@@ -301,16 +301,25 @@ def borrar_clientes(archivo1, archivo2, mensaje):
             while flag !=1 and flag !=0:
                 flag=validar_entero(f"Si desea {mensaje}r otro cliente ingrese 1, si no, ingrese 0: ")
         else:
-            while pos==-1 and dni != -1:
-                print(f'no se encontró el cliente {dni}')
-                dni = validar_entero("Ingrese el dni de cliente nuevamente (-1 para salir):  ")
-                formato=verificar_formato(dni)
-                if formato and dni != -1:
-                    dni_norm = str(dni).strip()
-                    if dni_norm in dnis_cli:
-                        pos = dnis_cli.index(dni_norm)
-                    else:
-                        pos = -1        
+            while pos == -1 and dni != -1:
+                print("No existe cliente con ese DNI.")
+                dni = validar_entero("Ingrese el DNI nuevamente (-1 para salir): ")
+
+                if dni == -1:
+                    print("Operación cancelada.")
+                    return
+
+                formato = verificar_formato(dni)
+                if not formato:
+                    continue
+
+                dni_norm = str(dni).strip()
+                if dni_norm in dnis_cli:
+                    pos = dnis_cli.index(dni_norm)
+                else:
+                    pos = -1
+                    print("No existe cliente con ese DNI.")
+       
                     if pos!=-1:
                         eliminado = clientes.pop(pos)
                         clientes_borrados.append(eliminado)
@@ -325,6 +334,7 @@ def borrar_clientes(archivo1, archivo2, mensaje):
                         if flag == 1:
                             dni=validar_entero(f"Ingrese el dni del cliente que quiera {mensaje}r (-1 para salir): ")
                             if dni == -1:
+                                print("Operación cancelada.")
                                 flag = 0
 
 #ORDENAR POR NOMBRE-----------------------------------------------------------------------------------------------------------
