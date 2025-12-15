@@ -139,7 +139,7 @@ def modificar_clientes(archivo="data/json/tabla_clientes.json"):
                 print(f'{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}')
                 print(f'{cliente["dni"]:<10}{cliente["nombre"]:<10}{cliente["apellido"]:<10}{cliente["telefono"]:<15}{cliente["mail"]:<15}')
 
-                nuevo_nombre   = input(f"Nuevo nombre ({cliente["nombre"]})(Enter para continuar): ").strip()
+                nuevo_nombre   = input(f"Nuevo nombre ({cliente['nombre']})(Enter para continuar): ").strip()
                 if nuevo_nombre != "":
                     while not es_texto(nuevo_nombre) and nuevo_nombre != "":
                         nuevo_nombre = input("Nombre inválido. Reingrese: ").strip()
@@ -147,21 +147,21 @@ def modificar_clientes(archivo="data/json/tabla_clientes.json"):
                         clientes[pos]["nombre"] = nuevo_nombre.title()
 
 
-                nuevo_apellido = input(f"Nuevo apellido ({cliente["apellido"]})(Enter para continuar):").strip()
+                nuevo_apellido = input(f"Nuevo apellido ({cliente['apellido']})(Enter para continuar):").strip()
                 if nuevo_apellido != "":
                     while not es_texto(nuevo_apellido) and nuevo_apellido != "":
                         nuevo_apellido = input("Apellido inválido. Reingrese: ").strip()
                     if nuevo_apellido != "":
                         clientes[pos]["apellido"] = nuevo_apellido.title()
 
-                nuevo_tel = input(f"Nuevo teléfono ({cliente["telefono"]})(Enter para continuar): ").strip()
+                nuevo_tel = input(f"Nuevo teléfono ({cliente['telefono']})(Enter para continuar): ").strip()
                 if nuevo_tel != "":
                     while not es_telefono(nuevo_tel) and nuevo_tel != "":
                         nuevo_tel = input("Teléfono inválido. Reingrese (ARG: 10 dígitos): ").strip()
                     if nuevo_tel != "":
                         clientes[pos]["telefono"] = nuevo_tel
 
-                nuevo_mail = input(f"Nuevo mail ({cliente["mail"]}): ").strip()
+                nuevo_mail = input(f"Nuevo mail ({cliente['mail']}): ").strip()
                 if nuevo_mail != "":
                     while not es_mail(nuevo_mail) and nuevo_mail != "":
                         nuevo_mail = input("Mail inválido (solo @gmail.com). Reingrese: ").strip()
@@ -194,7 +194,7 @@ def print_clt(archivo):
         print("Tabla clientes -------------------------------------")
         print(f'{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}')
         for cli in clientes_ordenados_por_dni:
-            print(f"{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<15}{cli["mail"]:<15}")
+            print(f"{cli['dni']:<10}{cli['nombre']:<10}{cli['apellido']:<10}{cli['telefono']:<15}{cli['mail']:<15}")
     except (FileNotFoundError, OSError) as error:
         print(f"Error! {error}")
     except:
