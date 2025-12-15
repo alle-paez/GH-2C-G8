@@ -63,3 +63,5 @@ def ordenar(lista, dato):
 
 if __name__ == "__main__":
     xd = esta_vacio("xdxd: ")
+
+print("hola")
