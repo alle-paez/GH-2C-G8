@@ -566,42 +566,53 @@ def ordenar_totales_mayor_menor():
 #MOSTRAR LEER ETC
 def print_elegir_opcion():
     menu_mostrar()
-    op = int(input("Ingrese la opción elegida: "))
-    if op == 1:
-        print_tabla_reservas("data/txt/tabla_reservas.txt")
-    elif op == 2:
-        cliente = validar_entero("Ingrese el DNI del cliente: ")
-        ver_dni = verificar_formato(cliente)
-        while not ver_dni and cliente != -1:
-            print("Se ingreso un dni Invalido.")
-            cliente= validar_entero("Ingrese el número de dni del cliente: (-1 para salir): ")
+    op = validar_entero("Ingrese la opción elegida (-1 para salir): ")
+    while op != -1:
+        if op == 1:
+            print_tabla_reservas("data/txt/tabla_reservas.txt")
+        elif op == 2:
+            cliente = validar_entero("Ingrese el DNI del cliente: ")
             ver_dni = verificar_formato(cliente)
-        cliente = int(cliente)
-        reservas_cliente = mostrar_reservas_por_hab_o_clt(cliente, x=1)
-        if not reservas_cliente:
-            print(f"El Dni {cliente} no tiene ninguna reserva en el alojamiento.")          
-        elif cliente != -1: 
-            print_tabla_reservas_lst(reservas_cliente)
+            while not ver_dni and cliente != -1:
+                print("Se ingreso un dni Invalido.")
+                cliente= validar_entero("Ingrese el número de dni del cliente: (-1 para salir): ")
+                ver_dni = verificar_formato(cliente)
+            cliente = int(cliente)
+            reservas_cliente = mostrar_reservas_por_hab_o_clt(cliente, x=1)
+            if not reservas_cliente:
+                print(f"El Dni {cliente} no tiene ninguna reserva en el alojamiento.")          
+            elif cliente != -1: 
+                print_tabla_reservas_lst(reservas_cliente)
 
-    elif op == 3:
-        print("Elija el numero de habitación: ")
-        print_habitaciones("data/json/tabla_habitaciones.json")
-        hab = validar_entero("Habitación elegida: ")
-        reservas_habitacion = mostrar_reservas_por_hab_o_clt(hab, x=4)
-        if not reservas_habitacion:
-            print(f"La habitación {hab} no tiene reservas. ")
-        elif hab != -1:
-            print_tabla_reservas_lst(reservas_habitacion)
+        elif op == 3:
+            print("Elija el numero de habitación: ")
+            print_habitaciones("data/json/tabla_habitaciones.json")
+            hab = validar_entero("Habitación elegida: ")
+            reservas_habitacion = mostrar_reservas_por_hab_o_clt(hab, x=4)
+            if not reservas_habitacion:
+                print(f"La habitación {hab} no tiene reservas. ")
+            elif hab != -1:
+                print_tabla_reservas_lst(reservas_habitacion)
 
-    elif op == 4:
-        totales_ord = ordenar_totales_mayor_menor()
-        print_tabla_reservas_lst2(totales_ord)
-    elif op == 5:
-        totales_ord = ordenar_menor_mayor(6)
-        print_tabla_reservas_lst2(totales_ord)
-    elif op==6:
-        totales_ord = ordenar_menor_mayor(2)
-        print_tabla_reservas_lst2(totales_ord)
+        elif op == 4:
+            totales_ord = ordenar_totales_mayor_menor()
+            print_tabla_reservas_lst2(totales_ord)
+        elif op == 5:
+            totales_ord = ordenar_menor_mayor(6)
+            print_tabla_reservas_lst2(totales_ord)
+        elif op==6:
+            totales_ord = ordenar_menor_mayor(2)
+            print_tabla_reservas_lst2(totales_ord)
+
+        mostrar = validar_entero("¿Desea ver el menu nuevamente? 1: Si / 2: No, Ingresar opción / Otro número: Salir. ")
+        if mostrar == 1:
+            menu_mostrar()
+            op = validar_entero("Ingrese la opción elegida (-1 para salir): ")
+        if mostrar == 2:
+            op = validar_entero("Ingrese la opción elegida (-1 para salir): ")
+        else: 
+            op = -1
+
 
 def print_tabla_reservas(archivo):
     try:
