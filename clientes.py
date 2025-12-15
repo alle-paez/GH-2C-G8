@@ -7,6 +7,7 @@ from validaciones import *
 
 
 def leer_clientes(archivo="data/json/tabla_clientes.json", modo="r"):
+    contenido = None
     try:
         contenido = open(archivo, modo, encoding="UTF-8")
         clientes = json.load(contenido)
@@ -15,11 +16,12 @@ def leer_clientes(archivo="data/json/tabla_clientes.json", modo="r"):
     except:
         print("Error, no se pudo acceder a la base de datos")
     finally:
-        if contenido is not None:           # solo cerramos si se abrió
+        if contenido:  # solo cerramos si se abrió
             try:
                 contenido.close()
             except:
                 print("Error al cerrar el archivo")
+
         
 #AGREGAR CLIENTES--------------------------------------------------------------------------------
 
@@ -58,9 +60,10 @@ def llenar_clientes(archivo="data/json/tabla_clientes.json"):
                 while not es_texto(apellido):
                     apellido = esta_vacio("Ingrese el apellido del cliente: ")
 
-                telefono = validar_entero("Ingrese el telefono del cliente: ")
-                while not es_telefono(str(telefono)):
-                    telefono = validar_entero("Ingrese el telefono del cliente: ")
+                telefono = input("Ingrese el telefono del cliente: ").strip()
+                while not es_telefono(telefono):
+                    telefono = input("Telefono invalido. Reingrese: ").strip()
+
 
                 mail = esta_vacio("Ingrese el e-mail del cliente: ")
                 while not es_mail(mail):
@@ -136,7 +139,7 @@ def modificar_clientes(archivo="data/json/tabla_clientes.json"):
                 print(f'{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}')
                 print(f'{cliente["dni"]:<10}{cliente["nombre"]:<10}{cliente["apellido"]:<10}{cliente["telefono"]:<15}{cliente["mail"]:<15}')
 
-                nuevo_nombre   = input(f"Nuevo nombre ({cliente["nombre"]})(Enter para continuar): ").strip()
+                nuevo_nombre   = input(f"Nuevo nombre ({cliente['nombre']})(Enter para continuar): ").strip()
                 if nuevo_nombre != "":
                     while not es_texto(nuevo_nombre) and nuevo_nombre != "":
                         nuevo_nombre = input("Nombre inválido. Reingrese: ").strip()
@@ -144,21 +147,21 @@ def modificar_clientes(archivo="data/json/tabla_clientes.json"):
                         clientes[pos]["nombre"] = nuevo_nombre.title()
 
 
-                nuevo_apellido = input(f"Nuevo apellido ({cliente["apellido"]})(Enter para continuar):").strip()
+                nuevo_apellido = input(f"Nuevo apellido ({cliente['apellido']})(Enter para continuar):").strip()
                 if nuevo_apellido != "":
                     while not es_texto(nuevo_apellido) and nuevo_apellido != "":
                         nuevo_apellido = input("Apellido inválido. Reingrese: ").strip()
                     if nuevo_apellido != "":
                         clientes[pos]["apellido"] = nuevo_apellido.title()
 
-                nuevo_tel = input(f"Nuevo teléfono ({cliente["telefono"]})(Enter para continuar): ").strip()
+                nuevo_tel = input(f"Nuevo teléfono ({cliente['telefono']})(Enter para continuar): ").strip()
                 if nuevo_tel != "":
                     while not es_telefono(nuevo_tel) and nuevo_tel != "":
                         nuevo_tel = input("Teléfono inválido. Reingrese (ARG: 10 dígitos): ").strip()
                     if nuevo_tel != "":
                         clientes[pos]["telefono"] = nuevo_tel
 
-                nuevo_mail = input(f"Nuevo mail ({cliente["mail"]}): ").strip()
+                nuevo_mail = input(f"Nuevo mail ({cliente['mail']}): ").strip()
                 if nuevo_mail != "":
                     while not es_mail(nuevo_mail) and nuevo_mail != "":
                         nuevo_mail = input("Mail inválido (solo @gmail.com). Reingrese: ").strip()
@@ -191,7 +194,7 @@ def print_clt(archivo):
         print("Tabla clientes -------------------------------------")
         print(f'{"Dni":<10}{"Nombre":<10}{"Apellido":<10}{"Teléfono":<15}{"Mail":<15}')
         for cli in clientes_ordenados_por_dni:
-            print(f"{cli["dni"]:<10}{cli["nombre"]:<10}{cli["apellido"]:<10}{cli["telefono"]:<15}{cli["mail"]:<15}")
+            print(f"{cli['dni']:<10}{cli['nombre']:<10}{cli['apellido']:<10}{cli['telefono']:<15}{cli['mail']:<15}")
     except (FileNotFoundError, OSError) as error:
         print(f"Error! {error}")
     except:
@@ -298,16 +301,25 @@ def borrar_clientes(archivo1, archivo2, mensaje):
             while flag !=1 and flag !=0:
                 flag=validar_entero(f"Si desea {mensaje}r otro cliente ingrese 1, si no, ingrese 0: ")
         else:
-            while pos==-1 and dni != -1:
-                print(f'no se encontró el cliente {dni}')
-                dni = validar_entero("Ingrese el dni de cliente nuevamente (-1 para salir):  ")
-                formato=verificar_formato(dni)
-                if formato and dni != -1:
-                    dni_norm = str(dni).strip()
-                    if dni_norm in dnis_cli:
-                        pos = dnis_cli.index(dni_norm)
-                    else:
-                        pos = -1        
+            while pos == -1 and dni != -1:
+                print("No existe cliente con ese DNI.")
+                dni = validar_entero("Ingrese el DNI nuevamente (-1 para salir): ")
+
+                if dni == -1:
+                    print("Operación cancelada.")
+                    return
+
+                formato = verificar_formato(dni)
+                if not formato:
+                    continue
+
+                dni_norm = str(dni).strip()
+                if dni_norm in dnis_cli:
+                    pos = dnis_cli.index(dni_norm)
+                else:
+                    pos = -1
+                    print("No existe cliente con ese DNI.")
+       
                     if pos!=-1:
                         eliminado = clientes.pop(pos)
                         clientes_borrados.append(eliminado)
@@ -322,6 +334,7 @@ def borrar_clientes(archivo1, archivo2, mensaje):
                         if flag == 1:
                             dni=validar_entero(f"Ingrese el dni del cliente que quiera {mensaje}r (-1 para salir): ")
                             if dni == -1:
+                                print("Operación cancelada.")
                                 flag = 0
 
 #ORDENAR POR NOMBRE-----------------------------------------------------------------------------------------------------------

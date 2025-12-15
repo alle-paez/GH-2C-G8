@@ -150,6 +150,14 @@ def dias_en_mes(anio, mes):
 31, 31, 30, 31, 30, 31]
     return dias_mes[mes - 1]
 
+
+def sumar_meses_r(anio, mes_actual):
+    if mes_actual == 1:
+        return 0 
+    mes_anterior = mes_actual - 1
+    dias_mes_anterior = dias_en_mes(anio, mes_anterior)
+    return dias_mes_anterior + sumar_meses_r(anio, mes_anterior)
+
 def contar_dias(fecha):
     anio, mes, dia = fecha
     dias = 0
@@ -157,12 +165,11 @@ def contar_dias(fecha):
     for a in range(1, anio):
         dias += 366 if bisiesto(a) else 365
 
-    for m in range(1, mes):
-        dias += dias_en_mes(anio, m)
-        
-    dias += dia
+    dias = dias + sumar_meses_r(anio,mes)
+    dias = dias + dia
 
     return dias
+
 
 def diferencia_dias_entre(check_in, check_out):
     return contar_dias(check_out) - contar_dias(check_in)
@@ -359,6 +366,27 @@ def digito_unico(pax):
     pax_str = str(pax)
     return pax_str.isdigit() and len(pax_str) == 1
 
+def obtener_ultima_linea(archivo):
+    try:
+        with open(archivo, "r", encoding="UTF-8") as arch:
+            linea = arch.readline()
+            while linea:
+                linea_limpia = linea.strip()
+                if linea_limpia:
+                    ultima_linea = linea_limpia
+                linea = arch.readline()
+            return ultima_linea
+    except (FileNotFoundError, OSError) as e:
+        print(f"Error con el archivo. {e}")
+
+def obtener_ultimo_id(ultima_linea):
+    ultimo_id,_,_,_,_,_,_ = ultima_linea.strip().split(";")
+    return int(ultimo_id)
+
+
+        
+
+
 #LLENAR RESERVAS: CREATE ---------------------------------------------------------------------------------------------
 def llenar_reservas():  
         nro_dni = validar_entero("Ingrese el número de dni del cliente: (-1 para salir): ")
@@ -410,7 +438,8 @@ def llenar_reservas():
                 valido, adicionales = validar_cant(cant_pax, dto)
 
             total = total_por_precio(dto, dias, adicionales)
-            nro_reserva = cuantas_lineas_txt("data/txt/tabla_reservas.txt") + 1
+            ultima_linea = obtener_ultima_linea("data/txt/tabla_reservas.txt")
+            nro_reserva = obtener_ultimo_id(ultima_linea) + 1
 
             reserva_nueva=((f'{nro_reserva};{nro_dni};{check_in};{check_out};{dto};{cant_pax};{total}\n'))
         
@@ -418,7 +447,7 @@ def llenar_reservas():
                 with open("data/txt/tabla_reservas.txt", "a", encoding="UTF-8") as reservas_write:
                     reservas_write.write(reserva_nueva)
                 
-                print("Se agrego todo correctamente.")
+                print(f"Se agrego todo correctamente. Su numero de reserva es {nro_reserva}")
                 nro_dni= validar_entero("Ingrese el número de dni del cliente: (-1 para salir): ")
                 reservas_write.close()
             except Exception as e:
@@ -537,42 +566,53 @@ def ordenar_totales_mayor_menor():
 #MOSTRAR LEER ETC
 def print_elegir_opcion():
     menu_mostrar()
-    op = int(input("Ingrese la opción elegida: "))
-    if op == 1:
-        print_tabla_reservas("data/txt/tabla_reservas.txt")
-    elif op == 2:
-        cliente = validar_entero("Ingrese el DNI del cliente: ")
-        ver_dni = verificar_formato(cliente)
-        while not ver_dni and cliente != -1:
-            print("Se ingreso un dni Invalido.")
-            cliente= validar_entero("Ingrese el número de dni del cliente: (-1 para salir): ")
+    op = validar_entero("Ingrese la opción elegida (-1 para salir): ")
+    while op != -1:
+        if op == 1:
+            print_tabla_reservas("data/txt/tabla_reservas.txt")
+        elif op == 2:
+            cliente = validar_entero("Ingrese el DNI del cliente: ")
             ver_dni = verificar_formato(cliente)
-        cliente = int(cliente)
-        reservas_cliente = mostrar_reservas_por_hab_o_clt(cliente, x=1)
-        if not reservas_cliente:
-            print(f"El Dni {cliente} no tiene ninguna reserva en el alojamiento.")          
-        elif cliente != -1: 
-            print_tabla_reservas_lst(reservas_cliente)
+            while not ver_dni and cliente != -1:
+                print("Se ingreso un dni Invalido.")
+                cliente= validar_entero("Ingrese el número de dni del cliente: (-1 para salir): ")
+                ver_dni = verificar_formato(cliente)
+            cliente = int(cliente)
+            reservas_cliente = mostrar_reservas_por_hab_o_clt(cliente, x=1)
+            if not reservas_cliente:
+                print(f"El Dni {cliente} no tiene ninguna reserva en el alojamiento.")          
+            elif cliente != -1: 
+                print_tabla_reservas_lst(reservas_cliente)
 
-    elif op == 3:
-        print("Elija el numero de habitación: ")
-        print_habitaciones("data/json/tabla_habitaciones.json")
-        hab = validar_entero("Habitación elegida: ")
-        reservas_habitacion = mostrar_reservas_por_hab_o_clt(hab, x=4)
-        if not reservas_habitacion:
-            print(f"La habitación {hab} no tiene reservas. ")
-        elif hab != -1:
-            print_tabla_reservas_lst(reservas_habitacion)
+        elif op == 3:
+            print("Elija el numero de habitación: ")
+            print_habitaciones("data/json/tabla_habitaciones.json")
+            hab = validar_entero("Habitación elegida: ")
+            reservas_habitacion = mostrar_reservas_por_hab_o_clt(hab, x=4)
+            if not reservas_habitacion:
+                print(f"La habitación {hab} no tiene reservas. ")
+            elif hab != -1:
+                print_tabla_reservas_lst(reservas_habitacion)
 
-    elif op == 4:
-        totales_ord = ordenar_totales_mayor_menor()
-        print_tabla_reservas_lst2(totales_ord)
-    elif op == 5:
-        totales_ord = ordenar_menor_mayor(6)
-        print_tabla_reservas_lst2(totales_ord)
-    elif op==6:
-        totales_ord = ordenar_menor_mayor(2)
-        print_tabla_reservas_lst2(totales_ord)
+        elif op == 4:
+            totales_ord = ordenar_totales_mayor_menor()
+            print_tabla_reservas_lst2(totales_ord)
+        elif op == 5:
+            totales_ord = ordenar_menor_mayor(6)
+            print_tabla_reservas_lst2(totales_ord)
+        elif op==6:
+            totales_ord = ordenar_menor_mayor(2)
+            print_tabla_reservas_lst2(totales_ord)
+
+        mostrar = validar_entero("¿Desea ver el menu nuevamente? 1: Si / 2: No, Ingresar opción / Otro número: Salir. ")
+        if mostrar == 1:
+            menu_mostrar()
+            op = validar_entero("Ingrese la opción elegida (-1 para salir): ")
+        if mostrar == 2:
+            op = validar_entero("Ingrese la opción elegida (-1 para salir): ")
+        else: 
+            op = -1
+
 
 def print_tabla_reservas(archivo):
     try:
@@ -750,7 +790,7 @@ def modificacion():
                 dni_nuevo = dni_nuevo 
         while True:
             try:
-                check_in_nuevo = pedir_fecha_mod(f"Ingrese nueva fecha de check-in ({check_in})AAAA-MM-DD: ")
+                check_in_nuevo = pedir_fecha_mod(f"Ingrese nueva fecha de check-in {check_in} AAAA-MM-DD: ")
                 if check_in_nuevo == "":
                     check_in_nuevo = arreglar_fechas_archivo(check_in)
                 break
@@ -758,7 +798,7 @@ def modificacion():
                 print("El formato ingresado es inválido.")
         while True:
             try:
-                check_out_nuevo = pedir_fecha_mod(f"Ingrese nueva fecha de check-out ({check_out}) AAAA-MM-DD: ")
+                check_out_nuevo = pedir_fecha_mod(f"Ingrese nueva fecha de check-out {check_out} AAAA-MM-DD: ")
                 if check_out_nuevo == "":
                     check_out_nuevo = arreglar_fechas_archivo(check_out)
                 else:
@@ -800,6 +840,9 @@ def modificacion():
         nueva_linea=(f'{idd};{dni_nuevo};{check_in_nuevo};{check_out_nuevo};{dto_nuevo};{cant_pax_nuevo};{total_nuevo}\n')
         with open("data/txt/tabla_reservas.txt", "a", encoding="UTF-8") as archivo:
             archivo.write(nueva_linea)
+        print(f"La reserva {id_reserva} se ha modificado con éxito.")
+        ordenar_archivo_reservas("data/txt/tabla_reservas.txt")
+        id_reserva = validar_entero("Ingrese un ID de reserva si desea modificar otra, si no, ingrese -1: ")
 
 #DELETE: BORRAR --------------------------------------------------------------------------------------
 def eliminar_reserva(archivo_del_que_eliminar, archivo_al_que_guardar, eliminar_o_recuperar="eliminar"):
@@ -871,7 +914,8 @@ def ordenar_archivo_reservas(archivo):
 
 
 if __name__ == "__main__":
-    pass
+    ultima_linea = obtener_ultima_linea("data/txt/tabla_reservas.txt")
+    print(obtener_ultimo_id(ultima_linea))
 #FACTURACIÓN --------------------------------------------------------------------------------------------------------------
 
 def ver_factura():
@@ -926,7 +970,7 @@ def imprimir_factura(dni_clt_act, hoy):
         dias=diferencia_dias_entre(check_in,check_out)
         valor=int(reservas_del_clt[i][6])
         total_sin_iva = total_sin_iva + valor
-        print(f'|{reservas_del_clt[i][0]:^17}|{"Habitación "+str(reservas_del_clt[i][4]):^19}|{reservas_del_clt[i][6]:^18}|{dias:^10}|{valor:^10}|')
+        print(f'|{reservas_del_clt[i][0]:^17}|{"Habitación "+str(reservas_del_clt[i][4]):^19}|{valor/dias:^18}|{dias:^10}|{valor:^10}|')
     print(LINEA)
     iva_monto = float(total_sin_iva) * 0.21
     total_con_iva = float(total_sin_iva) + iva_monto

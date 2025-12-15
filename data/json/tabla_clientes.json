@@ -63,6 +63,13 @@
         "mail": "lucas.martinez@email.com"
     },
     {
+        "dni": 45631121,
+        "nombre": "Facundo",
+        "apellido": "Villalba",
+        "telefono": "1150227757",
+        "mail": "Villalbafacundo70@gmail.com"
+    },
+    {
         "dni": 46439115,
         "nombre": "Allegra",
         "apellido": "Paez",
@@ -75,5 +82,19 @@
         "apellido": "Salvay",
         "telefono": "1127209968",
         "mail": "salvayjulia@gmail.com"
+    },
+    {
+        "dni": 34223434,
+        "nombre": "felix2",
+        "apellido": "wset",
+        "telefono": "sssssssss",
+        "mail": "felixidad@gmail.com"
+    },
+    {
+        "dni": 23232424,
+        "nombre": "fede",
+        "apellido": "jazmin",
+        "telefono": "1122334455",
+        "mail": "jazmin@gmail.com"
     }
 ]
